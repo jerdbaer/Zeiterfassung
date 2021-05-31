@@ -2,18 +2,6 @@ import java.util.List;
 
 public class Breaktime_calculation 
 {
-	/*
-	 *  < 6h keine Pause
-	 *  6-9h 30min 
-	 *  > 9h 45min
-	 *  
-	 *  
-	 *  _Pause_
-	 *  min. 15min am stück
-	 *  nicht am Anfang, am Ende der Arbeit
-	 *  
-	 *  wenn nicht unter 18
-	 */
 
 	public double getBreaktime_min_in_h(double worktime_in_h)
 	{
