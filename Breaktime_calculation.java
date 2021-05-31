@@ -1,3 +1,4 @@
+import java.util.List;
 
 public class Breaktime_calculation 
 {
@@ -23,5 +24,19 @@ public class Breaktime_calculation
 			breaktime_min_in_h += 0.25;
 		return breaktime_min_in_h;
 			
+	}
+	
+	public boolean validate_Break(List<Double> all_Breaks_in_h, double breaktime_min_in_h)
+	{
+		double valide_Breaktime = 0;
+		for(double rest :all_Breaks_in_h)
+		{	
+			if (rest >= 0.25)
+				valide_Breaktime += rest;
+		}
+		if (valide_Breaktime >= breaktime_min_in_h)
+			return true;
+		else 
+			return false;
 	}
 }
