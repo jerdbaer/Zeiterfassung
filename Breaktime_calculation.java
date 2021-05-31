@@ -3,6 +3,14 @@ import java.util.List;
 public class Breaktime_calculation 
 {
 
+	public double getSum_Breaktime_in_h(List<Double> all_Breaks_in_h)
+	{
+		double sum = 0;
+		for(double rest: all_Breaks_in_h)
+			sum += rest;
+		return sum;
+	}
+	
 	public double getBreaktime_min_in_h(double worktime_in_h)
 	{
 		double breaktime_min_in_h = 0;
