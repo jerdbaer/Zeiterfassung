@@ -10,7 +10,6 @@ public class Main {
         System.out.println("great!");
         System.out.println("Ticket #31");
     }
-    
+
 }
 //git config --global user.email "you@example.com"
-  
