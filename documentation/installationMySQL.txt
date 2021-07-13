@@ -11,7 +11,7 @@
     not needed for our application, so you may skip "Check Requirements" by
     clicking Next and confirming your decision
 7. Follow further installation steps until "Accounts and Roles"
-8. Enter a password. You may choose this freely. Continue with Next # Password 111_WI20-C
+8. Enter a password. You may choose this freely. Continue with Next
 9. Keep default settings and continue with Next and Execute until you need to
    enter a password. This has to be the password you chose above. Check, then
    continue until the installation is finished
