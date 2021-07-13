@@ -11,8 +11,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
    <top>
       <Label text="Arbeitszeit" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -72,7 +71,7 @@
                      </HBox.margin>
                   </Text>
                   <TextField prefHeight="25.0" prefWidth="30.0" />
-                  <Button mnemonicParsing="false" text="+">
+                  <Button fx:id="btnWorkAdd1" mnemonicParsing="false" onAction="#showHBox" text="+">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -82,7 +81,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <HBox visible="false">
+            <HBox fx:id="hBoxWork2" visible="false">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
                      <font>
@@ -114,7 +113,7 @@
                      </HBox.margin>
                   </Text>
                   <TextField prefHeight="25.0" prefWidth="30.0" />
-                  <Button mnemonicParsing="false" text="+">
+                  <Button fx:id="btnWorkAdd2" mnemonicParsing="false" onAction="#showHBox" text="+">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -124,7 +123,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <HBox visible="false">
+            <HBox fx:id="hBoxWork3" visible="false">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
                      <font>
@@ -153,11 +152,6 @@
                      </HBox.margin>
                   </Text>
                   <TextField prefHeight="25.0" prefWidth="30.0" />
-                  <Button mnemonicParsing="false" text="+">
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Button>
                </children>
                <VBox.margin>
                   <Insets />
@@ -206,7 +200,7 @@
                      </HBox.margin>
                   </Text>
                   <TextField prefHeight="25.0" prefWidth="30.0" />
-                  <Button mnemonicParsing="false" text="+">
+                  <Button fx:id="btnBreakAdd1" mnemonicParsing="false" onAction="#showHBox" text="+">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -216,7 +210,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <HBox visible="false">
+            <HBox fx:id="hBoxBreak2" visible="false">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
                      <font>
@@ -245,7 +239,7 @@
                      </HBox.margin>
                   </Text>
                   <TextField prefHeight="25.0" prefWidth="30.0" />
-                  <Button mnemonicParsing="false" text="+">
+                  <Button fx:id="btnBreakAdd2" mnemonicParsing="false" onAction="#showHBox" text="+">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -255,7 +249,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <HBox visible="false">
+            <HBox fx:id="hBoxBreak3" visible="false">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
                      <font>
@@ -284,7 +278,7 @@
                      </HBox.margin>
                   </Text>
                   <TextField prefHeight="25.0" prefWidth="30.0" />
-                  <Button mnemonicParsing="false" text="+">
+                  <Button fx:id="btnBreakAdd3" mnemonicParsing="false" onAction="#showHBox" text="+">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -294,7 +288,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <HBox visible="false">
+            <HBox fx:id="hBoxBreak4" visible="false">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
                      <font>
@@ -323,7 +317,7 @@
                      </HBox.margin>
                   </Text>
                   <TextField prefHeight="25.0" prefWidth="30.0" />
-                  <Button mnemonicParsing="false" text="+">
+                  <Button fx:id="btnBreakAdd4" mnemonicParsing="false" onAction="#showHBox" text="+">
                      <HBox.margin>
                         <Insets left="20.0" />
                      </HBox.margin>
@@ -333,7 +327,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <HBox visible="false">
+            <HBox fx:id="hBoxBreak5" visible="false">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
                      <font>
@@ -362,11 +356,6 @@
                      </HBox.margin>
                   </Text>
                   <TextField prefHeight="25.0" prefWidth="30.0" />
-                  <Button mnemonicParsing="false" text="+">
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Button>
                </children>
                <VBox.margin>
                   <Insets bottom="10.0" />
