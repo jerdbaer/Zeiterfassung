@@ -1,7 +1,7 @@
 1. Open https://dev.mysql.com/downloads/installer/
 2. Select Operating System
 3. If you have good internet connectivity, download the file
-   mysql-installer-web-community-8.0.19.0.msi
+   mysql-installer-web-community-8.0.19.0.msi (if you are using windows)
    Else, install mysql-installer-community-8.0.25.0.msi
 4. If necessary, skip the Login or Sign Up for an Oracle Web account part by
    clicking "No thanks, just start my download"
