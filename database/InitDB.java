@@ -8,12 +8,12 @@ public class InitDB{
 
   static {
     try {
-      Class<?> c = Class.forName("com.mysql.jdbc.Driver");
+      Class<?> c = Class.forName("com.mysql.cj.jdbc.Driver");
       if (c != null){
         System.out.println("JDBC-Treiber geladen");
       }
     } catch (ClassNotFoundException e){
-      System.err.println(e);
+      System.err.println("Fehler beim Laden des JDBC-Treibers");
       System.exit(1);
     }
   }
@@ -55,29 +55,29 @@ public class InitDB{
 
   private boolean createDBStructure() {
     String dbName = "Zeiterfassung";
-    String query0 = "CREATE DATABASE IF NOT EXISTS `" + dbName + "`";
-    String query1 = "USE `" + dbName + "`";
-    String query2 = "SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO'; ";
-    String table0 = "CREATE TABLE IF NOT EXISTS `Mitarbeiter` ("
-            + "`MA_ID` int NOT NULL, "
-            + "`MA_Vorname` char(50) NOT NULL, "
-            + "`MA_Nachname` char(50) NOT NULL, "
-            + "`MA_Strasse` char(50) NOT NULL, "
-            + "`MA_PLZ` char(5) NOT NULL, "
-            + "`MA_Ort` char(50) NOT NULL, "
-            + "`MA_Abteilung` char(50) NOT NULL, "
-            + "`MA_E-Mail` char(50) NOT NULL, "
-            + "`MA_Urlaubstage` int NOT NULL, "
-            + "`MA_aktiv` enum('ja', 'nein') NOT NULL, "
-            + "PRIMARY KEY (MA_ID));";
-    String table1 = "CREATE TABLE IF NOT EXISTS `Zeitkonto` ("
-            + "`work_date` date NOT NULL, "
-            + "`MA_ID` int NOT NULL, "
-            + "`Arbeitszeit_Ende` time NOT NULL, "
-            + "`Arbeitszeit_Beginn` time NOT NULL, "
-            + "`Ueberstunden_Tag` time NOT NULL, "
-            + "CONSTRAINT `PK_Zeitkonto` PRIMARY KEY (work_date,MA_ID), "
-            + "FOREIGN KEY (MA_ID) REFERENCES Mitarbeiter(MA_ID));";
+    String query0 = "CREATE DATABASE IF NOT EXISTS " + dbName + "";
+    String query1 = "USE " + dbName + "";
+    String query2 = "SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO' ";
+    String table0 = "CREATE TABLE IF NOT EXISTS Mitarbeiter ("
+            + "MA_ID int NOT NULL, "
+            + "MA_Vorname char(50) NOT NULL, "
+            + "MA_Nachname char(50) NOT NULL, "
+            + "MA_Strasse char(50) NOT NULL, "
+            + "MA_PLZ char(5) NOT NULL, "
+            + "MA_Ort char(50) NOT NULL, "
+            + "MA_Abteilung char(50) NOT NULL, "
+            + "MA_Mail char(50) NOT NULL, "
+            + "MA_Urlaubstage int NOT NULL, "
+            + "MA_aktiv enum('JA', 'NEIN') NOT NULL, "
+            + "PRIMARY KEY (MA_ID))";
+    String table1 = "CREATE TABLE IF NOT EXISTS Zeitkonto ("
+            + "work_date date NOT NULL, "
+            + "MA_ID int NOT NULL, "
+            + "Arbeitszeit_Ende time NOT NULL, "
+            + "Arbeitszeit_Beginn time NOT NULL, "
+            + "Ueberstunden_Tag time NOT NULL, "
+            + "CONSTRAINT PK_Zeitkonto PRIMARY KEY (work_date,MA_ID), "
+            + "FOREIGN KEY (MA_ID) REFERENCES Mitarbeiter(MA_ID))";
 
     Statement stmt = null;
     try{
