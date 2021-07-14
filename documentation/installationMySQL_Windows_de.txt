@@ -1,0 +1,22 @@
+1.   Öffnen Sie https://dev.mysql.com/downloads/installer/
+2.   Wählen Sie Windows aus
+3.   Laden Sie die Datei mysql-installer-community-8.0.25.0.msi herunter
+4.   Wenn nötig, überspringen Sie den Login oder die Registrierung für einen
+     Oracle Web-Account mit "No thanks, just start my download"
+5.   Öffnen Sie den Download-Installer und erlauben Sie Änderungen durch das Programm
+6.   Wählen Sie den Setup-Typen "Full"
+6a.  Manche Features haben spezielle Bedingungen, die Sie nicht haben müssen.
+     Normalerweise werden diese für unsere Anwendung nicht benötigt, daher können
+     Sie den Schritt mit Next überspringen und diese Entscheidung bestätigen
+7.   Folgen Sie weiteren Installationsschritten mit Next und Execute
+8.   Sie werden gebeten, wein Passwort einzugeben. Lassen Sie das Feld frei und
+     fahren Sie mit Check und Next fort
+9.   Behalten Sie die Standardeinstellungen bei und fahren Sie mit Check und Next
+     fort, bis Sie ein Passwort eingeben müssen. Brechen Sie an der Stelle mit Cancel
+     ab, dann fahren Sie fort, bis die Installation abgeschlossen ist.
+10.  Öffnen Sie die Systemsteuerung --> System und Sicherheit --> System --> Erweiterte Systemeinstellungen
+11.  Öffnen Sie Umgebungsvariablen --> Systemvariablen --> Neu...
+12a. Name der Variablen: CLASSPATH
+12b. Geben Sie als Wert der Variablen den Pfad des Java-Connectors Ihrer MySQL-Installation (.jar-Datei) an
+13.  Bestätigen Sie mit OK
+14.  Sie können nun MySQL in Java nutzen

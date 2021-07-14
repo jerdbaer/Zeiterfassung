@@ -12,7 +12,7 @@
      Next or Execute
 8.   You are asked to enter a password. Leave the field empty and continue with Check and Next
 9.   Keep default settings and continue with Next and Execute until you need to
-     enter a password. Cancel at this point, then continue until the installation is finished.
+     enter a password. Cancel at this point, then continue until the installation is finished
 10.  Open the Windows Control Panel --> System and Security --> System --> Advanced system settings
 11.  Open Environment Variables --> System variables --> New...
 12.a Variable name: CLASSPATH
