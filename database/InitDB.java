@@ -2,9 +2,22 @@ package database;
 
 import java.sql.*;
 
+/**
+ * Ein Programm zum Erstellen der Datenbank, die erstmal leer sein wird
+ *
+ * @author Simon Valiente
+ * @author Julian Erxleben
+ * @version 1.0
+ */
+
 public class InitDB{
 
-  private Connection connection;
+  private Connection connection; // Erstellt ein Objekt der Klasse Connection
+
+  /**
+   * Stellt Verbindung zum MySQL-Treiber her.
+   * Misslingt die Verbindung, ist womöglich der CLASSPATH falsch gesetzt
+   */
 
   static {
     try {
@@ -17,6 +30,14 @@ public class InitDB{
       System.exit(1);
     }
   }
+
+  /**
+   * Leerer Konstruktor, der die Methode zum Aufbau der Verbindung zur DB aufruft
+   * und diese danach anlegt. Zudem legt er fest, was beim Schließen des Programms passiert
+   *
+   * @see createConnection()
+   * @see createDBStructure()
+   */
 
   public InitDB() {
     createConnection();
@@ -40,6 +61,10 @@ public class InitDB{
     Runtime.getRuntime().addShutdownHook(shutDownHook);
   }
 
+  /**
+   * Stellt die Verbindung zum Datenbankserver her
+   */
+
   private void createConnection() {
     String url = "jdbc:mysql://localhost/?rewriteBatchedStatements=true";
     String user = "root";
@@ -53,12 +78,16 @@ public class InitDB{
     }
   }
 
+  /**
+   * Erstellt mittels SQL die benötigte Datenbank
+   */
+
   private boolean createDBStructure() {
     String dbName = "Zeiterfassung";
-    String query0 = "CREATE DATABASE IF NOT EXISTS " + dbName + "";
+    String query0 = "CREATE DATABASE IF NOT EXISTS " + dbName + ""; // Erstellt neue Datenbank, falls sie noch nicht existiert
     String query1 = "USE " + dbName + "";
     String query2 = "SET SQL_MODE='NO_AUTO_VALUE_ON_ZERO' ";
-    String table0 = "CREATE TABLE IF NOT EXISTS Mitarbeiter ("
+    String table0 = "CREATE TABLE IF NOT EXISTS Mitarbeiter (" // Erstellt neue Tabelle in der Datenbank
             + "MA_ID int NOT NULL, "
             + "MA_Vorname char(50) NOT NULL, "
             + "MA_Nachname char(50) NOT NULL, "
@@ -70,7 +99,7 @@ public class InitDB{
             + "MA_Urlaubstage int NOT NULL, "
             + "MA_aktiv enum('JA', 'NEIN') NOT NULL, "
             + "PRIMARY KEY (MA_ID))";
-    String table1 = "CREATE TABLE IF NOT EXISTS Zeitkonto ("
+    String table1 = "CREATE TABLE IF NOT EXISTS Zeitkonto (" // Erstellt weitere neue Tabelle in der DB
             + "work_date date NOT NULL, "
             + "MA_ID int NOT NULL, "
             + "Arbeitszeit_Beginn time NOT NULL, "
@@ -107,6 +136,12 @@ public class InitDB{
     }
     return false;
   }
+
+  /**
+   * Hauptprogramm
+   *
+   * @param args Kommandozeilenparameter
+   */
 
   public static void main(String[] args){
     new InitDB();
