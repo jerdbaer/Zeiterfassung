@@ -16,6 +16,8 @@ public class AddArbeitszeit{
   /**
    * Leerer Konstruktor, ruft die Methode zum Aufbau der Verbindung zur DB auf
    * und legt bereits fest, was beim Schließen des Programms passiert
+   *
+   * @see createConnection()
    */
   public AddArbeitszeit(){
     createConnection();
