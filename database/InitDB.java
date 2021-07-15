@@ -73,8 +73,8 @@ public class InitDB{
     String table1 = "CREATE TABLE IF NOT EXISTS Zeitkonto ("
             + "work_date date NOT NULL, "
             + "MA_ID int NOT NULL, "
-            + "Arbeitszeit_Ende time NOT NULL, "
             + "Arbeitszeit_Beginn time NOT NULL, "
+            + "Arbeitszeit_Ende time NOT NULL, "
             + "Ueberstunden_Tag time NOT NULL, "
             + "CONSTRAINT PK_Zeitkonto PRIMARY KEY (work_date,MA_ID), "
             + "FOREIGN KEY (MA_ID) REFERENCES Mitarbeiter(MA_ID))";
