@@ -42,7 +42,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Label>
-            <HBox>
+            <HBox fx:id="hBoxWork1">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
                      <font>
@@ -164,205 +164,218 @@
       </VBox>
    </center>
    <right>
-      <VBox alignment="TOP_CENTER" BorderPane.alignment="CENTER">
+      <HBox BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="Pause">
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </Label>
-            <HBox>
+            <VBox alignment="TOP_CENTER">
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakStart1Hours" prefHeight="25.0" prefWidth="31.0" promptText="12" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="2.6015625">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakStart1Minutes" prefHeight="25.0" prefWidth="30.0" promptText="00" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ende">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakEnd1Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakEnd1Minutes" prefHeight="25.0" prefWidth="30.0" promptText="30" />
-                  <Button fx:id="btnBreakAdd1" mnemonicParsing="false" onAction="#showHBox" text="+">
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Button>
+                  <Label alignment="TOP_CENTER" contentDisplay="CENTER" text="Pause">
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <HBox fx:id="hBoxBreak1">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakStart1Hours" prefHeight="25.0" prefWidth="31.0" promptText="12" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="2.6015625">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakStart1Minutes" prefHeight="25.0" prefWidth="30.0" promptText="00" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ende">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakEnd1Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakEnd1Minutes" prefHeight="25.0" prefWidth="30.0" promptText="30" />
+                        <Button fx:id="btnBreakAdd1" mnemonicParsing="false" onAction="#showHBox" text="+">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox fx:id="hBoxBreak2" visible="false">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakStart2Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="2.6015625">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakStart2Minutes" prefHeight="25.0" prefWidth="30.0" promptText="00" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ende">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakEnd2Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakEnd2Minutes" prefHeight="25.0" prefWidth="30.0" promptText="30" />
+                        <Button fx:id="btnBreakAdd2" mnemonicParsing="false" onAction="#showHBox" text="+">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox fx:id="hBoxBreak3" visible="false">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakStart3Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="2.6015625">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakStart3Minutes" prefHeight="25.0" prefWidth="30.0" promptText="00" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ende">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakEnd3Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakEnd3Minutes" prefHeight="25.0" prefWidth="30.0" promptText="30" />
+                        <Button fx:id="btnBreakAdd3" mnemonicParsing="false" onAction="#showHBox" text="+">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox fx:id="hBoxBreak4" visible="false">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakStart4Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="2.6015625">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakStart4Minutes" prefHeight="25.0" prefWidth="30.0" promptText="00" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ende">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakEnd4Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakEnd4Minutes" prefHeight="25.0" prefWidth="30.0" promptText="30" />
+                        <Button fx:id="btnBreakAdd4" mnemonicParsing="false" onAction="#showHBox" text="+">
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Button>
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </HBox>
+                  <HBox fx:id="hBoxBreak5" visible="false">
+                     <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakStart5Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="2.6015625">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakStart5Minutes" prefHeight="25.0" prefWidth="30.0" promptText="00" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ende">
+                           <font>
+                              <Font size="18.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets left="20.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakEnd5Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
+                           <HBox.margin>
+                              <Insets left="5.0" right="5.0" />
+                           </HBox.margin>
+                        </Text>
+                        <TextField fx:id="txtfieldBreakEnd5Minutes" prefHeight="25.0" prefWidth="30.0" promptText="30" />
+                     </children>
+                     <VBox.margin>
+                        <Insets bottom="10.0" />
+                     </VBox.margin>
+                  </HBox>
                </children>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox fx:id="hBoxBreak2" visible="false">
+            </VBox>
+            <VBox alignment="TOP_CENTER">
+               <HBox.margin>
+                  <Insets left="20.0" top="50.0" />
+               </HBox.margin>
                <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakStart2Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="2.6015625">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakStart2Minutes" prefHeight="25.0" prefWidth="30.0" promptText="00" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ende">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakEnd2Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakEnd2Minutes" prefHeight="25.0" prefWidth="30.0" promptText="30" />
-                  <Button fx:id="btnBreakAdd2" mnemonicParsing="false" onAction="#showHBox" text="+">
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Button>
+                  <Label fx:id="labelErrortxt" />
+                  <Button fx:id="btnInputValidation" mnemonicParsing="false" onAction="#validateInput" text="Eingabe prüfen" />
                </children>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox fx:id="hBoxBreak3" visible="false">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakStart3Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="2.6015625">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakStart3Minutes" prefHeight="25.0" prefWidth="30.0" promptText="00" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ende">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakEnd3Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakEnd3Minutes" prefHeight="25.0" prefWidth="30.0" promptText="30" />
-                  <Button fx:id="btnBreakAdd3" mnemonicParsing="false" onAction="#showHBox" text="+">
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox fx:id="hBoxBreak4" visible="false">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakStart4Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="2.6015625">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakStart4Minutes" prefHeight="25.0" prefWidth="30.0" promptText="00" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ende">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakEnd4Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakEnd4Minutes" prefHeight="25.0" prefWidth="30.0" promptText="30" />
-                  <Button fx:id="btnBreakAdd4" mnemonicParsing="false" onAction="#showHBox" text="+">
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </HBox>
-            <HBox fx:id="hBoxBreak5" visible="false">
-               <children>
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakStart5Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":" wrappingWidth="2.6015625">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakStart5Minutes" prefHeight="25.0" prefWidth="30.0" promptText="00" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ende">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                     <HBox.margin>
-                        <Insets left="20.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakEnd5Hours" prefHeight="25.0" prefWidth="30.0" promptText="12" />
-                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text=":">
-                     <HBox.margin>
-                        <Insets left="5.0" right="5.0" />
-                     </HBox.margin>
-                  </Text>
-                  <TextField fx:id="txtfieldBreakEnd5Minutes" prefHeight="25.0" prefWidth="30.0" promptText="30" />
-               </children>
-               <VBox.margin>
-                  <Insets bottom="10.0" />
-               </VBox.margin>
-            </HBox>
+            </VBox>
          </children>
-      </VBox>
+      </HBox>
    </right>
    <padding>
       <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
@@ -371,7 +384,7 @@
       <VBox alignment="CENTER" BorderPane.alignment="TOP_CENTER">
          <children>
             <Label text="Arbeitszeit buchen" />
-            <Button mnemonicParsing="false" text="Fertig" />
+            <Button fx:id="btnDone" disable="true" mnemonicParsing="false" onAction="#computeInput" text="Fertig" />
          </children>
       </VBox>
    </bottom>
