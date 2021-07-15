@@ -1,7 +1,6 @@
 package database;
 
 import java.sql.*;
-import java.util.Calendar;
 
 /**
  * Ein Programm zum Anlegen und Ändern von Zeitbuchungen.
