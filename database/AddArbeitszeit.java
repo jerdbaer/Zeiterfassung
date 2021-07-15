@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.*;
+import java.util.Calendar;
 
 public class AddArbeitszeit{
 
@@ -34,18 +35,19 @@ public class AddArbeitszeit{
   public boolean addArbeitszeit(Date workDate, int MA_ID, Time beginTime,
                                   Time endTime, Time overtime){
     createConnection();
-    String query = "INSERT INTO zeitkonto VALUES ("
-        + workDate + ", "
-        + MA_ID + ", "
-        + beginTime + ", "
-        + endTime + ", "
-        + overtime + ")";
+    String query = "INSERT INTO zeitkonto VALUES ('"
+        + workDate + "', "
+        + MA_ID + ", '"
+        + beginTime + "', '"
+        + endTime + "', '"
+        + overtime + "')";
 
     Statement stmt = null;
     try{
       connection.setAutoCommit(false);
       stmt = connection.createStatement();
-      stmt.executeQuery(query);
+      stmt.addBatch(query);
+      stmt.executeBatch();
       connection.commit();
       stmt.close();
       connection.close();
@@ -66,11 +68,12 @@ public class AddArbeitszeit{
   }
 
   public static void main(String[] args){
-    Date date = new Date(2021, 17, 15);
+    long a = Long.parseLong("1626213600000");
+    Date date = new Date(a);
     int id = 134;
-    Time begin = new Time(8,0,0);
-    Time end = new Time(18,0,0);
-    Time over = new Time(2,0,0);
+    Time begin = new Time(28800000-3600000);
+    Time end = new Time(64800000-3600000);
+    Time over = new Time(0);
     AddArbeitszeit az = new AddArbeitszeit();
     az.addArbeitszeit(date, id, begin, end, over);
   }
