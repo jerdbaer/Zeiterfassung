@@ -7,7 +7,7 @@ import java.sql.*;
  *
  * @author Simon Valiente
  * @author Julian Erxleben
- * @version 1.0
+ * @version 1.1
  */
 
 public class InitDB{
@@ -97,6 +97,7 @@ public class InitDB{
             + "MA_Abteilung char(50) NOT NULL, "
             + "MA_Mail char(50) NOT NULL, "
             + "MA_Urlaubstage int NOT NULL, "
+            + "MA_Sollarbeitszeit int NOT NULL, "
             + "MA_aktiv enum('JA', 'NEIN') NOT NULL, "
             + "PRIMARY KEY (MA_ID))";
     String table1 = "CREATE TABLE IF NOT EXISTS Zeitkonto (" // Erstellt weitere neue Tabelle in der DB
@@ -104,6 +105,7 @@ public class InitDB{
             + "MA_ID int NOT NULL, "
             + "Arbeitszeit_Beginn time NOT NULL, "
             + "Arbeitszeit_Ende time NOT NULL, "
+            + "Pausengesamtzeit_Tag time NOT NULL, "
             + "Ueberstunden_Tag time NOT NULL, "
             + "CONSTRAINT PK_Zeitkonto PRIMARY KEY (work_date,MA_ID), "
             + "FOREIGN KEY (MA_ID) REFERENCES Mitarbeiter(MA_ID))";
