@@ -97,7 +97,7 @@ public class InitDB{
             + "MA_Abteilung char(50) NOT NULL, "
             + "MA_Mail char(50) NOT NULL, "
             + "MA_Urlaubstage int NOT NULL, "
-            + "MA_Sollarbeitszeit int NOT NULL, "
+            + "MA_Sollarbeitszeit time NOT NULL, "
             + "MA_aktiv enum('JA', 'NEIN') NOT NULL, "
             + "PRIMARY KEY (MA_ID))";
     String table1 = "CREATE TABLE IF NOT EXISTS Zeitkonto (" // Erstellt weitere neue Tabelle in der DB
