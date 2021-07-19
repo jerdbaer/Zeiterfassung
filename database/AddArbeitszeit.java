@@ -6,7 +6,7 @@ import java.sql.*;
  * Ein Programm zum Anlegen und Ändern von Zeitbuchungen.
  *
  * @author Simon Valiente
- * @version 1.0
+ * @version 1.1
  */
 
 public class AddArbeitszeit{
@@ -120,7 +120,7 @@ public class AddArbeitszeit{
     String query = "UPDATE zeitkonto " // Eintrag bzw. Einträge werden überarbeitet
         + "SET Arbeitszeit_Beginn = '" + beginTime + "', "
         + "Arbeitszeit_Ende = '" + endTime + "', "
-        + "Pausengesamtzeit_Tag = '" + totalBreak + ", "
+        + "Pausengesamtzeit_Tag = '" + totalBreak + "', "
         + "Ueberstunden_Tag = '" + overtime + "' "
         + "WHERE work_date = '" + workDate + "' AND " // unter angegebenen Bedingungen
         + "MA_ID = " + MA_ID;
