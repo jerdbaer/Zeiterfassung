@@ -12,14 +12,21 @@ import java.sql.*;
 public class AddArbeitszeit{
 
   private Connection connection; // Erstellt ein Objekt der Klasse Connection
+  private Date workDate;
+  private int MA_ID;
 
   /**
-   * Leerer Konstruktor, ruft die Methode zum Aufbau der Verbindung zur DB auf
+   * Konstruktor, ruft die Methode zum Aufbau der Verbindung zur DB auf
    * und legt bereits fest, was beim Schließen des Programms passiert
+   *
+   * @param workDate ist das Datum des Arbeitstages
+   * @param MA_ID ist die Personalnummer des/der Mitarbeiter:in
    *
    * @see createConnection()
    */
-  public AddArbeitszeit(){
+  public AddArbeitszeit(Date workDate, int MA_ID){
+    this.workDate = workDate;
+    this.MA_ID = MA_ID;
     createConnection();
     Thread shutDownHook = new Thread() {
       public void run() {
@@ -78,21 +85,20 @@ public class AddArbeitszeit{
    * Legt in der Datenbank einen Eintrag für die Arbeitszeit an
    * Ein SQL-Befehl wird erstellt und an {@code commitQuery} übergeben
    *
-   * @param workDate ist das Datum des Arbeitstages
-   * @param MA_ID ist die Personalnummer des/der Mitarbeiter:in
    * @param beginTime ist der Beginn der Arbeitszeit
    * @param endTime ist das Ende der Arbeitszeit
+   * @param totalBreak ist die Gesamtzeit der Pausen an dem Tag
    * @param overtime ist die Anzahl der Überstunden, die an dem Tag geleistet wurden
    * @see commitQuery(String query, String method)
    */
 
-  public boolean addArbeitszeit(Date workDate, int MA_ID, Time beginTime,
-  Time endTime, Time overtime){
+  public boolean addArbeitszeit(Time beginTime, Time endTime, Time totalBreak, Time overtime){
     String query = "INSERT INTO zeitkonto VALUES ('" // Neuer Eintrag wird angelegt
         + workDate + "', "
         + MA_ID + ", '"
         + beginTime + "', '"
         + endTime + "', '"
+        + totalBreak + "', '"
         + overtime + "')";
 
     return commitQuery(query, "add");
@@ -103,21 +109,20 @@ public class AddArbeitszeit{
    * Achtung: Wenn der Eintrag nicht existiert, passiert nichts, nicht mal ein Fehler!
    * Ein SQL-Befehl wird erstellt und an {@code commitQuery} übergeben
    *
-   * @param workDate ist das Datum des Arbeitstages
-   * @param MA_ID ist die Personalnummer des/der Mitarbeiter:in
    * @param beginTime ist der Beginn der Arbeitszeit
    * @param endTime ist das Ende der Arbeitszeit
+   * @param totalBreak ist die Gesamtzeit der Pausen an dem Tag
    * @param overtime ist die Anzahl der Überstunden, die an dem Tag geleistet wurden
    * @see commitQuery(String query, String method)
    */
 
-  public boolean modifyArbeitszeit(Date workdate, int MA_ID, Time beginTime,
-  Time endTime, Time overtime){
+  public boolean modifyArbeitszeit(Time beginTime, Time endTime, Time totalBreak, Time overtime){
     String query = "UPDATE zeitkonto " // Eintrag bzw. Einträge werden überarbeitet
         + "SET Arbeitszeit_Beginn = '" + beginTime + "', "
         + "Arbeitszeit_Ende = '" + endTime + "', "
+        + "Pausengesamtzeit_Tag = '" + totalBreak + ", "
         + "Ueberstunden_Tag = '" + overtime + "' "
-        + "WHERE work_date = '" + workdate + "' AND " // unter angegebenen Bedingungen
+        + "WHERE work_date = '" + workDate + "' AND " // unter angegebenen Bedingungen
         + "MA_ID = " + MA_ID;
 
     return commitQuery(query, "modify");
@@ -147,9 +152,11 @@ public class AddArbeitszeit{
       return true;
     } catch (SQLException e){
       if (method == "add"){
-        System.err.println("Eintrag existiert bereits.");
+        // System.err.println("Eintrag existiert bereits.");
+        e.printStackTrace();
       } else if (method == "modify"){
-        System.err.println("Eintrag existiert nicht.");
+        // System.err.println("Eintrag existiert nicht.");
+        e.printStackTrace();
       } else {
         e.printStackTrace();
       }
@@ -168,18 +175,14 @@ public class AddArbeitszeit{
    */
 
   public void tests(){
-    long a = Long.parseLong("1626213600000");
-    long b = a + 86400000;
-    Date date = new Date(a);
-    int id = 134;
     Time begin = new Time(28800000-3600000);
     Time end = new Time(64800000-3600000);
+    Time totalBreak = new Time(3600000);
     Time over = new Time(0);
-    addArbeitszeit(date, id, begin, end, over);
-    Date newDate = new Date(b);
+    addArbeitszeit(begin, end, totalBreak, over);
     Time newEnd = new Time(64800000);
     Time newOver = new Time(3600000);
-    modifyArbeitszeit(newDate, id, begin, newEnd, newOver);
+    modifyArbeitszeit(begin, newEnd, totalBreak, newOver);
   }
 
   /**
@@ -189,7 +192,11 @@ public class AddArbeitszeit{
    */
 
   public static void main(String[] args){
-    AddArbeitszeit az = new AddArbeitszeit();
+    long a = Long.parseLong("1626213600000");
+    long b = a + 86400000;
+    Date date = new Date(a);
+    int id = 134;
+    AddArbeitszeit az = new AddArbeitszeit(date, id);
     az.tests();
 
   }
