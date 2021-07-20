@@ -30,7 +30,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Label>
-            <DatePicker editable="false" promptText="TT.MM.JJJJ" />
+            <DatePicker fx:id="datepicker" editable="false" promptText="TT.MM.JJJJ" />
          </children>
       </VBox>
    </left>

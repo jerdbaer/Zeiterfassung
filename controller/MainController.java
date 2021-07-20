@@ -2,6 +2,7 @@ package controller;
 
 import models.ValidationState;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,6 +12,7 @@ import java.util.function.UnaryOperator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -19,6 +21,9 @@ import javafx.scene.layout.HBox;
 
 public class MainController {
 
+	@FXML
+    private DatePicker datepicker;
+	
 	@FXML
 	private HBox hBoxWork1;
 
@@ -307,6 +312,14 @@ public class MainController {
 			if(!isBreakinbetweenWorksegment)
 				validation.add(ValidationState.NOT_VALID_BREAK_IS_NOT_IN_WORKTIME);
 		}
+		
+		//datepicker
+		var selectedDay = datepicker.getValue();
+		var days = 31; //how many days are possible to edit till now
+		if(selectedDay.isAfter(LocalDate.now()))
+			validation.add(ValidationState.NOT_VALID_SELECTED_DAY_IS_IN_THE_FUTURE);
+		if(selectedDay.isBefore(LocalDate.now().minusDays(days)))
+			validation.add(ValidationState.NOT_VALID_SELECTED_DAY_IS_TO_FAR_IN_THE_PAST);
 		
 		
 		
