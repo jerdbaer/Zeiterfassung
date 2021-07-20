@@ -215,12 +215,12 @@ public class MainController {
 			}
 
 		} else if (buttonpressed == btnWorkAdd2) {
-			
+
 			if (work2.exists()) {
 				hBoxWork3.setVisible(true);
 				btnWorkAdd2.setVisible(false);
 			}
-			
+
 		} else if (buttonpressed == btnBreakAdd1) {
 			hBoxBreak2.setVisible(true);
 			btnBreakAdd1.setVisible(false);
@@ -239,6 +239,8 @@ public class MainController {
 
 	@FXML
 	void validateInput(ActionEvent event) {
+		
+		//testing the UserInput for Worksegments
 		var work1 = new MainViewInputField(txtfieldWorkStart1Hours.getText(), txtfieldWorkStart1Minutes.getText(),
 				txtfieldWorkEnd1Hours.getText(), txtfieldWorkEnd1Minutes.getText());
 		var work2 = new MainViewInputField(txtfieldWorkStart2Hours.getText(), txtfieldWorkStart2Minutes.getText(),
@@ -248,12 +250,13 @@ public class MainController {
 		MainViewInputField[] workInput = { work1, work2, work3 };
 
 		var validation = new ArrayList<ValidationState>();
+
 		for (int i = 0; i < workInput.length; i++) {
 			var input = workInput[i];
 
 			if (input.equals(work1)) {
 				if (!(work1.exists()))
-					validation.add(ValidationState.NOT_VALID);
+					validation.add(ValidationState.NOT_VALID_NO_INPUT_FOUND);
 			} else {
 				if (input.exists()) {
 					input.setPredecessorEnd(workInput[i - 1]);
@@ -263,19 +266,62 @@ public class MainController {
 			}
 			validation.add(input.valid());
 		}
-
-		if (validation.stream().allMatch(elm -> elm.equals(ValidationState.VALID)))
+		
+		//testing the UserInput for Breaks
+		var break1 = new MainViewInputField(txtfieldBreakStart1Hours.getText(), txtfieldBreakStart1Minutes.getText(),
+				txtfieldBreakEnd1Hours.getText(), txtfieldBreakEnd1Minutes.getText());
+		var break2 = new MainViewInputField(txtfieldBreakStart2Hours.getText(), txtfieldBreakStart2Minutes.getText(),
+				txtfieldBreakEnd2Hours.getText(), txtfieldBreakEnd2Minutes.getText());
+		var break3 = new MainViewInputField(txtfieldBreakStart3Hours.getText(), txtfieldBreakStart3Minutes.getText(),
+				txtfieldBreakEnd3Hours.getText(), txtfieldBreakEnd3Minutes.getText());
+		var break4 = new MainViewInputField(txtfieldBreakStart4Hours.getText(), txtfieldBreakStart4Minutes.getText(),
+				txtfieldBreakEnd4Hours.getText(), txtfieldBreakEnd4Minutes.getText());
+		var break5 = new MainViewInputField(txtfieldBreakStart5Hours.getText(), txtfieldBreakStart5Minutes.getText(),
+				txtfieldBreakEnd5Hours.getText(), txtfieldBreakEnd5Minutes.getText());
+		MainViewInputField[] allBreaks = { break1, break2, break3, break4, break5 };
+		var breakInput = new ArrayList<MainViewInputField>();
+		for(MainViewInputField abreak : allBreaks ) {
+			validation.add(abreak.valid());
+			if(abreak.exists())
+				breakInput.add(abreak);
+		}
+			
+		
+		var worksegmentsBreaksMustBeIn = new ArrayList<MainViewInputField>();
+		for(MainViewInputField work : workInput)
+		{
+			if(work.exists())
+				worksegmentsBreaksMustBeIn.add(work);
+		}
+		
+		breakInput.stream().forEach(elm -> elm.setSelfStart());
+		breakInput.stream().forEach(elm -> elm.setSelfEnd());
+		
+		worksegmentsBreaksMustBeIn.stream().forEach(elm -> elm.setSelfStart());
+		worksegmentsBreaksMustBeIn.stream().forEach(elm -> elm.setSelfEnd());
+		
+		for(MainViewInputField breaks : breakInput) {
+			var isBreakinbetweenWorksegment = worksegmentsBreaksMustBeIn.stream()
+			.filter(elm -> elm.getSelfStart().isBefore(breaks.getSelfStart()) && elm.getSelfEnd().isAfter(breaks.getSelfEnd()))
+			.findFirst().isPresent();
+			if(!isBreakinbetweenWorksegment)
+				validation.add(ValidationState.NOT_VALID_BREAK_IS_NOT_IN_WORKTIME);
+		}
+		
+		
+		
+		
+		// If all Validations got passed ? do : else 
+		if (validation.stream().allMatch(elm -> elm.equals(ValidationState.VALID))) {
 			btnDone.setDisable(false);
-		else
+			labelErrortxt.setText("VALID");
+		} else {
+			var Error = validation.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get()
+					.toString();
+			labelErrortxt.setText(Error);
 			btnDone.setDisable(true);
 
-//		var workStart1asText = inputFormatToHHMM(txtfieldWorkStart1Hours.getText(), txtfieldWorkStart1Minutes.getText());
-//		var workStart1asTime = LocalTime.parse(workStart1asText);
-//		
-//		var workEnd1asText = inputFormatToHHMM(txtfieldWorkEnd1Hours.getText(), txtfieldWorkEnd1Minutes.getText());
-//		var workEnd1asTime = LocalTime.parse(workEnd1asText);
-//		
-//		var worksegment1 = Duration.between(workStart1asTime, workEnd1asTime);
+		}
 
 	}
 

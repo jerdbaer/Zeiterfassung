@@ -13,6 +13,7 @@ public class MainViewInputField {
 	private String endMinute;
 	
 	private LocalTime selfStart;
+	private LocalTime selfEnd;
 	private LocalTime predecessorEnd;
 	
 
@@ -29,8 +30,8 @@ public class MainViewInputField {
 	
 	public ValidationState valid() {
 		try {
-			if(isNegativ().equals(ValidationState.NOT_VALID))
-				return ValidationState.NOT_VALID;
+			if(isNegativ().equals(ValidationState.NOT_VALID_START_IS_AFTER_END))
+				return ValidationState.NOT_VALID_START_IS_AFTER_END;
 			return ValidationState.VALID;
 			
 		// no Input is valid Input	
@@ -44,7 +45,7 @@ public class MainViewInputField {
 		try {
 			var start = LocalTime.parse(inputFormatToHHMM(startHour, startMinute));
 			var end = LocalTime.parse(inputFormatToHHMM(endHour, endMinute));
-			return (Duration.between(start, end).isNegative()) ? ValidationState.NOT_VALID : ValidationState.VALID;
+			return (Duration.between(start, end).isNegative()) ? ValidationState.NOT_VALID_START_IS_AFTER_END : ValidationState.VALID;
 		
 		// no Input	
 		}catch(NullPointerException e) {
@@ -53,7 +54,7 @@ public class MainViewInputField {
 				
 	}
 	public ValidationState isAfterPredecessor() {
-		return selfStart.isAfter(predecessorEnd) ? ValidationState.VALID : ValidationState.NOT_VALID;
+		return selfStart.isAfter(predecessorEnd) ? ValidationState.VALID : ValidationState.NOT_VALID_WORKSEGMENTS_MUST_BE_IN_CHRONICAL_ORDER;
 	}
 	
 	private String inputFormatToHHMM(String hh, String mm)
@@ -77,6 +78,17 @@ public class MainViewInputField {
 		var mm = this.startMinute;
 		var hhmm = String.format("%02d", Integer.parseInt(hh)) + ":" + String.format("%02d", Integer.parseInt(mm));
 		this.selfStart = LocalTime.parse(hhmm);
+	}
+	
+	public LocalTime getSelfEnd() {
+		return selfEnd;
+	}
+
+	public void setSelfEnd() {
+		var hh = this.endHour;
+		var mm = this.endMinute;
+		var hhmm = String.format("%02d", Integer.parseInt(hh)) + ":" + String.format("%02d", Integer.parseInt(mm));
+		this.selfEnd = LocalTime.parse(hhmm);
 	}
 
 	public LocalTime getPredecessorEnd() {

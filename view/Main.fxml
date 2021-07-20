@@ -370,7 +370,7 @@
                   <Insets left="20.0" top="50.0" />
                </HBox.margin>
                <children>
-                  <Label fx:id="labelErrortxt" />
+                  <Label fx:id="labelErrortxt" text="                                                                     " />
                   <Button fx:id="btnInputValidation" mnemonicParsing="false" onAction="#validateInput" text="Eingabe prüfen" />
                </children>
             </VBox>
