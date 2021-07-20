@@ -93,7 +93,7 @@ public class AddArbeitszeit{
    */
 
   public boolean addArbeitszeit(Time beginTime, Time endTime, Time totalBreak, Time overtime){
-    String query = "INSERT INTO zeitkonto VALUES ('" // Neuer Eintrag wird angelegt
+    String query = "INSERT IGNORE INTO zeitkonto VALUES ('" // Neuer Eintrag wird angelegt
         + workDate + "', "
         + MA_ID + ", '"
         + beginTime + "', '"
@@ -152,10 +152,8 @@ public class AddArbeitszeit{
       return true;
     } catch (SQLException e){
       if (method == "add"){
-        // System.err.println("Eintrag existiert bereits.");
         e.printStackTrace();
       } else if (method == "modify"){
-        // System.err.println("Eintrag existiert nicht.");
         e.printStackTrace();
       } else {
         e.printStackTrace();
@@ -171,33 +169,11 @@ public class AddArbeitszeit{
   }
 
   /**
-   * Ein Test, den ich für mich gemacht habe. Fliegt in der finalen Version raus
-   */
-
-  public void tests(){
-    Time begin = new Time(28800000-3600000);
-    Time end = new Time(64800000-3600000);
-    Time totalBreak = new Time(3600000);
-    Time over = new Time(0);
-    addArbeitszeit(begin, end, totalBreak, over);
-    Time newEnd = new Time(64800000);
-    Time newOver = new Time(3600000);
-    modifyArbeitszeit(begin, newEnd, totalBreak, newOver);
-  }
-
-  /**
-   * Hauptprogramm. Ruft eigentlich nur den Test auf
+   * Hauptprogramm. Tut nichts
    *
    * @param args Kommandozeilenparameter
    */
 
   public static void main(String[] args){
-    long a = Long.parseLong("1626213600000");
-    long b = a + 86400000;
-    Date date = new Date(a);
-    int id = 134;
-    AddArbeitszeit az = new AddArbeitszeit(date, id);
-    az.tests();
-
   }
 }
