@@ -383,7 +383,7 @@
                <children>
                   <Label fx:id="labelErrortxt" />
                   <Button fx:id="btnInputValidation" mnemonicParsing="false" onAction="#validateInput" text="Eingabe prüfen" />
-                  <AnchorPane prefHeight="46.0" prefWidth="227.0">
+                  <AnchorPane prefHeight="46.0" prefWidth="227.0" visible="false">
                      <children>
                         <Text fill="#e80606" layoutX="12.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gestzeliche Pausenzeit nicht eingehalten" wrappingWidth="214.447265625" />
                         <AnchorPane layoutX="14.0" layoutY="32.0" prefHeight="55.0" prefWidth="200.0" visible="false">
