@@ -212,7 +212,7 @@ public class MainController {
 
 		// total working time
 		var totalWorkTime = totalWorktime(formattedInput);
-	
+
 		// -------------------------------
 		System.out.println(totalWorkTime);
 		// class (methode) von Simon die daten bekommt
@@ -240,12 +240,6 @@ public class MainController {
 		// ------------------------
 
 	}
-
-	
-
-	
-
-	
 
 	@FXML
 	void showHBox(ActionEvent event) {
@@ -276,64 +270,35 @@ public class MainController {
 	@FXML
 	void validateInput(ActionEvent event) {
 
-		// testing the UserInput
+		ArrayList<ValidationState> validationResult = new ArrayList<ValidationState>() ;
+		var input = formatInput();
+		if(input.isEmpty()) {
+			validationResult.add(ValidationState.NOT_VALID_NO_INPUT_FOUND);
 
-		var formattedInput = formatInput();
-		var worklist = new ArrayList<Work>();
-		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> worklist.add((Work) work));
-		var breaklist = new ArrayList<Break>();
-		formattedInput.stream().filter(elm -> elm instanceof Break).forEach(abreak -> breaklist.add((Break) abreak));
-		var validation = new ArrayList<ValidationState>();
-		if (formattedInput.stream().noneMatch(elm -> elm instanceof Work))
-			validation.add(ValidationState.NOT_VALID_NO_INPUT_FOUND);
-		if (formattedInput.stream().filter(elm -> elm instanceof Interruption)
-				.anyMatch(elm -> elm.getDuration().isNegative()))
-			validation.add(ValidationState.NOT_VALID_WORKSEGMENTS_MUST_BE_IN_CHRONICAL_ORDER);
-		else if (formattedInput.stream().anyMatch(elm -> elm.getDuration().isNegative()))
-			validation.add(ValidationState.NOT_VALID_START_IS_AFTER_END);
-
-		for (Break breaks : breaklist) {
-			var isBreakinbetweenWorksegment = worklist.stream().filter(
-					work -> work.getBegin().isBefore(breaks.getBegin()) && work.getEnd().isAfter(breaks.getEnd()))
-					.findFirst().isPresent();
-			if (!isBreakinbetweenWorksegment)
-				validation.add(ValidationState.NOT_VALID_BREAK_IS_NOT_IN_WORKTIME);
 		}
-
-		// datepicker
+		else {
+		var workBegin = workbegin(input);
+		var workEnd = workend(input);
+		var timeAtWork = Duration.between(workBegin, workEnd);
+		var timeAtBreak = breakUinterruptionDuration(input);
+		var legalBreak = calculateLegalBreak(timeAtWork);
 		var selectedDay = datepicker.getValue();
-		var days = 31; // how many days are possible to edit till now
-		try {
-			if (selectedDay.isAfter(LocalDate.now()))
-				validation.add(ValidationState.NOT_VALID_SELECTED_DAY_IS_IN_THE_FUTURE);
-			if (selectedDay.isBefore(LocalDate.now().minusDays(days)))
-				validation.add(ValidationState.NOT_VALID_SELECTED_DAY_IS_TO_FAR_IN_THE_PAST);
-		} catch (NullPointerException e) {
-			validation.add(ValidationState.NOT_VALID_NO_INPUT_FOUND);
+		var inputValidationController = new InputValidationController(input, legalBreak, timeAtWork, timeAtBreak,
+				workBegin, workEnd, selectedDay);
+		validationResult.addAll(inputValidationController.validation());
 		}
 		
-		// workingtime limits
-		var workbegin = workbegin(formattedInput);
-		if(workbegin.isBefore(LocalTime.of(6, 00)))
-			validation.add(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00);
-		
-		var workend = workend(formattedInput);
-		if(workend.isAfter(LocalTime.of(19, 30)));
-			validation.add(ValidationState.VALID_WORKEND_IS_AFTER_19_30);
-
-
-		// If all Validations got passed ? do : else
-		if (validation.stream().allMatch(elm 
-				-> elm.equals(ValidationState.VALID) 
-				|| elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00) 
-				|| elm.equals(ValidationState.VALID_WORKEND_IS_AFTER_19_30))) {
+		if (validationResult.stream()
+				.allMatch(elm -> elm.equals(ValidationState.VALID)
+						|| elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
+						|| elm.equals(ValidationState.VALID_WORKEND_IS_AFTER_19_30))) {
 			btnDone.setDisable(false);
 			labelErrortxt.setText("VALID");
-			//-----------------------------
+			// -----------------------------
 			// -> Popup-Fenster + Textfeld
-			//-----------------------------
+			// -----------------------------
 		} else {
-			var Error = validation.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get()
+			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get()
 					.toString();
 			labelErrortxt.setText(Error);
 			btnDone.setDisable(true);
@@ -403,7 +368,7 @@ public class MainController {
 		} // -> produced list with work(s) and break(s)
 		return formattedInput;
 	}
-	
+
 	private Duration totalWorktime(ArrayList<Timespann> formattedInput) {
 		Duration totalWorkTime = Duration.ZERO;
 		for (Timespann segment : formattedInput) {
@@ -412,7 +377,7 @@ public class MainController {
 			else if (segment instanceof Break)
 				totalWorkTime = totalWorkTime.minus(segment.getDuration());
 		}
-		return 	totalWorkTime;
+		return totalWorkTime;
 	}
 
 	private LocalTime workbegin(ArrayList<Timespann> formattedInput) {
@@ -421,7 +386,7 @@ public class MainController {
 		var begin = beginlist.stream().sorted().findFirst().get();
 		return begin;
 	}
-	
+
 	private LocalTime workend(ArrayList<Timespann> formattedInput) {
 		var endlist = new ArrayList<LocalTime>();
 		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> endlist.add(work.getEnd()));
@@ -434,9 +399,26 @@ public class MainController {
 		formattedInput.stream().filter(elm -> (elm instanceof Break) || (elm instanceof Interruption))
 				.forEach(elm -> breakUinterruptionList.add(elm.getDuration()));
 		var breakUinterruptionDuration = Duration.ZERO;
-		for(Duration breakUinterruption : breakUinterruptionList) {
+		for (Duration breakUinterruption : breakUinterruptionList) {
 			breakUinterruptionDuration = breakUinterruptionDuration.plus(breakUinterruption);
 		}
 		return breakUinterruptionDuration;
+	}
+
+	private final Duration LEGAL_BREAK_LIMIT_1 = Duration.ofHours(6);
+	private final Duration LEGAL_BREAK_LIMIT_2 = Duration.ofHours(9);
+	private final Duration LEGAL_BREAK_OVER_SIX_HOURS = Duration.ofMinutes(30);
+	private final Duration LEGAL_BREAK_OVER_NINE_HOURS = Duration.ofMinutes(45);
+
+	private Duration calculateLegalBreak(Duration timeAtWork) {
+		Duration legalBreak;
+		if (timeAtWork.minus(LEGAL_BREAK_LIMIT_1).isNegative())
+			legalBreak = Duration.ZERO;
+		else if (timeAtWork.minus(LEGAL_BREAK_LIMIT_2).isNegative())
+			legalBreak = LEGAL_BREAK_OVER_SIX_HOURS;
+		else
+			legalBreak = LEGAL_BREAK_OVER_NINE_HOURS;
+
+		return legalBreak;
 	}
 }
