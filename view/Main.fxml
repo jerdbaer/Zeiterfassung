@@ -5,13 +5,14 @@
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #617B7C;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.MainController">
    <top>
       <Label text="Arbeitszeit" BorderPane.alignment="CENTER">
          <BorderPane.margin>
@@ -31,6 +32,16 @@
                </VBox.margin>
             </Label>
             <DatePicker editable="false" promptText="TT.MM.JJJJ" />
+            <AnchorPane prefHeight="157.0" prefWidth="117.0" visible="false">
+               <children>
+                  <Label layoutX="72.0" layoutY="14.0" text="Label" />
+                  <Text layoutX="3.0" layoutY="99.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ges. Pause" />
+                  <Text layoutX="3.0" layoutY="63.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Pausenzeit" />
+                  <Text layoutX="3.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Arbeitszeit" />
+                  <Label layoutX="72.0" layoutY="50.0" text="Label" />
+                  <Label layoutX="72.0" layoutY="86.0" text="Label" />
+               </children>
+            </AnchorPane>
          </children>
       </VBox>
    </left>
@@ -42,7 +53,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </Label>
-            <HBox fx:id="hBoxWork1">
+            <HBox fx:id="hBoxWork1" alignment="TOP_CENTER">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
                      <font>
@@ -81,7 +92,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <HBox fx:id="hBoxWork2" visible="false">
+            <HBox fx:id="hBoxWork2" alignment="TOP_CENTER" visible="false">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
                      <font>
@@ -123,7 +134,7 @@
                   <Insets bottom="10.0" />
                </VBox.margin>
             </HBox>
-            <HBox fx:id="hBoxWork3" visible="false">
+            <HBox fx:id="hBoxWork3" alignment="TOP_CENTER" visible="false">
                <children>
                   <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Start">
                      <font>
@@ -372,6 +383,26 @@
                <children>
                   <Label fx:id="labelErrortxt" />
                   <Button fx:id="btnInputValidation" mnemonicParsing="false" onAction="#validateInput" text="Eingabe prüfen" />
+                  <AnchorPane prefHeight="46.0" prefWidth="227.0">
+                     <children>
+                        <Text fill="#e80606" layoutX="12.0" layoutY="27.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Gestzeliche Pausenzeit nicht eingehalten" wrappingWidth="214.447265625" />
+                        <AnchorPane layoutX="14.0" layoutY="32.0" prefHeight="55.0" prefWidth="200.0" visible="false">
+                           <children>
+                              <Text fill="#e11111" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ruhezeit &lt;11 std" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="0.0" prefWidth="227.0">
+                     <children>
+                        <Button layoutX="88.0" mnemonicParsing="false" text="Zurück" />
+                     </children>
+                  </AnchorPane>
+                  <AnchorPane prefHeight="0.0" prefWidth="227.0">
+                     <children>
+                        <Button layoutX="63.0" mnemonicParsing="false" text="Eingabe löschen" />
+                     </children>
+                  </AnchorPane>
                </children>
             </VBox>
          </children>
