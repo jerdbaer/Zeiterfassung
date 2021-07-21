@@ -211,41 +211,44 @@ public class MainController {
 		var formattedInput = formatInput();
 
 		// total working time
-		Duration totalWorkTime = Duration.ZERO;
-		for (Timespann segment : formattedInput) {
-			if (segment instanceof Work)
-				totalWorkTime = totalWorkTime.plus(segment.getDuration());
-			else if (segment instanceof Break)
-				totalWorkTime = totalWorkTime.minus(segment.getDuration());
-		}
-		//-------------------------------
+		var totalWorkTime = totalWorktime(formattedInput);
+	
+		// -------------------------------
 		System.out.println(totalWorkTime);
-		//-------------------------------
-		
-		//workbegin
-		var beginlist = new ArrayList<LocalTime>();
-		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> beginlist.add(work.getBegin()));
-		var begin = beginlist.stream().sorted().findFirst().get();
-		
-		//------------------------
+		// class (methode) von Simon die daten bekommt
+		// -------------------------------
+
+		// workbegin
+		var begin = workbegin(formattedInput);
+
+		// ------------------------
 		System.out.println(begin);
-		//------------------------
-		
-		
-		//workend
-		var endlist = new ArrayList<LocalTime>();
-		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> endlist.add(work.getEnd()));
-		var end = endlist.stream().sorted().reduce((first, second) -> second).get();
-		
-		//------------------------
+		// ------------------------
+
+		// workend
+		var end = workend(formattedInput);
+
+		// ------------------------
 		System.out.println(end);
-		//------------------------
-				
+		// ------------------------
+
+		// break&interruptions
+		var breakUinterruptionDuration = breakUinterruptionDuration(formattedInput);
+
+		// ------------------------
+		System.out.println(breakUinterruptionDuration);
+		// ------------------------
+
 	}
+
+	
+
+	
+
+	
 
 	@FXML
 	void showHBox(ActionEvent event) {
-		
 
 		Button buttonpressed = (Button) event.getSource();
 		if (buttonpressed == btnWorkAdd1) {
@@ -283,7 +286,8 @@ public class MainController {
 		var validation = new ArrayList<ValidationState>();
 		if (formattedInput.stream().noneMatch(elm -> elm instanceof Work))
 			validation.add(ValidationState.NOT_VALID_NO_INPUT_FOUND);
-		if(formattedInput.stream().filter(elm -> elm instanceof Interruption).anyMatch(elm -> elm.getDuration().isNegative()))
+		if (formattedInput.stream().filter(elm -> elm instanceof Interruption)
+				.anyMatch(elm -> elm.getDuration().isNegative()))
 			validation.add(ValidationState.NOT_VALID_WORKSEGMENTS_MUST_BE_IN_CHRONICAL_ORDER);
 		else if (formattedInput.stream().anyMatch(elm -> elm.getDuration().isNegative()))
 			validation.add(ValidationState.NOT_VALID_START_IS_AFTER_END);
@@ -296,7 +300,6 @@ public class MainController {
 				validation.add(ValidationState.NOT_VALID_BREAK_IS_NOT_IN_WORKTIME);
 		}
 
-
 		// datepicker
 		var selectedDay = datepicker.getValue();
 		var days = 31; // how many days are possible to edit till now
@@ -308,11 +311,27 @@ public class MainController {
 		} catch (NullPointerException e) {
 			validation.add(ValidationState.NOT_VALID_NO_INPUT_FOUND);
 		}
+		
+		// workingtime limits
+		var workbegin = workbegin(formattedInput);
+		if(workbegin.isBefore(LocalTime.of(6, 00)))
+			validation.add(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00);
+		
+		var workend = workend(formattedInput);
+		if(workend.isAfter(LocalTime.of(19, 30)));
+			validation.add(ValidationState.VALID_WORKEND_IS_AFTER_19_30);
+
 
 		// If all Validations got passed ? do : else
-		if (validation.stream().allMatch(elm -> elm.equals(ValidationState.VALID))) {
+		if (validation.stream().allMatch(elm 
+				-> elm.equals(ValidationState.VALID) 
+				|| elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00) 
+				|| elm.equals(ValidationState.VALID_WORKEND_IS_AFTER_19_30))) {
 			btnDone.setDisable(false);
 			labelErrortxt.setText("VALID");
+			//-----------------------------
+			// -> Popup-Fenster + Textfeld
+			//-----------------------------
 		} else {
 			var Error = validation.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get()
 					.toString();
@@ -327,13 +346,15 @@ public class MainController {
 		// all TextFields
 		TextField[] start1 = { txtfieldWorkStart1Hours, txtfieldWorkStart1Minutes, txtfieldWorkEnd1Hours,
 				txtfieldWorkEnd1Minutes };
-		
-		TextField[] interruption1 = { txtfieldWorkEnd1Hours, txtfieldWorkEnd1Minutes, txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes};
+
+		TextField[] interruption1 = { txtfieldWorkEnd1Hours, txtfieldWorkEnd1Minutes, txtfieldWorkStart2Hours,
+				txtfieldWorkStart2Minutes };
 
 		TextField[] start2 = { txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes, txtfieldWorkEnd2Hours,
 				txtfieldWorkEnd2Minutes };
-		
-		TextField[] interruption2 = { txtfieldWorkEnd2Hours, txtfieldWorkEnd2Minutes, txtfieldWorkStart3Hours, txtfieldWorkStart3Minutes};
+
+		TextField[] interruption2 = { txtfieldWorkEnd2Hours, txtfieldWorkEnd2Minutes, txtfieldWorkStart3Hours,
+				txtfieldWorkStart3Minutes };
 
 		TextField[] start3 = { txtfieldWorkStart3Hours, txtfieldWorkStart3Minutes, txtfieldWorkEnd3Hours,
 				txtfieldWorkEnd3Minutes };
@@ -354,7 +375,8 @@ public class MainController {
 				txtfieldBreakEnd5Minutes };
 
 		// Textfield grouped
-		TextField[][] input = { start1, start2, start3, break1, break2, break3, break4, break5, interruption1, interruption2 };
+		TextField[][] input = { start1, start2, start3, break1, break2, break3, break4, break5, interruption1,
+				interruption2 };
 
 		ArrayList<Timespann> formattedInput = new ArrayList<Timespann>();
 
@@ -381,5 +403,40 @@ public class MainController {
 		} // -> produced list with work(s) and break(s)
 		return formattedInput;
 	}
+	
+	private Duration totalWorktime(ArrayList<Timespann> formattedInput) {
+		Duration totalWorkTime = Duration.ZERO;
+		for (Timespann segment : formattedInput) {
+			if (segment instanceof Work)
+				totalWorkTime = totalWorkTime.plus(segment.getDuration());
+			else if (segment instanceof Break)
+				totalWorkTime = totalWorkTime.minus(segment.getDuration());
+		}
+		return 	totalWorkTime;
+	}
 
+	private LocalTime workbegin(ArrayList<Timespann> formattedInput) {
+		var beginlist = new ArrayList<LocalTime>();
+		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> beginlist.add(work.getBegin()));
+		var begin = beginlist.stream().sorted().findFirst().get();
+		return begin;
+	}
+	
+	private LocalTime workend(ArrayList<Timespann> formattedInput) {
+		var endlist = new ArrayList<LocalTime>();
+		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> endlist.add(work.getEnd()));
+		var end = endlist.stream().sorted().reduce((first, second) -> second).get();
+		return end;
+	}
+
+	private Duration breakUinterruptionDuration(ArrayList<Timespann> formattedInput) {
+		var breakUinterruptionList = new ArrayList<Duration>();
+		formattedInput.stream().filter(elm -> (elm instanceof Break) || (elm instanceof Interruption))
+				.forEach(elm -> breakUinterruptionList.add(elm.getDuration()));
+		var breakUinterruptionDuration = Duration.ZERO;
+		for(Duration breakUinterruption : breakUinterruptionList) {
+			breakUinterruptionDuration = breakUinterruptionDuration.plus(breakUinterruption);
+		}
+		return breakUinterruptionDuration;
+	}
 }
