@@ -209,34 +209,39 @@ public class MainController {
 	void computeInput(ActionEvent event) {
 
 		var formattedInput = formatInput();
+		var calculationController = new CalculationController(formattedInput);
+		
+		var selectedDay = datepicker.getValue();
+		// ------------------------
+		System.out.println(selectedDay); //LocalDAte
+		// ------------------------
 
 		// total working time
-		var totalWorkTime = totalWorktime(formattedInput);
+		var totalWorkTime = calculationController.totalWorktime();
 
 		// -------------------------------
-		System.out.println(totalWorkTime);
-		// class (methode) von Simon die daten bekommt
+		System.out.println(totalWorkTime); //Duration
 		// -------------------------------
 
 		// workbegin
-		var begin = workbegin(formattedInput);
+		var begin = calculationController.getWorkBegin();
 
 		// ------------------------
-		System.out.println(begin);
+		System.out.println(begin); //LocalTime
 		// ------------------------
 
 		// workend
-		var end = workend(formattedInput);
+		var end = calculationController.getWorkEnd();
 
 		// ------------------------
-		System.out.println(end);
+		System.out.println(end); //LocalTime
 		// ------------------------
 
 		// break&interruptions
-		var breakUinterruptionDuration = breakUinterruptionDuration(formattedInput);
+		var breakUinterruptionDuration = calculationController.breakUinterruptionDuration();
 
 		// ------------------------
-		System.out.println(breakUinterruptionDuration);
+		System.out.println(breakUinterruptionDuration); //Duration
 		// ------------------------
 
 	}
@@ -277,11 +282,12 @@ public class MainController {
 
 		}
 		else {
-		var workBegin = workbegin(input);
-		var workEnd = workend(input);
+		var calculationController = new CalculationController(input);	
+		var workBegin = calculationController.getWorkBegin();
+		var workEnd = calculationController.getWorkEnd();
 		var timeAtWork = Duration.between(workBegin, workEnd);
-		var timeAtBreak = breakUinterruptionDuration(input);
-		var legalBreak = calculateLegalBreak(timeAtWork);
+		var timeAtBreak = calculationController.breakUinterruptionDuration();
+		var legalBreak = calculationController.calculateLegalBreak();
 		var selectedDay = datepicker.getValue();
 		var inputValidationController = new InputValidationController(input, legalBreak, timeAtWork, timeAtBreak,
 				workBegin, workEnd, selectedDay);
@@ -369,56 +375,5 @@ public class MainController {
 		return formattedInput;
 	}
 
-	private Duration totalWorktime(ArrayList<Timespann> formattedInput) {
-		Duration totalWorkTime = Duration.ZERO;
-		for (Timespann segment : formattedInput) {
-			if (segment instanceof Work)
-				totalWorkTime = totalWorkTime.plus(segment.getDuration());
-			else if (segment instanceof Break)
-				totalWorkTime = totalWorkTime.minus(segment.getDuration());
-		}
-		return totalWorkTime;
-	}
-
-	private LocalTime workbegin(ArrayList<Timespann> formattedInput) {
-		var beginlist = new ArrayList<LocalTime>();
-		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> beginlist.add(work.getBegin()));
-		var begin = beginlist.stream().sorted().findFirst().get();
-		return begin;
-	}
-
-	private LocalTime workend(ArrayList<Timespann> formattedInput) {
-		var endlist = new ArrayList<LocalTime>();
-		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> endlist.add(work.getEnd()));
-		var end = endlist.stream().sorted().reduce((first, second) -> second).get();
-		return end;
-	}
-
-	private Duration breakUinterruptionDuration(ArrayList<Timespann> formattedInput) {
-		var breakUinterruptionList = new ArrayList<Duration>();
-		formattedInput.stream().filter(elm -> (elm instanceof Break) || (elm instanceof Interruption))
-				.forEach(elm -> breakUinterruptionList.add(elm.getDuration()));
-		var breakUinterruptionDuration = Duration.ZERO;
-		for (Duration breakUinterruption : breakUinterruptionList) {
-			breakUinterruptionDuration = breakUinterruptionDuration.plus(breakUinterruption);
-		}
-		return breakUinterruptionDuration;
-	}
-
-	private final Duration LEGAL_BREAK_LIMIT_1 = Duration.ofHours(6);
-	private final Duration LEGAL_BREAK_LIMIT_2 = Duration.ofHours(9);
-	private final Duration LEGAL_BREAK_OVER_SIX_HOURS = Duration.ofMinutes(30);
-	private final Duration LEGAL_BREAK_OVER_NINE_HOURS = Duration.ofMinutes(45);
-
-	private Duration calculateLegalBreak(Duration timeAtWork) {
-		Duration legalBreak;
-		if (timeAtWork.minus(LEGAL_BREAK_LIMIT_1).isNegative())
-			legalBreak = Duration.ZERO;
-		else if (timeAtWork.minus(LEGAL_BREAK_LIMIT_2).isNegative())
-			legalBreak = LEGAL_BREAK_OVER_SIX_HOURS;
-		else
-			legalBreak = LEGAL_BREAK_OVER_NINE_HOURS;
-
-		return legalBreak;
-	}
+	
 }
