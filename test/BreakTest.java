@@ -6,7 +6,7 @@ import java.time.LocalTime;
 
 import org.junit.jupiter.api.Test;
 
-import josi.calculation.Break;
+import models.Break;
 
 class BreakTest {
 
