@@ -1,6 +1,7 @@
 package controller;
 
 import models.Break;
+import models.BreakInterruption;
 import models.Interruption;
 import models.Timespann;
 import models.ValidationState;
@@ -223,6 +224,8 @@ public class MainController {
 		System.out.println(totalWorkTime); //Duration
 		// -------------------------------
 
+		
+		
 		// workbegin
 		var begin = calculationController.getWorkBegin();
 
@@ -289,8 +292,11 @@ public class MainController {
 		var timeAtBreak = calculationController.breakUinterruptionDuration();
 		var legalBreak = calculationController.calculateLegalBreak();
 		var selectedDay = datepicker.getValue();
+		//------------------------------------------
+		var workEndYesterday = LocalTime.of(16, 30); // need database input
+		//-------------------------------------------
 		var inputValidationController = new InputValidationController(input, legalBreak, timeAtWork, timeAtBreak,
-				workBegin, workEnd, selectedDay);
+				workBegin, workEnd, selectedDay, workEndYesterday);
 		validationResult.addAll(inputValidationController.validation());
 		}
 		
@@ -304,9 +310,12 @@ public class MainController {
 			// -> Popup-Fenster + Textfeld
 			// -----------------------------
 		} else {
-			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get()
-					.toString();
-			labelErrortxt.setText(Error);
+			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();
+			labelErrortxt.setText(Error.toString());
+			//-------------------------------
+			// switch/case backfire TextDisplayed 
+			//-------------------------------
+			
 			btnDone.setDisable(true);
 
 		}
@@ -315,39 +324,51 @@ public class MainController {
 
 	private ArrayList<Timespann> formatInput() {
 		// all TextFields
-		TextField[] start1 = { txtfieldWorkStart1Hours, txtfieldWorkStart1Minutes, txtfieldWorkEnd1Hours,
+		TextField[] work1 = { txtfieldWorkStart1Hours, txtfieldWorkStart1Minutes, txtfieldWorkEnd1Hours,
 				txtfieldWorkEnd1Minutes };
 
 		TextField[] interruption1 = { txtfieldWorkEnd1Hours, txtfieldWorkEnd1Minutes, txtfieldWorkStart2Hours,
 				txtfieldWorkStart2Minutes };
 
-		TextField[] start2 = { txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes, txtfieldWorkEnd2Hours,
+		TextField[] work2 = { txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes, txtfieldWorkEnd2Hours,
 				txtfieldWorkEnd2Minutes };
 
 		TextField[] interruption2 = { txtfieldWorkEnd2Hours, txtfieldWorkEnd2Minutes, txtfieldWorkStart3Hours,
 				txtfieldWorkStart3Minutes };
 
-		TextField[] start3 = { txtfieldWorkStart3Hours, txtfieldWorkStart3Minutes, txtfieldWorkEnd3Hours,
+		TextField[] work3 = { txtfieldWorkStart3Hours, txtfieldWorkStart3Minutes, txtfieldWorkEnd3Hours,
 				txtfieldWorkEnd3Minutes };
 
 		TextField[] break1 = { txtfieldBreakStart1Hours, txtfieldBreakStart1Minutes, txtfieldBreakEnd1Hours,
 				txtfieldBreakEnd1Minutes };
+		
+		TextField[] breakInterruption1 = {  txtfieldBreakEnd1Hours,	txtfieldBreakEnd1Minutes, 
+				txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes};
 
 		TextField[] break2 = { txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes, txtfieldBreakEnd2Hours,
 				txtfieldBreakEnd2Minutes };
+		
+		TextField[] breakInterruption2 = {  txtfieldBreakEnd2Hours,	txtfieldBreakEnd2Minutes, 
+				txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes};
 
 		TextField[] break3 = { txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours,
 				txtfieldBreakEnd3Minutes };
+		
+		TextField[] breakInterruption3 = {  txtfieldBreakEnd3Hours,	txtfieldBreakEnd3Minutes, 
+				txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes};
 
 		TextField[] break4 = { txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours,
 				txtfieldBreakEnd4Minutes };
+		
+		TextField[] breakInterruption4 = {  txtfieldBreakEnd4Hours,	txtfieldBreakEnd4Minutes, 
+				txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes};
 
 		TextField[] break5 = { txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours,
 				txtfieldBreakEnd5Minutes };
 
 		// Textfield grouped
-		TextField[][] input = { start1, start2, start3, break1, break2, break3, break4, break5, interruption1,
-				interruption2 };
+		TextField[][] input = { work1, work2, work3, break1, break2, break3, break4, break5, interruption1,
+				interruption2, breakInterruption1, breakInterruption2, breakInterruption3, breakInterruption4 };
 
 		ArrayList<Timespann> formattedInput = new ArrayList<Timespann>();
 
@@ -361,10 +382,13 @@ public class MainController {
 				var start = LocalTime.of(startHour, startMinutes);
 				var end = LocalTime.of(endHour, endMinutes);
 				Timespann timespann;
-				if (value.equals(start1) || value.equals(start2) || value.equals(start3))
+				if (value.equals(work1) || value.equals(work2) || value.equals(work3))
 					timespann = new Work(start, end);
 				else if (value.equals(interruption1) || value.equals(interruption2))
 					timespann = new Interruption(start, end);
+				else if (value.equals(breakInterruption1) || value.equals(breakInterruption2) 
+						|| value.equals(breakInterruption3) || value.equals(breakInterruption4))
+					timespann = new BreakInterruption(start,end);
 				else
 					timespann = new Break(start, end);
 				formattedInput.add(timespann);
