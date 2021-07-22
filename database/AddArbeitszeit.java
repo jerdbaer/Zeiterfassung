@@ -12,7 +12,7 @@ import java.sql.*;
 public class AddArbeitszeit{
 
   private Connection connection; // Erstellt ein Objekt der Klasse Connection
-  private Date workDate;
+  private String workDate;
   private int MA_ID;
 
   /**
@@ -24,7 +24,7 @@ public class AddArbeitszeit{
    *
    * @see createConnection()
    */
-  public AddArbeitszeit(Date workDate, int MA_ID){
+  public AddArbeitszeit(String workDate, int MA_ID){
     this.workDate = workDate;
     this.MA_ID = MA_ID;
     createConnection();
@@ -92,7 +92,7 @@ public class AddArbeitszeit{
    * @see commitQuery(String query, String method)
    */
 
-  public boolean addArbeitszeit(Time beginTime, Time endTime, Time totalBreak, Time overtime){
+  public boolean addArbeitszeit(String beginTime, String endTime, String totalBreak, String overtime){
     String query = "INSERT IGNORE INTO zeitkonto VALUES ('" // Neuer Eintrag wird angelegt
         + workDate + "', "
         + MA_ID + ", '"
@@ -116,7 +116,7 @@ public class AddArbeitszeit{
    * @see commitQuery(String query, String method)
    */
 
-  public boolean modifyArbeitszeit(Time beginTime, Time endTime, Time totalBreak, Time overtime){
+  public boolean modifyArbeitszeit(String beginTime, String endTime, String totalBreak, String overtime){
     String query = "UPDATE zeitkonto " // Eintrag bzw. Einträge werden überarbeitet
         + "SET Arbeitszeit_Beginn = '" + beginTime + "', "
         + "Arbeitszeit_Ende = '" + endTime + "', "

@@ -8,9 +8,9 @@ import database.*;
 import java.util.ArrayList;
 
 class DatabaseTest {
-	
+
 	private Connection connection;
-	
+
 	static {
 	     try{
 	       Class<?> c = Class.forName("com.mysql.cj.jdbc.Driver");
@@ -22,7 +22,7 @@ class DatabaseTest {
 	       System.exit(1);
 	     }
 	   }
-	
+
 	private void createConnection() throws SQLException {
 		String url = "jdbc:mysql://localhost/zeiterfassung";
 		String user = "root";
@@ -30,12 +30,12 @@ class DatabaseTest {
 		System.out.println("Creating DBConnection");
 		connection = DriverManager.getConnection(url, user, pass);
 	}
-	
+
 	private void addTestMA() {
 		String query0 = "DELETE FROM zeitkonto WHERE MA_ID = 134 OR MA_ID = 136";
 		String query1 = "DELETE FROM mitarbeiter WHERE MA_ID = 134 OR MA_ID = 136";
-		String query2 = "INSERT IGNORE INTO mitarbeiter VALUES (134, 'Erika', 'Musterfrau', 'Görschstr. 32', '13187', 'Berlin', 'Buchhaltung', 'e.muster@gmail.com', 30, '08:00:00', 'ja')";
-		String query3 = "INSERT IGNORE INTO mitarbeiter VALUES (138, 'Matthias', 'Musterfrau', 'Görschstr. 32', '13187', 'Berlin', 'Buchhaltung', 'mat.muster@gmail.com', 30, '08:00:00', 'ja')";
+		String query2 = "INSERT IGNORE INTO mitarbeiter VALUES (134, 'Erika', 'Musterfrau', 'Gï¿½rschstr. 32', '13187', 'Berlin', 'Buchhaltung', 'e.muster@gmail.com', 30, '08:00:00', 'ja')";
+		String query3 = "INSERT IGNORE INTO mitarbeiter VALUES (138, 'Matthias', 'Musterfrau', 'Gï¿½rschstr. 32', '13187', 'Berlin', 'Buchhaltung', 'mat.muster@gmail.com', 30, '08:00:00', 'ja')";
 		Statement stmt = null;
 		try {
 			createConnection();
@@ -62,17 +62,15 @@ class DatabaseTest {
 	@Test
 	void addZeitkontoEintragTest() {
 		addTestMA();
-		long a = Long.parseLong("1626213600000");
-		Date testDate = new Date(a);
+		String testDate = "2021-07-14";
 		int id = 134;
-		Time begin = new Time(25200000);
-		Time end = new Time(61200000);
-		Time totalBreak = new Time(0);
-		Time over = new Time(0);
-		// I may need to resolve the issue time zone if we keep this format
+		String begin = "08:00:00";
+		String end = "18:00:00";
+		String totalBreak = "01:00:00";
+		String over = "01:00:00";
 		AddArbeitszeit addAz = new AddArbeitszeit(testDate, id);
 		addAz.addArbeitszeit(begin, end, totalBreak, over);
-		
+
 		ArrayList<String[]> expected = new ArrayList<String[]>();
 		expected.add(new String[6]);
 		expected.get(0)[0] = "2021-07-14";
@@ -108,7 +106,7 @@ class DatabaseTest {
 				if (connection != null)
 					connection.close();
 			} catch (SQLException e) {
-				
+
 			}
 		}
 		for (int l = 0; l<result.size(); l++) {
@@ -116,22 +114,21 @@ class DatabaseTest {
 				assertEquals(expected.get(l)[k], result.get(l)[k]);
 			}
 		}
-		
+
 	}
-	
+
 	@Test
 	void updateZeitkontoEintragTest() {
-		
-		long a = Long.parseLong("1626213600000");
-		Date testDate = new Date(a);
+
+		String testDate = "2021-07-14";
 		int id = 134;
-		Time begin = new Time(25200000);
-		Time end = new Time(64800000);
-		Time totalBreak = new Time(0);
-		Time over = new Time(3600000);
+		String begin = "08:00:00";
+		String end = "19:00:00";
+		String totalBreak = "01:00:00";
+		String over = "02:00:00";
 		AddArbeitszeit addAz = new AddArbeitszeit(testDate, id);
 		addAz.modifyArbeitszeit(begin, end, totalBreak, over);
-		
+
 		ArrayList<String[]> expected = new ArrayList<String[]>();
 		expected.add(new String[6]);
 		expected.get(0)[0] = "2021-07-14";
@@ -168,7 +165,7 @@ class DatabaseTest {
 				if (connection != null)
 					connection.close();
 			} catch (SQLException e) {
-				
+
 			}
 		}
 		for (int l = 0; l<result.size(); l++) {
@@ -177,40 +174,39 @@ class DatabaseTest {
 			}
 		}
 	}
-	
+
 	@Test
 	void getOvertimeSingleTest() {
 		GetOvertime ot = new GetOvertime();
 		ArrayList<String[]> result = ot.getSum(134);
-		
+
 		ArrayList<String[]> expected = new ArrayList<String[]>();
 		expected.add(new String[2]);
 		expected.get(0)[0] = "134";
 		expected.get(0)[1] = "02:00:00";
-		
+
 		for (int i = 0; i < result.size(); i++) {
 			for (int j = 0; j < 2; j++) {
 				assertEquals(expected.get(i)[j], result.get(i)[j]);
 			}
 		}
 	}
-	
+
 	@Test
 	void getOvertimeAbteilungTest() {
-		long a = Long.parseLong("1626213600000");
-		Date testDate = new Date(a);
+		String testDate = "2021-07-14";
 		int id = 138;
-		Time begin = new Time(25200000);
-		Time end = new Time(61200000);
-		Time totalBreak = new Time(0);
-		Time over = new Time(0);
+		String begin = "08:00:00";
+		String end = "18:00:00";
+		String totalBreak = "01:00:00";
+		String over = "01:00:00";
 		// I may need to resolve the issue time zone if we keep this format
 		AddArbeitszeit addAz = new AddArbeitszeit(testDate, id);
 		addAz.addArbeitszeit(begin, end, totalBreak, over);
-		
+
 		GetOvertime ot = new GetOvertime();
 		ArrayList<String[]> result = ot.getSum("Buchhaltung");
-		
+
 		ArrayList<String[]> expected = new ArrayList<String[]>();
 		expected.add(new String[2]);
 		expected.get(0)[0] = "134";
@@ -218,13 +214,13 @@ class DatabaseTest {
 		expected.add(new String[2]);
 		expected.get(1)[0] = "138";
 		expected.get(1)[1] = "01:00:00";
-		
+
 		for (int i = 0; i < result.size(); i++) {
 			for (int j = 0; j < 2; j++) {
 				assertEquals(expected.get(i)[j], result.get(i)[j]);
 			}
 		}
 	}
-	
+
 
 }
