@@ -18,6 +18,7 @@ public class InputValidationController {
 	private ArrayList<Timespann> inputList;
 	private Duration legalBreak;
 	private Duration timeAtWork;
+	private Duration totalWorkingTime;
 	private Duration timeAtBreak;
 	private LocalTime workBegin;
 	private LocalTime workEnd;
@@ -30,11 +31,13 @@ public class InputValidationController {
 	private final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
 	private final Duration MAX_WORKING_TIME_WITHOUT_BREAK = Duration.ofHours(6);
 
-	public InputValidationController(ArrayList<Timespann> input, Duration legalBreak, Duration timeAtWork,
-			Duration timeAtBreak, LocalTime workBegin, LocalTime workEnd, LocalDate selectedDay ,LocalTime workEndYesterday) {
+	public InputValidationController(ArrayList<Timespann> input, Duration legalBreak, Duration timeAtWork, Duration totalWorkingTime,
+			Duration timeAtBreak, LocalTime workBegin, LocalTime workEnd, LocalDate selectedDay,
+			LocalTime workEndYesterday) {
 		this.inputList = input;
 		this.legalBreak = legalBreak;
 		this.timeAtWork = timeAtWork;
+		this.totalWorkingTime = totalWorkingTime;
 		this.timeAtBreak = timeAtBreak;
 		this.workBegin = workBegin;
 		this.workEnd = workEnd;
@@ -48,8 +51,8 @@ public class InputValidationController {
 		try {
 			var workBeginToday = LocalDateTime.of(selectedDay, workBegin);
 			var workEndYesterdayLDT = LocalDateTime.of(selectedDay.minusDays(1), workEndYesterday);
-			validation.add(checkDurationBetweenWorkingDays(workEndYesterdayLDT,workBeginToday));
-		}catch(NullPointerException e) {
+			validation.add(checkDurationBetweenWorkingDays(workEndYesterdayLDT, workBeginToday));
+		} catch (NullPointerException e) {
 			validation.add(ValidationState.NOT_VALID_NO_DATE_SELECTED);
 		}
 		validation.add(checkInputExists(inputList));
@@ -61,21 +64,22 @@ public class InputValidationController {
 		validation.add(checkWorkTimeLimits(workBegin, workEnd));
 		validation.add(checkTimeAtWorkOverTenHours(timeAtWork));
 		validation.add(checkWorkingTimeOverSixHoursWithoutBreak(inputList, workBegin, workEnd));
-		
 
 		return validation;
 
 	}
-	
-	private ValidationState checkDurationBetweenWorkingDays(LocalDateTime workEndYesterday, LocalDateTime workBeginToday) {
+
+	private ValidationState checkDurationBetweenWorkingDays(LocalDateTime workEndYesterday,
+			LocalDateTime workBeginToday) {
 		var duration = Duration.between(workEndYesterday, workBeginToday);
-		return duration.minus(MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS).isNegative() ? 
-				ValidationState.NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR : ValidationState.VALID;
+		return duration.minus(MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS).isNegative()
+				? ValidationState.NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR
+				: ValidationState.VALID;
 	}
 
 	private ValidationState checkTimeAtWorkOverTenHours(Duration timeAtWork) {
-		return (timeAtWork.compareTo(Duration.ofHours(10)) > 0) ? 
-				ValidationState.NOT_VALID_WORKING_TIME_OVER_TEN_HOURS : ValidationState.VALID;
+		return (totalWorkingTime.compareTo(Duration.ofHours(10)) > 0) ? ValidationState.NOT_VALID_WORKING_TIME_OVER_TEN_HOURS
+				: ValidationState.VALID;
 	}
 
 	private ValidationState checkWorkTimeLimits(LocalTime workBegin, LocalTime workEnd) {
@@ -118,18 +122,18 @@ public class InputValidationController {
 				: ValidationState.VALID;
 	}
 
-	private ValidationState checkBreaksInWorkTime(ArrayList<Timespann> formattedInput, LocalTime workBegin, LocalTime workEnd) {
+	private ValidationState checkBreaksInWorkTime(ArrayList<Timespann> formattedInput, LocalTime workBegin,
+			LocalTime workEnd) {
 		var breaklist = new ArrayList<Break>();
 		formattedInput.stream().filter(elm -> elm instanceof Break).forEach(abreak -> breaklist.add((Break) abreak));
 		var worklist = new ArrayList<Work>();
 		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> worklist.add((Work) work));
-		
 
 		for (Break breaks : breaklist) {
-			
-			if(breaks.getBegin().equals(workBegin) || breaks.getEnd().equals(workEnd))
-				return ValidationState.NOT_VALID_BREAK_CANNOT_BE_AT_WORKING_BEGIN_OR_END;		
-						
+
+			if (breaks.getBegin().equals(workBegin) || breaks.getEnd().equals(workEnd))
+				return ValidationState.NOT_VALID_BREAK_CANNOT_BE_AT_WORKING_BEGIN_OR_END;
+
 			var isBreakinbetweenWorksegment = worklist.stream().filter(
 					work -> work.getBegin().isBefore(breaks.getBegin()) && work.getEnd().isAfter(breaks.getEnd()))
 					.findFirst().isPresent();
@@ -158,24 +162,45 @@ public class InputValidationController {
 		return timeAtBreak.minus(legalBreak).isNegative() ? ValidationState.NOT_VALID_TOTAL_BREAK_ERROR
 				: ValidationState.VALID;
 	}
-	
-	private ValidationState checkWorkingTimeOverSixHoursWithoutBreak(ArrayList<Timespann> formattedInput, LocalTime workBegin, LocalTime workEnd) {
-		var breakBeginlist = new ArrayList<LocalTime>();
-		formattedInput.stream().filter(elm -> elm instanceof Break).forEach(breaks -> breakBeginlist.add(breaks.getBegin()));
-		var beginFirstBreak = breakBeginlist.stream().sorted().findFirst().get();
-		
-		var breakEndlist = new ArrayList<LocalTime>();
-		formattedInput.stream().filter(elm -> elm instanceof Break).forEach(breaks -> breakEndlist.add(breaks.getEnd()));
-		var endLastBreak = breakEndlist.stream().reduce((firstBreak, secondBreak) -> secondBreak).get();
-		
-		if(Duration.between(workBegin, beginFirstBreak).compareTo(MAX_WORKING_TIME_WITHOUT_BREAK) >= 0)
-			return ValidationState.NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR;
-		if(Duration.between(endLastBreak, workEnd).compareTo(MAX_WORKING_TIME_WITHOUT_BREAK) >= 0)
-			return ValidationState.NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR;
 
-		
+	private ValidationState checkWorkingTimeOverSixHoursWithoutBreak(ArrayList<Timespann> formattedInput,
+			LocalTime workBegin, LocalTime workEnd) {
+
+		var workList = new ArrayList<Work>();
+		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> workList.add((Work) work));
+
+		var breakList = new ArrayList<Break>();
+		formattedInput.stream().filter(elm -> elm instanceof Break).forEach(breaks -> breakList.add((Break) breaks));
+
+		for (Work work : workList) {
+			var x = new ArrayList<LocalTime>();
+			
+			// filter Begin, End for all TimeSpann were begin or end is after work Begin
+			formattedInput.stream()
+					.filter(elm -> elm.getBegin().isAfter(work.getBegin()) || elm.getEnd().isAfter(work.getBegin()))
+					.forEach(other ->{
+						x.add(other.getBegin());
+						x.add(other.getEnd());
+					});
+			// filter all Begin, End all who are not work begin AND find first
+			var endWorkSegment = x.stream().filter(elm -> !(elm.equals(work.getBegin()))).sorted().findFirst().get();
+
+			if ((Duration.between(work.getBegin(), endWorkSegment).compareTo(Duration.ofHours(6)) > 0))
+				return ValidationState.NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR;
+		}
+
+		for (Break breaks : breakList) {
+			var x = new ArrayList<LocalTime>();
+			formattedInput.stream()
+					.filter(elm -> elm.getEnd().isAfter(breaks.getEnd()))
+					.forEach(other -> x.add(other.getEnd()));
+			var endWorkSegmentAfterBreak = x.stream().sorted().findFirst().get();
+			if ((Duration.between(breaks.getEnd(), endWorkSegmentAfterBreak).compareTo(Duration.ofHours(6)) > 0))
+				return ValidationState.NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR;
+		}
+
 		return ValidationState.VALID;
-		
+
 	}
 
 }

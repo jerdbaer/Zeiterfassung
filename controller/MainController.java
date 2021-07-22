@@ -6,24 +6,15 @@ import models.Interruption;
 import models.Timespann;
 import models.ValidationState;
 import models.Work;
-
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.function.Predicate;
-import java.util.function.UnaryOperator;
-
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.HBox;
 
 public class MainController {
@@ -218,7 +209,7 @@ public class MainController {
 		// ------------------------
 
 		// total working time
-		var totalWorkTime = calculationController.totalWorktime();
+		var totalWorkTime = calculationController.calculateTotalWorktime();
 
 		// -------------------------------
 		System.out.println(totalWorkTime); //Duration
@@ -289,13 +280,14 @@ public class MainController {
 		var workBegin = calculationController.getWorkBegin();
 		var workEnd = calculationController.getWorkEnd();
 		var timeAtWork = Duration.between(workBegin, workEnd);
+		var totalWorkingTime = calculationController.calculateTotalWorktime();
 		var timeAtBreak = calculationController.breakUinterruptionDuration();
 		var legalBreak = calculationController.calculateLegalBreak();
 		var selectedDay = datepicker.getValue();
 		//------------------------------------------
 		var workEndYesterday = LocalTime.of(16, 30); // need database input
 		//-------------------------------------------
-		var inputValidationController = new InputValidationController(input, legalBreak, timeAtWork, timeAtBreak,
+		var inputValidationController = new InputValidationController(input, legalBreak, timeAtWork, totalWorkingTime, timeAtBreak,
 				workBegin, workEnd, selectedDay, workEndYesterday);
 		validationResult.addAll(inputValidationController.validation());
 		}

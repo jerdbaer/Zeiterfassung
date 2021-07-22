@@ -40,7 +40,7 @@ public class CalculationController {
 		return this.workEnd;
 	}
 	
-	public Duration totalWorktime() {
+	public Duration calculateTotalWorktime() {
 		Duration totalWorkTime = Duration.ZERO;
 		for (Timespann segment : formattedInput) {
 			if (segment instanceof Work)
