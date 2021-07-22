@@ -2,3 +2,7 @@
 /MainController$UserInput.class
 /MainController$UserInputToTime.class
 /MainController$ValidationState.class
+/MainViewInputField.class
+/MainViewInputRestrictionController.class
+/InputValidationController.class
+/CalculationController.class

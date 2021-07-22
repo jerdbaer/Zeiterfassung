@@ -1,25 +1,34 @@
 package controller;
 
+import models.Break;
+import models.BreakInterruption;
+import models.Interruption;
+import models.Timespann;
+import models.ValidationState;
+import models.Work;
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.function.UnaryOperator;
-
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
-import javafx.scene.control.TextFormatter.Change;
 import javafx.scene.layout.HBox;
 
 public class MainController {
-	
+
 	@FXML
-    private HBox hBoxWork1;
-	
+	private DatePicker datepicker;
+
 	@FXML
-    private HBox hBoxBreak1;
+	private HBox hBoxWork1;
+
+	@FXML
+	private HBox hBoxBreak1;
 
 	@FXML
 	private TextField txtfieldWorkStart1Hours;
@@ -165,78 +174,77 @@ public class MainController {
 	public void initialize() {
 
 		// restrict Input
-		txtfieldWorkStart1Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldWorkStart2Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldWorkStart3Hours.setTextFormatter(new TextFormatter<String>(hours));
+		var mainViewInputRestrictionController = new MainViewInputRestrictionController();
 
-		txtfieldWorkEnd1Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldWorkEnd2Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldWorkEnd3Hours.setTextFormatter(new TextFormatter<String>(hours));
+		TextField[] textfieldHour = { txtfieldWorkStart1Hours, txtfieldWorkStart2Hours, txtfieldWorkStart3Hours,
+				txtfieldWorkEnd1Hours, txtfieldWorkEnd2Hours, txtfieldWorkEnd3Hours,
 
-		txtfieldBreakStart1Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldBreakStart2Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldBreakStart3Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldBreakStart4Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldBreakStart5Hours.setTextFormatter(new TextFormatter<String>(hours));
+				txtfieldBreakStart1Hours, txtfieldBreakStart2Hours, txtfieldBreakStart3Hours, txtfieldBreakStart4Hours,
+				txtfieldBreakStart5Hours, txtfieldBreakEnd1Hours, txtfieldBreakEnd2Hours, txtfieldBreakEnd3Hours,
+				txtfieldBreakEnd4Hours, txtfieldBreakEnd5Hours };
 
-		txtfieldBreakEnd1Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldBreakEnd2Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldBreakEnd3Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldBreakEnd4Hours.setTextFormatter(new TextFormatter<String>(hours));
-		txtfieldBreakEnd5Hours.setTextFormatter(new TextFormatter<String>(hours));
+		mainViewInputRestrictionController.setTextfieldHour(textfieldHour);
 
-		txtfieldWorkStart1Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldWorkStart2Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldWorkStart3Minutes.setTextFormatter(new TextFormatter<String>(minutes));
+		TextField[] textfieldMinute = { txtfieldWorkStart1Minutes, txtfieldWorkStart2Minutes, txtfieldWorkStart3Minutes,
+				txtfieldWorkEnd1Minutes, txtfieldWorkEnd2Minutes, txtfieldWorkEnd3Minutes,
 
-		txtfieldWorkEnd1Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldWorkEnd2Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldWorkEnd3Minutes.setTextFormatter(new TextFormatter<String>(minutes));
+				txtfieldBreakStart1Minutes, txtfieldBreakStart2Minutes, txtfieldBreakStart3Minutes,
+				txtfieldBreakStart4Minutes, txtfieldBreakStart5Minutes, txtfieldBreakEnd1Minutes,
+				txtfieldBreakEnd2Minutes, txtfieldBreakEnd3Minutes, txtfieldBreakEnd4Minutes,
+				txtfieldBreakEnd5Minutes };
 
-		txtfieldBreakStart1Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldBreakStart2Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldBreakStart3Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldBreakStart4Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldBreakStart5Minutes.setTextFormatter(new TextFormatter<String>(minutes));
+		mainViewInputRestrictionController.setTextfieldMinute(textfieldMinute);
 
-		txtfieldBreakEnd1Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldBreakEnd2Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldBreakEnd3Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldBreakEnd4Minutes.setTextFormatter(new TextFormatter<String>(minutes));
-		txtfieldBreakEnd5Minutes.setTextFormatter(new TextFormatter<String>(minutes));
+		mainViewInputRestrictionController.setTextFormatter(textfieldHour, textfieldMinute);
 
 	}
 
-	// restriction rules for hours
-	private UnaryOperator<Change> hours = change -> {
-		if (!change.isContentChange())
-			return change;
-
-		String text = change.getControlNewText();
-
-		return text.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3])$") || text.equals("") ? change : null;
-	};
-
-	// restriction rules for minutes
-	private UnaryOperator<Change> minutes = change -> {
-		if (!change.isContentChange())
-			return change;
-
-		String text = change.getControlNewText();
-
-		return text.matches("^([0-9]|[0-5][0-9])$") || text.equals("") ? change : null;
-	};
-
 	@FXML
 	void computeInput(ActionEvent event) {
-		if (txtfieldWorkStart1Hours.getText() != null && txtfieldWorkStart1Minutes.getText() != null
-				&& txtfieldWorkEnd1Hours.getText() != null && txtfieldWorkEnd1Minutes.getText() != null) {
 
-		}
+		var formattedInput = formatInput();
+		var calculationController = new CalculationController(formattedInput);
+		
+		var selectedDay = datepicker.getValue();
+		// ------------------------
+		System.out.println(selectedDay); //LocalDAte
+		// ------------------------
+
+		// total working time
+		var totalWorkTime = calculationController.calculateTotalWorktime();
+
+		// -------------------------------
+		System.out.println(String.format("Arbeitsbeginn %02d:%02d:%02d", totalWorkTime.toHoursPart(), totalWorkTime.toMinutesPart(), totalWorkTime.toSecondsPart())); //Duration
+		// -------------------------------
+
+		
+		
+		// workbegin
+		var begin = calculationController.getWorkBegin();
+
+		// ------------------------
+		System.out.println("Begin\t" + begin.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))); //LocalTime
+		// ------------------------
+
+		// workend
+		var end = calculationController.getWorkEnd();
+
+		// ------------------------
+		System.out.println("Ende\t" +end.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))); //LocalTime
+		// ------------------------
+
+		// break&interruptions
+		var breakUinterruptionDuration = calculationController.breakUinterruptionDuration();
+
+		// ------------------------
+		System.out.println((String.format("Gesamt Pausenzeit %02d:%02d:%02d", breakUinterruptionDuration.toHoursPart(), breakUinterruptionDuration.toMinutesPart(), breakUinterruptionDuration.toSecondsPart()))); //Duration
+		// ------------------------
+
 	}
 
 	@FXML
 	void showHBox(ActionEvent event) {
+
 		Button buttonpressed = (Button) event.getSource();
 		if (buttonpressed == btnWorkAdd1) {
 			hBoxWork2.setVisible(true);
@@ -261,73 +269,129 @@ public class MainController {
 	}
 
 	@FXML
-    void validateInput(ActionEvent event) 
-    {
-		validateHBox(txtfieldWorkStart1Hours.getText(), 
-				txtfieldWorkStart1Minutes.getText(), 
-				txtfieldWorkEnd1Hours.getText(), 
-				txtfieldWorkEnd1Minutes.getText());
-		
-		validateHBox(txtfieldWorkStart2Hours.getText(), 
-				txtfieldWorkStart2Minutes.getText(), 
-				txtfieldWorkEnd2Hours.getText(), 
-				txtfieldWorkEnd2Minutes.getText());
-		
-		validateHBox(txtfieldWorkStart3Hours.getText(), 
-				txtfieldWorkStart3Minutes.getText(), 
-				txtfieldWorkEnd3Hours.getText(), 
-				txtfieldWorkEnd3Minutes.getText());
-		
-		validateHBox(txtfieldBreakStart1Hours.getText(), 
-				txtfieldBreakStart1Minutes.getText(), 
-				txtfieldBreakEnd1Hours.getText(), 
-				txtfieldBreakEnd1Minutes.getText());
-		
-		validateHBox(txtfieldBreakStart2Hours.getText(), 
-				txtfieldBreakStart2Minutes.getText(), 
-				txtfieldBreakEnd2Hours.getText(), 
-				txtfieldBreakEnd2Minutes.getText());
-		
-		validateHBox(txtfieldBreakStart3Hours.getText(), 
-				txtfieldBreakStart3Minutes.getText(), 
-				txtfieldBreakEnd3Hours.getText(), 
-				txtfieldBreakEnd3Minutes.getText());
-		
-		validateHBox(txtfieldBreakStart4Hours.getText(), 
-				txtfieldBreakStart4Minutes.getText(), 
-				txtfieldBreakEnd4Hours.getText(), 
-				txtfieldBreakEnd4Minutes.getText());
-		
-		validateHBox(txtfieldBreakStart5Hours.getText(), 
-				txtfieldBreakStart5Minutes.getText(), 
-				txtfieldBreakEnd5Hours.getText(), 
-				txtfieldBreakEnd5Minutes.getText());
-    }
-	
-	private enum ValidationState
-	{
-		VALID,
-		NOT_VALID
-	}
-	
-	private ValidationState validateHBox(String startHour, String startMinute, String endHour, String endMinute)
-	{
+	void validateInput(ActionEvent event) {
 
-		if(!(startHour.isBlank() && startMinute.isBlank() && endHour.isBlank() &&  endMinute.isBlank()) && 
-				!(!startHour.isBlank() && !startMinute.isBlank() && !endHour.isBlank() &&  !endMinute.isBlank())) 
-			return ValidationState.NOT_VALID;
+		ArrayList<ValidationState> validationResult = new ArrayList<ValidationState>() ;
+		var input = formatInput();
+		if(input.isEmpty()) {
+			validationResult.add(ValidationState.NOT_VALID_NO_INPUT_FOUND);
+
+		}
+		else {
+		var calculationController = new CalculationController(input);	
+		var workBegin = calculationController.getWorkBegin();
+		var workEnd = calculationController.getWorkEnd();
+		var timeAtWork = Duration.between(workBegin, workEnd);
+		var totalWorkingTime = calculationController.calculateTotalWorktime();
+		var timeAtBreak = calculationController.breakUinterruptionDuration();
+		var legalBreak = calculationController.calculateLegalBreak();
+		var selectedDay = datepicker.getValue();
+		//------------------------------------------
+		var workEndYesterday = LocalTime.of(16, 30); // need database input
+		//-------------------------------------------
+		var inputValidationController = new InputValidationController(input, legalBreak, timeAtWork, totalWorkingTime, timeAtBreak,
+				workBegin, workEnd, selectedDay, workEndYesterday);
+		validationResult.addAll(inputValidationController.validation());
+		}
 		
-		var begin = LocalTime.of(Integer.parseInt(startHour),Integer.parseInt(startMinute));
-		var end =LocalTime.of(Integer.parseInt(endHour),Integer.parseInt(endMinute));
-		
-		if (begin.isAfter(end))
-			return ValidationState.NOT_VALID;
-		
-		return ValidationState.VALID;
+		if (validationResult.stream()
+				.allMatch(elm -> elm.equals(ValidationState.VALID)
+						|| elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
+						|| elm.equals(ValidationState.VALID_WORKEND_IS_AFTER_19_30))) {
+			btnDone.setDisable(false);
+			labelErrortxt.setText("VALID");
+			// -----------------------------
+			// -> Popup-Fenster + Textfeld
+			// -----------------------------
+		} else {
+			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();
+			labelErrortxt.setText(Error.toString());
+			//-------------------------------
+			// switch/case backfire TextDisplayed 
+			//-------------------------------
+			
+			btnDone.setDisable(true);
+
+		}
+
 	}
+
+	private ArrayList<Timespann> formatInput() {
+		// all TextFields
+		TextField[] work1 = { txtfieldWorkStart1Hours, txtfieldWorkStart1Minutes, txtfieldWorkEnd1Hours,
+				txtfieldWorkEnd1Minutes };
+
+		TextField[] interruption1 = { txtfieldWorkEnd1Hours, txtfieldWorkEnd1Minutes, txtfieldWorkStart2Hours,
+				txtfieldWorkStart2Minutes };
+
+		TextField[] work2 = { txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes, txtfieldWorkEnd2Hours,
+				txtfieldWorkEnd2Minutes };
+
+		TextField[] interruption2 = { txtfieldWorkEnd2Hours, txtfieldWorkEnd2Minutes, txtfieldWorkStart3Hours,
+				txtfieldWorkStart3Minutes };
+
+		TextField[] work3 = { txtfieldWorkStart3Hours, txtfieldWorkStart3Minutes, txtfieldWorkEnd3Hours,
+				txtfieldWorkEnd3Minutes };
+
+		TextField[] break1 = { txtfieldBreakStart1Hours, txtfieldBreakStart1Minutes, txtfieldBreakEnd1Hours,
+				txtfieldBreakEnd1Minutes };
+		
+		TextField[] breakInterruption1 = {  txtfieldBreakEnd1Hours,	txtfieldBreakEnd1Minutes, 
+				txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes};
+
+		TextField[] break2 = { txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes, txtfieldBreakEnd2Hours,
+				txtfieldBreakEnd2Minutes };
+		
+		TextField[] breakInterruption2 = {  txtfieldBreakEnd2Hours,	txtfieldBreakEnd2Minutes, 
+				txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes};
+
+		TextField[] break3 = { txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours,
+				txtfieldBreakEnd3Minutes };
+		
+		TextField[] breakInterruption3 = {  txtfieldBreakEnd3Hours,	txtfieldBreakEnd3Minutes, 
+				txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes};
+
+		TextField[] break4 = { txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours,
+				txtfieldBreakEnd4Minutes };
+		
+		TextField[] breakInterruption4 = {  txtfieldBreakEnd4Hours,	txtfieldBreakEnd4Minutes, 
+				txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes};
+
+		TextField[] break5 = { txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours,
+				txtfieldBreakEnd5Minutes };
+
+		// Textfield grouped
+		TextField[][] input = { work1, work2, work3, break1, break2, break3, break4, break5, interruption1,
+				interruption2, breakInterruption1, breakInterruption2, breakInterruption3, breakInterruption4 };
+
+		ArrayList<Timespann> formattedInput = new ArrayList<Timespann>();
+
+		for (TextField[] value : input) {
+			try {
+				var startHour = Integer.parseInt(value[0].getText());
+				var startMinutes = Integer.parseInt(value[1].getText());
+				var endHour = Integer.parseInt(value[2].getText());
+				var endMinutes = Integer.parseInt(value[3].getText());
+
+				var start = LocalTime.of(startHour, startMinutes);
+				var end = LocalTime.of(endHour, endMinutes);
+				Timespann timespann;
+				if (value.equals(work1) || value.equals(work2) || value.equals(work3))
+					timespann = new Work(start, end);
+				else if (value.equals(interruption1) || value.equals(interruption2))
+					timespann = new Interruption(start, end);
+				else if (value.equals(breakInterruption1) || value.equals(breakInterruption2) 
+						|| value.equals(breakInterruption3) || value.equals(breakInterruption4))
+					timespann = new BreakInterruption(start,end);
+				else
+					timespann = new Break(start, end);
+				formattedInput.add(timespann);
+			} catch (NumberFormatException e) {
+
+			}
+		} // -> produced list with work(s) and break(s)
+		return formattedInput;
+	}
+
 	
-	private LocalTime format(String hour, String minute)
-	{
-		return LocalTime.of(Integer.parseInt(hour), Integer.parseInt(minute));
-	}
-}	
+}
