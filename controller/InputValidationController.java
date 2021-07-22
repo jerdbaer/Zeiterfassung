@@ -185,7 +185,7 @@ public class InputValidationController {
 			// filter all Begin, End all who are not work begin AND find first
 			var endWorkSegment = x.stream().filter(elm -> !(elm.equals(work.getBegin()))).sorted().findFirst().get();
 
-			if ((Duration.between(work.getBegin(), endWorkSegment).compareTo(Duration.ofHours(6)) > 0))
+			if ((Duration.between(work.getBegin(), endWorkSegment).compareTo(MAX_WORKING_TIME_WITHOUT_BREAK) > 0))
 				return ValidationState.NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR;
 		}
 
@@ -195,7 +195,7 @@ public class InputValidationController {
 					.filter(elm -> elm.getEnd().isAfter(breaks.getEnd()))
 					.forEach(other -> x.add(other.getEnd()));
 			var endWorkSegmentAfterBreak = x.stream().sorted().findFirst().get();
-			if ((Duration.between(breaks.getEnd(), endWorkSegmentAfterBreak).compareTo(Duration.ofHours(6)) > 0))
+			if ((Duration.between(breaks.getEnd(), endWorkSegmentAfterBreak).compareTo(MAX_WORKING_TIME_WITHOUT_BREAK) > 0))
 				return ValidationState.NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR;
 		}
 
