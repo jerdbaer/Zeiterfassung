@@ -8,6 +8,8 @@ import models.ValidationState;
 import models.Work;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -212,7 +214,7 @@ public class MainController {
 		var totalWorkTime = calculationController.calculateTotalWorktime();
 
 		// -------------------------------
-		System.out.println(totalWorkTime); //Duration
+		System.out.println(String.format("Arbeitsbeginn %02d:%02d:%02d", totalWorkTime.toHoursPart(), totalWorkTime.toMinutesPart(), totalWorkTime.toSecondsPart())); //Duration
 		// -------------------------------
 
 		
@@ -221,21 +223,21 @@ public class MainController {
 		var begin = calculationController.getWorkBegin();
 
 		// ------------------------
-		System.out.println(begin); //LocalTime
+		System.out.println("Begin\t" + begin.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))); //LocalTime
 		// ------------------------
 
 		// workend
 		var end = calculationController.getWorkEnd();
 
 		// ------------------------
-		System.out.println(end); //LocalTime
+		System.out.println("Ende\t" +end.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))); //LocalTime
 		// ------------------------
 
 		// break&interruptions
 		var breakUinterruptionDuration = calculationController.breakUinterruptionDuration();
 
 		// ------------------------
-		System.out.println(breakUinterruptionDuration); //Duration
+		System.out.println((String.format("Gesamt Pausenzeit %02d:%02d:%02d", breakUinterruptionDuration.toHoursPart(), breakUinterruptionDuration.toMinutesPart(), breakUinterruptionDuration.toSecondsPart()))); //Duration
 		// ------------------------
 
 	}
