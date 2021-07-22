@@ -14,9 +14,18 @@
 9.   Behalten Sie die Standardeinstellungen bei und fahren Sie mit Check und Next
      fort, bis Sie ein Passwort eingeben müssen. Brechen Sie an der Stelle mit Cancel
      ab, dann fahren Sie fort, bis die Installation abgeschlossen ist.
-10.  Öffnen Sie die Systemsteuerung --> System und Sicherheit --> System --> Erweiterte Systemeinstellungen
-11.  Öffnen Sie Umgebungsvariablen --> Systemvariablen --> Neu...
-12a. Name der Variablen: CLASSPATH
-12b. Geben Sie als Wert der Variablen den Pfad des Java-Connectors Ihrer MySQL-Installation (.jar-Datei) an
-13.  Bestätigen Sie mit OK
-14.  Sie können nun MySQL in Java nutzen
+     
+Bei Ausführung der Java-Programme über Kommandozeile:
+1.  Öffnen Sie die Systemsteuerung --> System und Sicherheit --> System --> Erweiterte Systemeinstellungen
+2.  Öffnen Sie Umgebungsvariablen --> Systemvariablen --> Neu...
+3a. Name der Variablen: CLASSPATH
+3b. Geben Sie als Wert der Variablen den Pfad des Java-Connectors Ihrer MySQL-Installation (mysql-connector-java-[Versionsnummer].jar) an
+4.  Bestätigen Sie mit OK
+5.  Sie können nun MySQL in Java nutzen
+
+Bei Nutzung von Eclipse:
+1. Nach Import des Projekts: Rechtsklick auf das Projekt --> Build path --> Configure Build Path
+2. Libraries --> Classpath --> Add External JARs
+3. Navigation zum Speicherort von mysql-connector-java-[Versionsnummer].jar
+4. Auswählen der Datei
+5. Sie können nun MySQL in Java über Eclipse nutzen
