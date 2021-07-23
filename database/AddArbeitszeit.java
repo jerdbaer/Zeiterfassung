@@ -6,7 +6,7 @@ import java.sql.*;
  * Ein Programm zum Anlegen und Ändern von Zeitbuchungen.
  *
  * @author Simon Valiente
- * @version 1.1
+ * @version 1.2
  */
 
 public class AddArbeitszeit{
@@ -19,7 +19,7 @@ public class AddArbeitszeit{
    * Konstruktor, ruft die Methode zum Aufbau der Verbindung zur DB auf
    * und legt bereits fest, was beim Schließen des Programms passiert
    *
-   * @param workDate ist das Datum des Arbeitstages
+   * @param workDate ist das Datum des Arbeitstages im Format yyyy-mm-dd
    * @param MA_ID ist die Personalnummer des/der Mitarbeiter:in
    *
    * @see createConnection()
@@ -85,21 +85,23 @@ public class AddArbeitszeit{
    * Legt in der Datenbank einen Eintrag für die Arbeitszeit an
    * Ein SQL-Befehl wird erstellt und an {@code commitQuery} übergeben
    *
-   * @param beginTime ist der Beginn der Arbeitszeit
-   * @param endTime ist das Ende der Arbeitszeit
-   * @param totalBreak ist die Gesamtzeit der Pausen an dem Tag
-   * @param overtime ist die Anzahl der Überstunden, die an dem Tag geleistet wurden
+   * @param beginTime ist der Beginn der Arbeitszeit im Format hh:mm:ss
+   * @param endTime ist das Ende der Arbeitszeit im Format hh:mm:ss
+   * @param totalBreak ist die Gesamtzeit der Pausen an dem Tag im Format hh:mm:ss
+   * @param overtime ist die Anzahl der Überstunden, die an dem Tag geleistet wurden im Format hh:mm:ss
+   * @param comment ist der Kommentar zum Arbeitszeiteintrag
    * @see commitQuery(String query, String method)
    */
 
-  public boolean addArbeitszeit(String beginTime, String endTime, String totalBreak, String overtime){
-    String query = "INSERT IGNORE INTO zeitkonto VALUES ('" // Neuer Eintrag wird angelegt
+  public boolean addArbeitszeit(String beginTime, String endTime, String totalBreak, String overtime, String comment){
+    String query = "INSERT INTO zeitkonto VALUES ('" // Neuer Eintrag wird angelegt
         + workDate + "', "
         + MA_ID + ", '"
         + beginTime + "', '"
         + endTime + "', '"
         + totalBreak + "', '"
-        + overtime + "')";
+        + overtime + "', '"
+        + comment + "')";
 
     return commitQuery(query, "add");
   }
@@ -109,19 +111,21 @@ public class AddArbeitszeit{
    * Achtung: Wenn der Eintrag nicht existiert, passiert nichts, nicht mal ein Fehler!
    * Ein SQL-Befehl wird erstellt und an {@code commitQuery} übergeben
    *
-   * @param beginTime ist der Beginn der Arbeitszeit
-   * @param endTime ist das Ende der Arbeitszeit
-   * @param totalBreak ist die Gesamtzeit der Pausen an dem Tag
-   * @param overtime ist die Anzahl der Überstunden, die an dem Tag geleistet wurden
+   * @param beginTime ist der Beginn der Arbeitszeit im Format hh:mm:ss
+   * @param endTime ist das Ende der Arbeitszeit im Format hh:mm:ss
+   * @param totalBreak ist die Gesamtzeit der Pausen an dem Tag im Format hh:mm:ss
+   * @param overtime ist die Anzahl der Überstunden, die an dem Tag geleistet wurden im Format hh:mm:ss
+   * @param comment ist der Kommentar zum Arbeitszeiteintrag
    * @see commitQuery(String query, String method)
    */
 
-  public boolean modifyArbeitszeit(String beginTime, String endTime, String totalBreak, String overtime){
+  public boolean modifyArbeitszeit(String beginTime, String endTime, String totalBreak, String overtime, String comment){
     String query = "UPDATE zeitkonto " // Eintrag bzw. Einträge werden überarbeitet
         + "SET Arbeitszeit_Beginn = '" + beginTime + "', "
         + "Arbeitszeit_Ende = '" + endTime + "', "
         + "Pausengesamtzeit_Tag = '" + totalBreak + "', "
-        + "Ueberstunden_Tag = '" + overtime + "' "
+        + "Ueberstunden_Tag = '" + overtime + "', "
+        + "Kommentar = '" + comment + "' "
         + "WHERE work_date = '" + workDate + "' AND " // unter angegebenen Bedingungen
         + "MA_ID = " + MA_ID;
 
