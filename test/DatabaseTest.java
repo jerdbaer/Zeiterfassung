@@ -110,7 +110,11 @@ class DatabaseTest {
 		String over = "01:00:00";
 		String comment = "";
 		AddArbeitszeit addAz = new AddArbeitszeit(testDate, id);
-		addAz.addArbeitszeit(begin, end, totalBreak, over, comment);
+		try {
+			addAz.addArbeitszeit(begin, end, totalBreak, over, comment);
+		} catch (BatchUpdateException bue) {
+			fail("Exception occured");
+		}
 
 		ArrayList<String[]> expected = new ArrayList<String[]>();
 		expected.add(new String[7]);
@@ -219,9 +223,28 @@ class DatabaseTest {
 			}
 		}
 	}
-
+	
 	@Test
 	@Order(3)
+	void BatchUpdateExceptionTest() {
+		String testDate = "2021-07-14";
+		int id = 134;
+		String begin = "08:00:00";
+		String end = "18:00:00";
+		String totalBreak = "01:30:00";
+		String over = "00:30:00";
+		String comment = "";
+		AddArbeitszeit addAz = new AddArbeitszeit(testDate, id);
+		try {
+			addAz.addArbeitszeit(begin, end, totalBreak, over, comment);
+			fail("Exception did not occur");
+		} catch (BatchUpdateException bue) {
+			assertTrue(true);
+		}
+	}
+
+	@Test
+	@Order(4)
 	void getOvertimeSingleTest() {
 		GetOvertime ot = new GetOvertime();
 		ArrayList<String[]> result = ot.getSum(134);
@@ -239,7 +262,7 @@ class DatabaseTest {
 	}
 
 	@Test
-	@Order(4)
+	@Order(5)
 	void getOvertimeAbteilungTest() {
 		String testDate = "2021-07-14";
 		int id = 138;
@@ -250,7 +273,11 @@ class DatabaseTest {
 		String comment = "";
 		// I may need to resolve the issue time zone if we keep this format
 		AddArbeitszeit addAz = new AddArbeitszeit(testDate, id);
-		addAz.addArbeitszeit(begin, end, totalBreak, over, comment);
+		try {
+			addAz.addArbeitszeit(begin, end, totalBreak, over, comment);
+		} catch (BatchUpdateException bue) {
+			fail("Exception occured");
+		}
 
 		GetOvertime ot = new GetOvertime();
 		ArrayList<String[]> result = ot.getSum("Buchhaltung");

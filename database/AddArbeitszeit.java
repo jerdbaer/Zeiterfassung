@@ -83,17 +83,17 @@ public class AddArbeitszeit{
 
   /**
    * Legt in der Datenbank einen Eintrag für die Arbeitszeit an
-   * Ein SQL-Befehl wird erstellt und an {@code commitQuery} übergeben
+   * Ein SQL-Befehl wird erstellt und an die Datenbank übergeben, wo dieser ausgeführt wird.
    *
    * @param beginTime ist der Beginn der Arbeitszeit im Format hh:mm:ss
    * @param endTime ist das Ende der Arbeitszeit im Format hh:mm:ss
    * @param totalBreak ist die Gesamtzeit der Pausen an dem Tag im Format hh:mm:ss
    * @param overtime ist die Anzahl der Überstunden, die an dem Tag geleistet wurden im Format hh:mm:ss
    * @param comment ist der Kommentar zum Arbeitszeiteintrag
-   * @see commitQuery(String query, String method)
+   * @throws BatchUpdateException wenn bereits ein Eintrag für den MA und das Datum existiert (wird extern abgefangen)
    */
 
-  public boolean addArbeitszeit(String beginTime, String endTime, String totalBreak, String overtime, String comment){
+  public boolean addArbeitszeit(String beginTime, String endTime, String totalBreak, String overtime, String comment) throws BatchUpdateException{
     String query = "INSERT INTO zeitkonto VALUES ('" // Neuer Eintrag wird angelegt
         + workDate + "', "
         + MA_ID + ", '"
@@ -103,20 +103,40 @@ public class AddArbeitszeit{
         + overtime + "', '"
         + comment + "')";
 
-    return commitQuery(query, "add");
+        Statement stmt = null;
+        try{
+          connection.setAutoCommit(false); // Das Statement
+          stmt = connection.createStatement();
+          stmt.addBatch(query);
+          stmt.executeBatch();
+          connection.commit();
+          stmt.close();
+          System.out.println("Eintrag erfolgreich angelegt");
+          return true;
+        } catch (BatchUpdateException e){
+          throw new BatchUpdateException();
+        } catch (SQLException sqle){
+          sqle.printStackTrace();
+        } finally {
+          try{
+            if (stmt != null)
+              stmt.close();
+          } catch (SQLException e){
+          }
+        }
+        return false;
   }
 
   /**
    * Ändert an einem Tag für den/die angegebe:n Mitarbeiter:in die Zeiten
    * Achtung: Wenn der Eintrag nicht existiert, passiert nichts, nicht mal ein Fehler!
-   * Ein SQL-Befehl wird erstellt und an {@code commitQuery} übergeben
+   * Ein SQL-Befehl wird erstellt und an die Datenbank übergeben, wo dieser ausgeführt wird.
    *
    * @param beginTime ist der Beginn der Arbeitszeit im Format hh:mm:ss
    * @param endTime ist das Ende der Arbeitszeit im Format hh:mm:ss
    * @param totalBreak ist die Gesamtzeit der Pausen an dem Tag im Format hh:mm:ss
    * @param overtime ist die Anzahl der Überstunden, die an dem Tag geleistet wurden im Format hh:mm:ss
    * @param comment ist der Kommentar zum Arbeitszeiteintrag
-   * @see commitQuery(String query, String method)
    */
 
   public boolean modifyArbeitszeit(String beginTime, String endTime, String totalBreak, String overtime, String comment){
@@ -129,47 +149,26 @@ public class AddArbeitszeit{
         + "WHERE work_date = '" + workDate + "' AND " // unter angegebenen Bedingungen
         + "MA_ID = " + MA_ID;
 
-    return commitQuery(query, "modify");
-  }
-
-  /**
-   * Übergibt die erhaltenen SQL-Befehle an die Datenbank, wo diese mit MySQL ausgeführt werden
-   *
-   * @param query ist der SQL-Befehl
-   * @param method ist der Vorgang (hinzufügen oder ändern), der durchgeführt wird
-   */
-
-  public boolean commitQuery(String query, String method){
-    Statement stmt = null;
-    try{
-      connection.setAutoCommit(false); // Das Statement
-      stmt = connection.createStatement();
-      stmt.addBatch(query);
-      stmt.executeBatch();
-      connection.commit();
-      stmt.close();
-      if (method == "add"){
-        System.out.println("Eintrag erfolgreich angelegt");
-      } else if (method == "modify"){
-        System.out.println("Eintrag erfolgreich geändert");
-      }
-      return true;
-    } catch (SQLException e){
-      if (method == "add"){
-        e.printStackTrace();
-      } else if (method == "modify"){
-        e.printStackTrace();
-      } else {
-        e.printStackTrace();
-      }
-    } finally {
+      Statement stmt = null;
       try{
-        if (stmt != null)
-          stmt.close();
-      } catch (SQLException e){
+        connection.setAutoCommit(false); // Das Statement
+        stmt = connection.createStatement();
+        stmt.addBatch(query);
+        stmt.executeBatch();
+        connection.commit();
+        stmt.close();
+        System.out.println("Eintrag erfolgreich geändert");
+        return true;
+      } catch (SQLException sqle){
+        sqle.printStackTrace();
+      } finally {
+        try{
+          if (stmt != null)
+            stmt.close();
+        } catch (SQLException e){
+        }
       }
-    }
-    return false;
+      return false;
   }
 
   /**
@@ -179,5 +178,15 @@ public class AddArbeitszeit{
    */
 
   public static void main(String[] args){
+    AddArbeitszeit addAz = new AddArbeitszeit("2021-02-04", 134);
+    try{
+        addAz.addArbeitszeit("08:00:00", "16:30:00", "00:30:00", "00:00:00", "");
+        System.out.println("Eintrag 1 erfolgreich");
+        addAz.addArbeitszeit("08:00:00", "17:30:00", "00:30:00", "01:00:00", "");
+        System.out.println("Something went wrong...");
+    } catch (BatchUpdateException e){
+      System.out.println("Einmal ist gut, zweimal ist schlecht");
+    }
+
   }
 }
