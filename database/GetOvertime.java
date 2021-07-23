@@ -1,13 +1,12 @@
 package database;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 /**
  * Ein Programm zum Erhalt der Überstunden.
  *
  * @author Simon Valiente
- * @version 1.0
+ * @version 2.0
  */
 
  public class GetOvertime{
@@ -80,26 +79,21 @@ import java.util.ArrayList;
     * Zieht die Summe der Überstunden von einem Mitarbeiter.
     *
     * @param MA_ID ist die ID des/der Mitarbeiter:in
+    * @return Summe der Überstunden als String im Format hh:mm:ss (negativ einstellig: -h:mm:ss, negativ zweistellig -hh:mm:ss)
     */
 
-   public ArrayList<String[]> getSum(int MA_ID){
-     String query = "SELECT mitarbeiter.MA_ID, SEC_TO_TIME(SUM(TIME_TO_SEC(zeitkonto.Ueberstunden_Tag))) FROM mitarbeiter "
-      + "LEFT JOIN zeitkonto ON mitarbeiter.MA_ID = zeitkonto.MA_ID "
-      + "WHERE mitarbeiter.MA_ID = " + MA_ID
-      + " GROUP BY mitarbeiter.MA_ID";
+   public String getSum(int MA_ID){
+     String query = "SELECT SEC_TO_TIME(SUM(TIME_TO_SEC(zeitkonto.Ueberstunden_Tag))) FROM zeitkonto "
+      + "WHERE MA_ID = " + MA_ID;
       Statement stmt = null;
-      ArrayList<String[]> result = new ArrayList<String[]>();
+      String resultString = "";
       try{
         connection.setAutoCommit(false);
         stmt = connection.createStatement();
         ResultSet rs = stmt.executeQuery(query);
         connection.commit();
-        int i = 0;
-        while (rs.next()){
-          result.add(new String[2]);
-          result.get(i)[0] = rs.getString(1);
-          result.get(i++)[1] = rs.getString(2);
-        }
+        rs.next();
+        resultString = rs.getString(1);
         stmt.close();
 
       } catch (SQLException e){
@@ -111,45 +105,7 @@ import java.util.ArrayList;
         } catch (SQLException e){
         }
       }
-      return result;
-   }
-
-   /**
-    * Zieht die Summe der Überstunden von einer Abteilung, gruppiert nach Mitarbeiter.
-    *
-    * @param Abteilung ist die ID des/der Mitarbeiter:in
-    */
-
-   public ArrayList<String[]> getSum(String abteilung){
-     String query = "SELECT mitarbeiter.MA_ID, SEC_TO_TIME(SUM(TIME_TO_SEC(zeitkonto.Ueberstunden_Tag))) FROM mitarbeiter "
-      + "LEFT JOIN zeitkonto ON mitarbeiter.MA_ID = zeitkonto.MA_ID "
-      + "WHERE mitarbeiter.MA_Abteilung = '" + abteilung + "'"
-      + " GROUP BY mitarbeiter.MA_ID";
-      Statement stmt = null;
-      ArrayList<String[]> result = new ArrayList<String[]>();
-      try{
-        connection.setAutoCommit(false);
-        stmt = connection.createStatement();
-        ResultSet rs = stmt.executeQuery(query);
-        connection.commit();
-        int i = 0;
-        while (rs.next()){
-          result.add(new String[2]);
-          result.get(i)[0] = rs.getString(1);
-          result.get(i++)[1] = rs.getString(2);
-        }
-        stmt.close();
-
-      } catch (SQLException e){
-        e.printStackTrace();
-      } finally {
-        try{
-          if (stmt != null)
-            stmt.close();
-        } catch (SQLException e){
-        }
-      }
-      return result;
+      return resultString;
    }
 
    public static void main(String[] args){

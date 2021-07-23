@@ -6,10 +6,10 @@ import java.sql.*;
  * Ein Programm zum Anlegen und Ändern von Zeitbuchungen.
  *
  * @author Simon Valiente
- * @version 1.2
+ * @version 2.0
  */
 
-public class AddArbeitszeit{
+public class AddWorkingTime{
 
   private Connection connection; // Erstellt ein Objekt der Klasse Connection
   private String workDate;
@@ -24,7 +24,7 @@ public class AddArbeitszeit{
    *
    * @see createConnection()
    */
-  public AddArbeitszeit(String workDate, int MA_ID){
+  public AddWorkingTime(String workDate, int MA_ID){
     this.workDate = workDate;
     this.MA_ID = MA_ID;
     createConnection();
@@ -91,9 +91,10 @@ public class AddArbeitszeit{
    * @param overtime ist die Anzahl der Überstunden, die an dem Tag geleistet wurden im Format hh:mm:ss
    * @param comment ist der Kommentar zum Arbeitszeiteintrag
    * @throws BatchUpdateException wenn bereits ein Eintrag für den MA und das Datum existiert (wird extern abgefangen)
+   * @return Rückmeldung, ob der Eintrag erfolgreich angelegt wurde
    */
 
-  public boolean addArbeitszeit(String beginTime, String endTime, String totalBreak, String overtime, String comment) throws BatchUpdateException{
+  public boolean addWorkingTime(String beginTime, String endTime, String totalBreak, String overtime, String comment) throws BatchUpdateException{
     String query = "INSERT INTO zeitkonto VALUES ('" // Neuer Eintrag wird angelegt
         + workDate + "', "
         + MA_ID + ", '"
@@ -137,9 +138,10 @@ public class AddArbeitszeit{
    * @param totalBreak ist die Gesamtzeit der Pausen an dem Tag im Format hh:mm:ss
    * @param overtime ist die Anzahl der Überstunden, die an dem Tag geleistet wurden im Format hh:mm:ss
    * @param comment ist der Kommentar zum Arbeitszeiteintrag
+   * @return Rückmeldung, ob der Eintrag erfolgreich geändert wurde
    */
 
-  public boolean modifyArbeitszeit(String beginTime, String endTime, String totalBreak, String overtime, String comment){
+  public boolean modifyWorkingTime(String beginTime, String endTime, String totalBreak, String overtime, String comment){
     String query = "UPDATE zeitkonto " // Eintrag bzw. Einträge werden überarbeitet
         + "SET Arbeitszeit_Beginn = '" + beginTime + "', "
         + "Arbeitszeit_Ende = '" + endTime + "', "
@@ -178,11 +180,11 @@ public class AddArbeitszeit{
    */
 
   public static void main(String[] args){
-    AddArbeitszeit addAz = new AddArbeitszeit("2021-02-04", 134);
+    AddWorkingTime addAz = new AddWorkingTime("2021-02-04", 134);
     try{
-        addAz.addArbeitszeit("08:00:00", "16:30:00", "00:30:00", "00:00:00", "");
+        addAz.addWorkingTime("08:00:00", "16:30:00", "00:30:00", "00:00:00", "");
         System.out.println("Eintrag 1 erfolgreich");
-        addAz.addArbeitszeit("08:00:00", "17:30:00", "00:30:00", "01:00:00", "");
+        addAz.addWorkingTime("08:00:00", "17:30:00", "00:30:00", "01:00:00", "");
         System.out.println("Something went wrong...");
     } catch (BatchUpdateException e){
       System.out.println("Einmal ist gut, zweimal ist schlecht");

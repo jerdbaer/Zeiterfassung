@@ -36,7 +36,7 @@ class DatabaseTest {
 		System.out.println("Creating DBConnection");
 		connection = DriverManager.getConnection(url, user, pass);
 	}
-	
+
 	@BeforeAll
 	private static void addTestMA() {
 		String query0 = "DELETE FROM zeitkonto WHERE MA_ID = 134";
@@ -69,7 +69,7 @@ class DatabaseTest {
 			}
 		}
 	}
-	
+
 	@AfterAll
 	public static void deleteTestMA() {
 		String query0 = "DELETE FROM zeitkonto WHERE MA_ID = 134";
@@ -109,9 +109,9 @@ class DatabaseTest {
 		String totalBreak = "01:00:00";
 		String over = "01:00:00";
 		String comment = "";
-		AddArbeitszeit addAz = new AddArbeitszeit(testDate, id);
+		AddWorkingTime addAz = new AddWorkingTime(testDate, id);
 		try {
-			addAz.addArbeitszeit(begin, end, totalBreak, over, comment);
+			addAz.addWorkingTime(begin, end, totalBreak, over, comment);
 		} catch (BatchUpdateException bue) {
 			fail("Exception occured");
 		}
@@ -174,8 +174,8 @@ class DatabaseTest {
 		String totalBreak = "01:00:00";
 		String over = "02:00:00";
 		String comment = "neu";
-		AddArbeitszeit addAz = new AddArbeitszeit(testDate, id);
-		addAz.modifyArbeitszeit(begin, end, totalBreak, over, comment);
+		AddWorkingTime addAz = new AddWorkingTime(testDate, id);
+		addAz.modifyWorkingTime(begin, end, totalBreak, over, comment);
 
 		ArrayList<String[]> expected = new ArrayList<String[]>();
 		expected.add(new String[7]);
@@ -223,7 +223,7 @@ class DatabaseTest {
 			}
 		}
 	}
-	
+
 	@Test
 	@Order(3)
 	void BatchUpdateExceptionTest() {
@@ -234,9 +234,9 @@ class DatabaseTest {
 		String totalBreak = "01:30:00";
 		String over = "00:30:00";
 		String comment = "";
-		AddArbeitszeit addAz = new AddArbeitszeit(testDate, id);
+		AddWorkingTime addAz = new AddWorkingTime(testDate, id);
 		try {
-			addAz.addArbeitszeit(begin, end, totalBreak, over, comment);
+			addAz.addWorkingTime(begin, end, totalBreak, over, comment);
 			fail("Exception did not occur");
 		} catch (BatchUpdateException bue) {
 			assertTrue(true);
@@ -247,55 +247,27 @@ class DatabaseTest {
 	@Order(4)
 	void getOvertimeSingleTest() {
 		GetOvertime ot = new GetOvertime();
-		ArrayList<String[]> result = ot.getSum(134);
+		String result = ot.getSum(134);
 
-		ArrayList<String[]> expected = new ArrayList<String[]>();
-		expected.add(new String[2]);
-		expected.get(0)[0] = "134";
-		expected.get(0)[1] = "02:00:00";
-
-		for (int i = 0; i < result.size(); i++) {
-			for (int j = 0; j < 2; j++) {
-				assertEquals(expected.get(i)[j], result.get(i)[j]);
-			}
-		}
+		String expected = "02:00:00";
+		assertEquals(expected, result);
 	}
-
+	
 	@Test
 	@Order(5)
-	void getOvertimeAbteilungTest() {
-		String testDate = "2021-07-14";
-		int id = 138;
-		String begin = "08:00:00";
-		String end = "18:00:00";
-		String totalBreak = "01:00:00";
-		String over = "01:00:00";
-		String comment = "";
-		// I may need to resolve the issue time zone if we keep this format
-		AddArbeitszeit addAz = new AddArbeitszeit(testDate, id);
+	void getNegativeOvertimeTest() {
+		AddWorkingTime addAz = new AddWorkingTime("2021-07-15", 134);
 		try {
-			addAz.addArbeitszeit(begin, end, totalBreak, over, comment);
-		} catch (BatchUpdateException bue) {
+			addAz.addWorkingTime("08:00:00", "12:00:00", "00:00:00", "-4:00:00", "halbtags");
+		} catch (BatchUpdateException e) {
 			fail("Exception occured");
 		}
-
+		
 		GetOvertime ot = new GetOvertime();
-		ArrayList<String[]> result = ot.getSum("Buchhaltung");
-
-		ArrayList<String[]> expected = new ArrayList<String[]>();
-		expected.add(new String[2]);
-		expected.get(0)[0] = "134";
-		expected.get(0)[1] = "02:00:00";
-		expected.add(new String[2]);
-		expected.get(1)[0] = "138";
-		expected.get(1)[1] = "01:00:00";
-
-		for (int i = 0; i < result.size(); i++) {
-			for (int j = 0; j < 2; j++) {
-				assertEquals(expected.get(i)[j], result.get(i)[j]);
-			}
-		}
+		String result = ot.getSum(134);
+		
+		String expected = "-2:00:00";
+		assertEquals(expected, result);
 	}
-
 
 }
