@@ -12,9 +12,10 @@ import models.Work;
 public class CalculationController {
 	
 	private ArrayList<Timespann> formattedInput;
+	private Duration timeAtWork;
 	private LocalTime workBegin;
 	private LocalTime workEnd;
-	private Duration timeAtWork;
+	
 	
 	private final Duration LEGAL_BREAK_LIMIT_1 = Duration.ofHours(6);
 	private final Duration LEGAL_BREAK_LIMIT_2 = Duration.ofHours(9);
@@ -23,8 +24,8 @@ public class CalculationController {
 	
 	public CalculationController(ArrayList<Timespann> formattedInput) {
 		this.formattedInput = formattedInput;
-		this.workBegin = workbegin();
-		this.workEnd = workend();
+		this.workBegin = pickWorkBeginFromInput();
+		this.workEnd = pickWorkEndFromInput();
 		this.timeAtWork = Duration.between(workBegin, workEnd);
 	}
 	
@@ -40,26 +41,15 @@ public class CalculationController {
 		return this.workEnd;
 	}
 	
-	public Duration calculateTotalWorktime() {
-		Duration totalWorkTime = Duration.ZERO;
-		for (Timespann segment : formattedInput) {
-			if (segment instanceof Work)
-				totalWorkTime = totalWorkTime.plus(segment.getDuration());
-			else if (segment instanceof Break)
-				totalWorkTime = totalWorkTime.minus(segment.getDuration());
-		}
-		return totalWorkTime;
-	}
-
-	public Duration breakUinterruptionDuration() {
-		var breakUinterruptionList = new ArrayList<Duration>();
+	public Duration calculateBreakAndInterruptionDuration() {
+		var breakAndInterruptionList = new ArrayList<Duration>();
 		formattedInput.stream().filter(elm -> (elm instanceof Break) || (elm instanceof Interruption))
-				.forEach(elm -> breakUinterruptionList.add(elm.getDuration()));
-		var breakUinterruptionDuration = Duration.ZERO;
-		for (Duration breakUinterruption : breakUinterruptionList) {
-			breakUinterruptionDuration = breakUinterruptionDuration.plus(breakUinterruption);
+				.forEach(elm -> breakAndInterruptionList.add(elm.getDuration()));
+		var breakAndInterruptionDuration = Duration.ZERO;
+		for (Duration breakOrInterruption : breakAndInterruptionList) {
+			breakAndInterruptionDuration = breakAndInterruptionDuration.plus(breakOrInterruption);
 		}
-		return breakUinterruptionDuration;
+		return breakAndInterruptionDuration;
 	}
 
 	public Duration calculateLegalBreak() {
@@ -74,14 +64,25 @@ public class CalculationController {
 		return legalBreak;
 	}
 
-	private LocalTime workbegin() {
-		var beginlist = new ArrayList<LocalTime>();
-		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> beginlist.add(work.getBegin()));
-		var begin = beginlist.stream().sorted().findFirst().get();
+	public Duration calculateTotalWorktime() {
+		Duration totalWorkTime = Duration.ZERO;
+		for (Timespann segment : formattedInput) {
+			if (segment instanceof Work)
+				totalWorkTime = totalWorkTime.plus(segment.getDuration());
+			else if (segment instanceof Break)
+				totalWorkTime = totalWorkTime.minus(segment.getDuration());
+		}
+		return totalWorkTime;
+	}
+	
+	private LocalTime pickWorkBeginFromInput() {
+		var beginList = new ArrayList<LocalTime>();
+		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> beginList.add(work.getBegin()));
+		var begin = beginList.stream().sorted().findFirst().get();
 		return begin;
 	}
 
-	private LocalTime workend() {
+	private LocalTime pickWorkEndFromInput() {
 		var endlist = new ArrayList<LocalTime>();
 		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> endlist.add(work.getEnd()));
 		var end = endlist.stream().sorted().reduce((first, second) -> second).get();

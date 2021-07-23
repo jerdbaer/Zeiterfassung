@@ -234,7 +234,7 @@ public class MainController {
 		// ------------------------
 
 		// break&interruptions
-		var breakUinterruptionDuration = calculationController.breakUinterruptionDuration();
+		var breakUinterruptionDuration = calculationController.calculateBreakAndInterruptionDuration();
 
 		// ------------------------
 		System.out.println((String.format("Gesamt Pausenzeit %02d:%02d:%02d", breakUinterruptionDuration.toHoursPart(), breakUinterruptionDuration.toMinutesPart(), breakUinterruptionDuration.toSecondsPart()))); //Duration
@@ -283,7 +283,7 @@ public class MainController {
 		var workEnd = calculationController.getWorkEnd();
 		var timeAtWork = Duration.between(workBegin, workEnd);
 		var totalWorkingTime = calculationController.calculateTotalWorktime();
-		var timeAtBreak = calculationController.breakUinterruptionDuration();
+		var timeAtBreak = calculationController.calculateBreakAndInterruptionDuration();
 		var legalBreak = calculationController.calculateLegalBreak();
 		var selectedDay = datepicker.getValue();
 		//------------------------------------------
