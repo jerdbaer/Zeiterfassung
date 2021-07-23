@@ -110,6 +110,12 @@ public class InitDB{
             + "Kommentar char(50), "
             + "CONSTRAINT PK_Zeitkonto PRIMARY KEY (work_date,MA_ID), "
             + "FOREIGN KEY (MA_ID) REFERENCES Mitarbeiter(MA_ID))";
+    String table2 = "CREATE TABLE IF NOT EXISTS login ("
+            + "MA_ID int NOT NULL, "
+            + "password int NOT NULL, " // Es wird der hashcode vom pw gespeichert
+            + "PRIMARY KEY (MA_ID))";
+            // Ich verknüpfe das doch nicht mit der MA-Tabelle, damit nicht der
+            // MA existieren muss, um den Login zu erstellen
 
     Statement stmt = null;
     try{
@@ -120,6 +126,7 @@ public class InitDB{
       stmt.addBatch(query2);
       stmt.addBatch(table0);
       stmt.addBatch(table1);
+      stmt.addBatch(table2);
       stmt.executeBatch();
       connection.commit();
       stmt.close();
