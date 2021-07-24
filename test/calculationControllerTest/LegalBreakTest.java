@@ -117,16 +117,3 @@ class LegalBreakTest {
 }
 		
 
-
-//	
-//
-//	@Test
-//	public void TotalTimeAtWorkOver9Hours_LegalBreakIs45Minutes() 
-//	{
-//		LegalBreak legalBreak = new LegalBreak();
-//
-//		LocalTime calculatedBreak = legalBreak.calculateLegalBreak(LocalTime.of(9, 45));
-//
-//		assertEquals(LEGAL_BREAK_45, calculatedBreak);
-//	}
-

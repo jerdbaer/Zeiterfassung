@@ -17,13 +17,6 @@ class WorkBeginAndWorkEndTest {
 	private final Work WORK_10_TO_16H30_IS_6H30M = new Work(LocalTime.of(10, 0), LocalTime.of(16,30));
 	private final Work WORK_6H30_TO_19H30_IS_13 = new Work(LocalTime.of(6, 30), LocalTime.of(19,30));
 	
-//	private final Work BREAK_8_TO_9_IS_1 = new Work(LocalTime.of(8,0), LocalTime.of(9,0));
-//	private final Work BREAK_11H30M_TO_12_IS_0H30M = new Work(LocalTime.of(11, 30), LocalTime.of(12,0));
-//	private final Work BREAK_13_TO_15HM30_IS_2H30M = new Work(LocalTime.of(13,0), LocalTime.of(15,30));
-//	private final Work BREAK_10_TO_0H10M_IS_0H10M = new Work(LocalTime.of(10,0), LocalTime.of(10,10));
-//	private final Work BREAK_8H15_TO_8H30M_IS_0H15M = new Work(LocalTime.of(8,15), LocalTime.of(8,30));
-	
-	
 	// Test for pickWorkBeginFromInput() --> private weil im Konstruktor
 	@Test
 	void singleInputWork_WORK_8_TO_17_BeginIs8() {
