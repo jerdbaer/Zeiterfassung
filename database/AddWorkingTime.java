@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.*;
+import java.util.HashMap;
 
 /**
  * Ein Programm zum Anlegen und Ändern von Zeitbuchungen.
@@ -172,19 +173,36 @@ public class AddWorkingTime{
       }
       return false;
   }
-  
-  public boolean close() {
-	  try {
-		  if(connection != null && !connection.isClosed()) {
-			connection.close();
-			if(connection.isClosed()) {
-				System.out.println("Connection to Database is closed");
-			}
-		  }
-	  } catch (SQLException e) {
-		  System.out.println("Couldn't close Connection to Database");
-	  }
-	  return true;
+
+  public HashMap<String, String> getWorkingTime(){
+    String query = "SELECT Arbeitszeit_Beginn, Arbeitszeit_Ende, Pausengesamtzeit_Tag, Ueberstunden_Tag, Kommentar "
+     + "FROM zeitkonto WHERE "
+     + "work_date  = '" + workDate + "' AND "
+     + "MA_ID = " + MA_ID;
+     Statement stmt = null;
+     HashMap<String, String> result = new HashMap<String, String>();
+
+     try{
+       connection.setAutoCommit(false);
+       stmt = connection.createStatement();
+       ResultSet rs = stmt.executeQuery(query);
+       connection.commit();
+       rs.next();
+       result.put("Arbeitszeit_Beginn", rs.getString(1));
+       result.put("Arbeitszeit_Ende", rs.getString(2));
+       result.put("Pausengesamtzeit_Tag", rs.getString(3));
+       result.put("Ueberstunden_Tag", rs.getString(4));
+       result.put("Kommentar", rs.getString(5));
+       stmt.close();
+     } catch (SQLException e){
+       e.printStackTrace();
+     } finally {
+       try {
+         if (stmt != null)
+          stmt.close();
+       } catch (SQLException e){}
+     }
+     return result;
   }
 
   /**
