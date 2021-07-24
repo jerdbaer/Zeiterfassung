@@ -24,7 +24,7 @@ public class InputValidationController {
 	private LocalTime workEndYesterday;
 	private LocalDate selectedDay;
 
-	private static  final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
+	private static final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
 	private static final Duration MAX_DAILY_WORKING_TIME = Duration.ofHours(10);
 	private static final Duration MAX_WORKING_TIME_WITHOUT_BREAK = Duration.ofHours(6);
 	private static final LocalTime WORKING_LIMIT_BEGIN = LocalTime.of(6, 00);
@@ -62,7 +62,7 @@ public class InputValidationController {
 		validation.add(checkWorkTimeLimits(workBegin, workEnd));
 		validation.add(checkTotalWorkingTimeOverTenHours(totalWorkingTime));
 		validation.add(checkWorkingTimeOverSixHoursWithoutBreak(inputList));
-//, workBegin, workEnd
+
 		return validation;
 
 	}
