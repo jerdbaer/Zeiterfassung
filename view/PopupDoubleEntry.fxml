@@ -39,7 +39,7 @@
                <children>
                   <VBox>
                      <children>
-                        <Label fx:id="txtDatumOld" text="00-00-0000" textFill="#11378f">
+                        <Label fx:id="txtDateOld" text="00-00-0000" textFill="#11378f">
                            <font>
                               <Font size="15.0" />
                            </font>

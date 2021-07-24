@@ -43,7 +43,7 @@ public class LoginController {
     @FXML
     void login(ActionEvent event) {
     	
-    	var swapStageController = new SwapStageController();
+    	var swapStageController = new SwapSceneController();
     	if(checkLogin())
     		swapStageController.goToMenu();
     	else {

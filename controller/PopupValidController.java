@@ -16,6 +16,8 @@ public class PopupValidController {
     @FXML
     private Label txtTimes;
     
+    public static AddWorkingTime addWorkingTime;
+    
     @FXML
     public void initialize() {
     	var calculations = MainController.getCalculationModel();
@@ -31,8 +33,7 @@ public class PopupValidController {
     void abortToWorktime(ActionEvent event) {
     	var popup = ((Button)event.getSource()).getScene().getWindow();
     	popup.hide();
-    	var swapSceneController = new SwapSceneController();
-    	swapSceneController.showPopup("/view/PopupDoubleEntry.fxml");
+    	
     }
 
     @FXML
@@ -40,7 +41,7 @@ public class PopupValidController {
     	var calculations = MainController.getCalculationModel();
     	var MA_ID = LoginController.MA_Data.getMA_ID();
     	var workDate = calculations.getSelectedDay();
-    	var addWorkingTime = new AddWorkingTime(workDate, MA_ID);
+    	addWorkingTime = new AddWorkingTime(workDate, MA_ID);
     	
     	var data = MainController.getCalculationModel();
     	var beginTime = data.getWorkBegin();
@@ -58,12 +59,10 @@ public class PopupValidController {
     	}catch(BatchUpdateException e) {
     		var swapSceneController = new SwapSceneController();
     		var popup = ((Button)event.getSource()).getScene().getWindow();
+    		swapSceneController.showPopup("/view/PopupDoubleEntry.fxml");
         	popup.hide();
-        	swapSceneController.showPopup("/view/DoubleEntry.fxml");
+        	
     	}
-    	finally {
-			addWorkingTime.close();
-		}
     	
     	
     }

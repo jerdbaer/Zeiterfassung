@@ -347,7 +347,7 @@ public class MainController {
 
 	@FXML
 	void abort(ActionEvent event) {
-		var swapStageController = new SwapStageController();
+		var swapStageController = new SwapSceneController();
 		swapStageController.showPopupAbort();
 	}
 
@@ -376,7 +376,7 @@ public class MainController {
 			validationResult.addAll(inputValidationController.validation());
 		}
 
-		var swapStageController = new SwapStageController();
+		var swapStageController = new SwapSceneController();
 
 		if (validationResult.stream().allMatch(elm -> elm.equals(ValidationState.VALID))) {
 			computeInput(input);

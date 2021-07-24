@@ -217,6 +217,7 @@ public class AddWorkingTime{
 		  System.out.println("Couldn't close Connection to Database");
 	  }
 	  return true;
+  }	  
 
   /**
    * Hauptprogramm. Tut nichts
