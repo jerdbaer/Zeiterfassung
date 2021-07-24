@@ -32,7 +32,7 @@ public class HelpController {
  //   		swapStageController.goToAbsence(event);
     	}
     	else if(pressedBtn == btnOverviewTop) {
-//    		swapStageController.goToOverview(event);
+    		swapStageController.goTo("/view/Overview.fxml");
     	}
     	else if(pressedBtn == btnHelpTop) {
     		swapStageController.goTo("/view/Help.fxml");

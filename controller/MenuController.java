@@ -44,7 +44,7 @@ public class MenuController {
  //   		swapStageController.goToAbsence(event);
     	}
     	else if(pressedBtn == btnOverviewTop || pressedBtn == btnOverview) {
-//    		swapStageController.goToOverview(event);
+    		swapStageController.goTo("/view/Overview.fxml");
     	}
     	else if(pressedBtn == btnHelpTop || pressedBtn == btnHelp) {
     		swapStageController.goTo("/view/Help.fxml");
