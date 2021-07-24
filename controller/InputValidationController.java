@@ -61,8 +61,8 @@ public class InputValidationController {
 		validation.add(checkDatepickerCompliance(selectedDay));
 		validation.add(checkWorkTimeLimits(workBegin, workEnd));
 		validation.add(checkTotalWorkingTimeOverTenHours(totalWorkingTime));
-		validation.add(checkWorkingTimeOverSixHoursWithoutBreak(inputList, workBegin, workEnd));
-
+		validation.add(checkWorkingTimeOverSixHoursWithoutBreak(inputList));
+//, workBegin, workEnd
 		return validation;
 
 	}
@@ -169,9 +169,8 @@ public class InputValidationController {
 				: ValidationState.VALID;
 	}
 
-	private ValidationState checkWorkingTimeOverSixHoursWithoutBreak(ArrayList<Timespann> formattedInput,
-			LocalTime workBegin, LocalTime workEnd) {
-
+	private ValidationState checkWorkingTimeOverSixHoursWithoutBreak(ArrayList<Timespann> formattedInput) {
+//,LocalTime workBegin, LocalTime workEnd
 		var workList = new ArrayList<Work>();
 		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> workList.add((Work) work));
 
