@@ -11,7 +11,7 @@ import models.Break;
 import models.Timespann;
 import models.Work;
 
-class BreakInWorkTime {
+class BreakInWorkTimeTest {
 	
 	private Work WORK_8_TO_18 = new Work(LocalTime.of(8, 0), LocalTime.of(18,0));
 	private LocalTime WORK_BEGIN = LocalTime.of(8, 0);
