@@ -59,7 +59,7 @@ public class PopupValidController {
     		var swapSceneController = new SwapSceneController();
     		var popup = ((Button)event.getSource()).getScene().getWindow();
         	popup.hide();
-//        	swapSceneController.showPopup("/view/DoubleEntry.fxml");
+        	swapSceneController.showPopup("/view/DoubleEntry.fxml");
     	}
     	finally {
 			addWorkingTime.close();
