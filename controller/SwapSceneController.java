@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import view.Main;
 
-public class SwapStageController{
+public class SwapSceneController{
 	
 	
 	public void goToMenu() {
@@ -58,6 +58,19 @@ public class SwapStageController{
     	}
     }
 	
+	public void showPopup(String filename) {
+        try {
+			final Stage dialog = new Stage();
+			dialog.initModality(Modality.APPLICATION_MODAL);
+			var popupContent = (BorderPane)FXMLLoader.load(getClass().getResource(filename));
+			var popup = new Scene(popupContent);
+			dialog.initStyle(StageStyle.UNDECORATED);
+			dialog.setScene(popup);
+			dialog.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
 	
     public void showPopupAbort() {
         try {

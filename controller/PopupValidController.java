@@ -31,7 +31,8 @@ public class PopupValidController {
     void abortToWorktime(ActionEvent event) {
     	var popup = ((Button)event.getSource()).getScene().getWindow();
     	popup.hide();
-
+    	var swapSceneController = new SwapSceneController();
+    	swapSceneController.showPopup("/view/PopupDoubleEntry.fxml");
     }
 
     @FXML
@@ -55,7 +56,7 @@ public class PopupValidController {
         	popup.hide();
     		
     	}catch(BatchUpdateException e) {
-    		var swapSceneController = new SwapStageController();
+    		var swapSceneController = new SwapSceneController();
     		var popup = ((Button)event.getSource()).getScene().getWindow();
         	popup.hide();
 //        	swapSceneController.showPopup("/view/DoubleEntry.fxml");
