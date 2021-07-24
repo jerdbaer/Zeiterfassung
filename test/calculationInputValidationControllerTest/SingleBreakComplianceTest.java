@@ -17,16 +17,15 @@ class SingleBreakComplianceTest {
 	private Duration LEGAL_BREAK_30 = Duration.ofMinutes(30);
 	private Duration LEGAL_BREAK_45 = Duration.ofMinutes(45);
 
-	private final Break BREAK_0 = new Break(LocalTime.of(0, 0), LocalTime.of(0, 0));
-	private final Break BREAK_29 = new Break(LocalTime.of(18, 0), LocalTime.of(18, 29));
-	private final Break BREAK_30 = new Break(LocalTime.of(8, 0), LocalTime.of(8, 30));
-	private final Break BREAK_31 = new Break(LocalTime.of(10, 0), LocalTime.of(10, 31));
+	private static final Break BREAK_0 = new Break(LocalTime.of(0, 0), LocalTime.of(0, 0));
+	private static final Break BREAK_29 = new Break(LocalTime.of(18, 0), LocalTime.of(18, 29));
+	private static final Break BREAK_30 = new Break(LocalTime.of(8, 0), LocalTime.of(8, 30));
+	private static final Break BREAK_31 = new Break(LocalTime.of(10, 0), LocalTime.of(10, 31));
 	
-	
-	private final Interruption INTERRUPTION_0 = new Interruption(LocalTime.of(0, 0), LocalTime.of(0, 0));
-	private final Interruption INTERRUPTION_44 = new Interruption(LocalTime.of(18, 0), LocalTime.of(18, 44));
-	private final Interruption INTERRUPTION_45 = new Interruption(LocalTime.of(8, 0), LocalTime.of(8, 45));
-	private final Interruption INTERRUPTION_46 = new Interruption(LocalTime.of(10, 0), LocalTime.of(10, 46));
+	private static final Interruption INTERRUPTION_0 = new Interruption(LocalTime.of(0, 0), LocalTime.of(0, 0));
+	private static final Interruption INTERRUPTION_44 = new Interruption(LocalTime.of(18, 0), LocalTime.of(18, 44));
+	private static final Interruption INTERRUPTION_45 = new Interruption(LocalTime.of(8, 0), LocalTime.of(8, 45));
+	private static final Interruption INTERRUPTION_46 = new Interruption(LocalTime.of(10, 0), LocalTime.of(10, 46));
 
 	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
 			null, null, null, null, null, null, null);

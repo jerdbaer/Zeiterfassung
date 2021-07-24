@@ -15,8 +15,8 @@ class InputExistsTest {
 
 	
 	
-	private Work WORK_8_TO_18 = new Work(LocalTime.of(8, 0), LocalTime.of(18,0));	
-	private Break BREAK_8_TO_18 = new Break(LocalTime.of(0, 0), LocalTime.of(0,0));
+	private static Work WORK_8_TO_18 = new Work(LocalTime.of(8, 0), LocalTime.of(18,0));	
+	private static Break BREAK_8_TO_18 = new Break(LocalTime.of(0, 0), LocalTime.of(0,0));
 	
 	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
 			null, null, null, null, null, null, null);

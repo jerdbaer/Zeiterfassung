@@ -16,12 +16,12 @@ import models.Work;
 
 public class InputValidationControllerStub extends InputValidationController {
 		
-	private final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
-	private final Duration MAX_DAILY_WORKING_TIME = Duration.ofHours(10);
-	private final Duration MAX_WORKING_TIME_WITHOUT_BREAK = Duration.ofHours(6);
-	private final LocalTime WORKING_LIMIT_BEGIN = LocalTime.of(6, 00);
-	private final LocalTime WORKING_LIMIT_END = LocalTime.of(19, 30);
-	private final long DAYS_FOR_REVISION_RELIABILITY = 31;
+	private static final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
+	private static final Duration MAX_DAILY_WORKING_TIME = Duration.ofHours(10);
+	private static final Duration MAX_WORKING_TIME_WITHOUT_BREAK = Duration.ofHours(6);
+	private static final LocalTime WORKING_LIMIT_BEGIN = LocalTime.of(6, 00);
+	private static final LocalTime WORKING_LIMIT_END = LocalTime.of(19, 30);
+	private static final long DAYS_FOR_REVISION_RELIABILITY = 31;
 	
 	
 	
@@ -136,8 +136,7 @@ public class InputValidationControllerStub extends InputValidationController {
 	}
 	
 	
-	protected ValidationState checkWorkingTimeOverSixHoursWithoutBreak(ArrayList<Timespann> formattedInput,
-			LocalTime workBegin, LocalTime workEnd) {
+	protected ValidationState checkWorkingTimeOverSixHoursWithoutBreak(ArrayList<Timespann> formattedInput) {
 
 		var workList = new ArrayList<Work>();
 		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> workList.add((Work) work));

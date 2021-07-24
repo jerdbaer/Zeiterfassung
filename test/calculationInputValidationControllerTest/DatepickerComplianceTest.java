@@ -8,11 +8,11 @@ import org.junit.jupiter.api.Test;
 
 class DatepickerComplianceTest {
 
-	private final LocalDate TODAY = LocalDate.now();
-	private final LocalDate YESTERDAY = LocalDate.now().minusDays(1);
-	private final LocalDate TOMORROW = LocalDate.now().plusDays(1);
-	private final LocalDate DATE_31_DAYS_BACK = LocalDate.now().minusDays(31);
-	private final LocalDate DATE_32_DAYS_BACK = LocalDate.now().minusDays(32);
+	private static final LocalDate TODAY = LocalDate.now();
+	private static final LocalDate YESTERDAY = LocalDate.now().minusDays(1);
+	private static final LocalDate TOMORROW = LocalDate.now().plusDays(1);
+	private static final LocalDate DATE_31_DAYS_BACK = LocalDate.now().minusDays(31);
+	private static final LocalDate DATE_32_DAYS_BACK = LocalDate.now().minusDays(32);
 
 	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
 			null, null, null, null, null, null, null);

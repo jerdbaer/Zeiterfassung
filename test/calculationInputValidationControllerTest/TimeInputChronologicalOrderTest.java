@@ -29,7 +29,7 @@ class TimeInputChronologicalOrderTest {
 	private static final BreakInterruption BREAKINTERRUPTION_NEG_WORKTIME2_BEFORE_WORKTIME1 = 
 			new BreakInterruption(LocalTime.of(20, 0), LocalTime.of(17, 0));
 	
-	private  static final Break BREAK_0 = new Break(LocalTime.of(0, 0), LocalTime.of(0, 0));
+	private static final Break BREAK_0 = new Break(LocalTime.of(0, 0), LocalTime.of(0, 0));
 	private static final Break BREAK_VALID = new Break(LocalTime.of(10, 0), LocalTime.of(11, 0));
 	private static final Break BREAK_INVALID = new Break(LocalTime.of(11, 0), LocalTime.of(10, 0));
 	

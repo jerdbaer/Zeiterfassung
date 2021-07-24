@@ -17,11 +17,11 @@ class BreakInWorkTime {
 	private LocalTime WORK_BEGIN = LocalTime.of(8, 0);
 	private LocalTime WORK_END = LocalTime.of(18,0);
 	
-	private Break BREAK_8_TO_18 = new Break(LocalTime.of(0, 0), LocalTime.of(0,0));
-	private Break BREAK_IN_8_01_TO_17_59 = new Break(LocalTime.of(8,1), LocalTime.of(17,59));
-	private Break BREAK_OUT_7_59_TO_18_01 = new Break(LocalTime.of(7,59), LocalTime.of(18,01));
-	private Break BREAK_AT_WORKBEGIN = new Break(LocalTime.of(8,0), LocalTime.of(10,0));
-	private Break BREAK_AT_WORKEND = new Break(LocalTime.of(15,0), LocalTime.of(18,0));
+	private static Break BREAK_8_TO_18 = new Break(LocalTime.of(0, 0), LocalTime.of(0,0));
+	private static Break BREAK_IN_8_01_TO_17_59 = new Break(LocalTime.of(8,1), LocalTime.of(17,59));
+	private static Break BREAK_OUT_7_59_TO_18_01 = new Break(LocalTime.of(7,59), LocalTime.of(18,01));
+	private static Break BREAK_AT_WORKBEGIN = new Break(LocalTime.of(8,0), LocalTime.of(10,0));
+	private static Break BREAK_AT_WORKEND = new Break(LocalTime.of(15,0), LocalTime.of(18,0));
 	
 	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
 			null, null, null, null, null, null, null);

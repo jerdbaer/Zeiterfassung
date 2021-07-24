@@ -8,13 +8,13 @@ import org.junit.jupiter.api.Test;
 
 class WorkTimeLimitsTest {
 	
-	private final LocalTime WORK_BEGIN_5_59 = LocalTime.of(5,59);
-	private final LocalTime WORK_BEGIN_6_00 = LocalTime.of(6,0);
-	private final LocalTime WORK_BEGIN_6_01 = LocalTime.of(6,1);
+	private static final LocalTime WORK_BEGIN_5_59 = LocalTime.of(5,59);
+	private static final LocalTime WORK_BEGIN_6_00 = LocalTime.of(6,0);
+	private static final LocalTime WORK_BEGIN_6_01 = LocalTime.of(6,1);
 	
-	private final LocalTime WORK_END_19_29 = LocalTime.of(19,29);
-	private final LocalTime WORK_END_19_30 = LocalTime.of(19,30);
-	private final LocalTime WORK_END_19_31 = LocalTime.of(19,31);
+	private static final LocalTime WORK_END_19_29 = LocalTime.of(19,29);
+	private static final LocalTime WORK_END_19_30 = LocalTime.of(19,30);
+	private static final LocalTime WORK_END_19_31 = LocalTime.of(19,31);
 	
 	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
 			null, null, null, null, null, null, null);
