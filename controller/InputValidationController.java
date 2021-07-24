@@ -17,7 +17,6 @@ public class InputValidationController {
 
 	private ArrayList<Timespann> inputList;
 	private Duration legalBreak;
-	private Duration timeAtWork;
 	private Duration timeAtBreak;
 	private Duration totalWorkingTime;
 	private LocalTime workBegin;
@@ -32,12 +31,11 @@ public class InputValidationController {
 	private final LocalTime WORKING_LIMIT_END = LocalTime.of(19, 30);
 	private final long DAYS_FOR_REVISION_RELIABILITY = 31;
 
-	public InputValidationController(ArrayList<Timespann> input, Duration legalBreak, Duration timeAtWork,
+	public InputValidationController(ArrayList<Timespann> input, Duration legalBreak, 
 			Duration totalWorkingTime, Duration timeAtBreak, LocalTime workBegin, LocalTime workEnd,
 			LocalDate selectedDay, LocalTime workEndYesterday) {
 		this.inputList = input;
 		this.legalBreak = legalBreak;
-		this.timeAtWork = timeAtWork;
 		this.totalWorkingTime = totalWorkingTime;
 		this.timeAtBreak = timeAtBreak;
 		this.workBegin = workBegin;
@@ -58,11 +56,11 @@ public class InputValidationController {
 		validation.add(checkInputExists(inputList));
 		validation.add(checkTimeOrderIsChronological(inputList));
 		validation.add(checkBreaksInWorkTime(inputList, workBegin, workEnd));
-		validation.add(checkTotalBreakCompliance(timeAtWork, timeAtBreak, legalBreak));
+		validation.add(checkTotalBreakCompliance(timeAtBreak, legalBreak));
 		validation.add(checkSingleBreakDurationCompliance(inputList, legalBreak));
 		validation.add(checkDatepickerCompliance(selectedDay));
 		validation.add(checkWorkTimeLimits(workBegin, workEnd));
-		validation.add(checkTotalWorkingTimeOverTenHours(timeAtWork));
+		validation.add(checkTotalWorkingTimeOverTenHours(totalWorkingTime));
 		validation.add(checkWorkingTimeOverSixHoursWithoutBreak(inputList, workBegin, workEnd));
 
 		return validation;
@@ -78,7 +76,7 @@ public class InputValidationController {
 				: ValidationState.VALID;
 	}
 
-	private ValidationState checkTotalWorkingTimeOverTenHours(Duration timeAtWork) {
+	private ValidationState checkTotalWorkingTimeOverTenHours(Duration totalWorkingTime) {
 		
 		return (totalWorkingTime.compareTo(MAX_DAILY_WORKING_TIME) > 0)
 				? ValidationState.NOT_VALID_WORKING_TIME_OVER_TEN_HOURS
@@ -164,7 +162,7 @@ public class InputValidationController {
 				: ValidationState.VALID;
 	}
 
-	private ValidationState checkTotalBreakCompliance(Duration timeAtwork, Duration timeAtBreak, Duration legalBreak) {
+	private ValidationState checkTotalBreakCompliance(Duration timeAtBreak, Duration legalBreak) {
 		
 		return timeAtBreak.minus(legalBreak).isNegative() 
 				? ValidationState.NOT_VALID_TOTAL_BREAK_ERROR

@@ -281,7 +281,6 @@ public class MainController {
 		var calculationController = new CalculationController(input);	
 		var workBegin = calculationController.getWorkBegin();
 		var workEnd = calculationController.getWorkEnd();
-		var timeAtWork = Duration.between(workBegin, workEnd);
 		var totalWorkingTime = calculationController.calculateTotalWorktime();
 		var timeAtBreak = calculationController.calculateBreakAndInterruptionDuration();
 		var legalBreak = calculationController.calculateLegalBreak();
@@ -289,7 +288,7 @@ public class MainController {
 		//------------------------------------------
 		var workEndYesterday = LocalTime.of(16, 30); // need database input
 		//-------------------------------------------
-		var inputValidationController = new InputValidationController(input, legalBreak, timeAtWork, totalWorkingTime, timeAtBreak,
+		var inputValidationController = new InputValidationController(input, legalBreak, totalWorkingTime, timeAtBreak,
 				workBegin, workEnd, selectedDay, workEndYesterday);
 		validationResult.addAll(inputValidationController.validation());
 		}
