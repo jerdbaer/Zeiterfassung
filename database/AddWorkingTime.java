@@ -205,6 +205,19 @@ public class AddWorkingTime{
      return result;
   }
 
+  public boolean close() {
+	  try {
+		  if(connection != null && !connection.isClosed()) {
+			connection.close();
+			if(connection.isClosed()) {
+				System.out.println("Connection to Database is closed");
+			}
+		  }
+	  } catch (SQLException e) {
+		  System.out.println("Couldn't close Connection to Database");
+	  }
+	  return true;
+
   /**
    * Hauptprogramm. Tut nichts
    *
