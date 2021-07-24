@@ -10,10 +10,11 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import java.sql.*;
 import database.*;
+import exceptions.*;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class LoginTest {
-	
+
 	private static Connection connection;
 
 	static {
@@ -38,13 +39,17 @@ class LoginTest {
 
 	@BeforeAll
 	static void setUpBeforeClass() {
-		String query = "DELETE FROM login WHERE MA_ID = 1337";
+		String query0 = "DELETE FROM login WHERE MA_ID = 1337";
+		String query1 = "DELETE FROM mitarbeiter WHERE MA_ID = 1337";
+		String query2 = "INSERT INTO mitarbeiter VALUES (1337, 'Johanna', 'Musterfrau', 'Schenkestr. 1', '10318', 'Berlin', 'Sekretariat', 'musterfraeulein@gmail.com', 30, '06:00:00', 'ja')";
 		Statement stmt = null;
 		try {
 			createConnection();
 			connection.setAutoCommit(false);
 			stmt = connection.createStatement();
-			stmt.addBatch(query);
+			stmt.addBatch(query0);
+			stmt.addBatch(query1);
+			stmt.addBatch(query2);
 			stmt.executeBatch();
 			connection.commit();
 			stmt.close();
@@ -59,15 +64,17 @@ class LoginTest {
 			}
 		}
 	}
-	
+
 	@AfterAll
 	static void cleanUp() {
-		String query = "DELETE FROM login WHERE MA_ID = 1337";
+		String query0 = "DELETE FROM login WHERE MA_ID = 1337";
+		String query1 = "DELETE FROM mitarbeiter WHERE MA_ID = 1337";
 		Statement stmt = null;
 		try {
 			connection.setAutoCommit(false);
 			stmt = connection.createStatement();
-			stmt.addBatch(query);
+			stmt.addBatch(query0);
+			stmt.addBatch(query1);
 			stmt.executeBatch();
 			connection.commit();
 			stmt.close();
@@ -88,13 +95,13 @@ class LoginTest {
 	@Test
 	@Order(1)
 	void addUserTest() {
-		int pw = "Zorua99".hashCode();
+		String pw = "Zorua99";
 		CheckPassword.addAccount(1337, pw);
-		
+
 		int[] expected = new int[2];
 		expected[0] = 1337;
 		expected[1] = "Zorua99".hashCode();
-		
+
 		int[] result = new int[2];
 		String resultQuery = "SELECT * FROM login WHERE MA_ID = 1337";
 		Statement stmt = null;
@@ -118,26 +125,77 @@ class LoginTest {
 			}
 		}
 	}
-	
+
 	@Test
 	@Order(2)
 	void correctPasswordCheck() {
-		int pw = "Zorua99".hashCode();
+		String pw = "Zorua99";
 		assertTrue(CheckPassword.checkPW(1337, pw));
 	}
-	
+
 	@Test
 	@Order(3)
 	void incorrectPasswordCheck() {
-		int pw = "1337speak".hashCode();
+		String pw = "1337speak";
 		assertFalse(CheckPassword.checkPW(1337, pw));
 	}
-	
+
 	@Test
 	@Order(4)
 	void invalidUserTest() {
-		int pw = "Zorua99".hashCode();
+		String pw = "Zorua99";
 		assertFalse(CheckPassword.checkPW(135, pw));
+	}
+	
+	@Test
+	@Order(5)
+	void changePasswordTest() {
+		String oldPw = "Zorua99";
+		String newPw = "1337speak";
+		try {
+			if (!CheckPassword.changePW(1337, oldPw, newPw))
+				fail("Password unchanged");
+		} catch (FalsePasswordException fpe) {
+			fail("Exception occured");
+		} catch (NoChangeException nce) {
+			fail("Exception occured");
+		}
+		assertTrue(CheckPassword.checkPW(1337, newPw));
+		
+	}
+	
+	@Test
+	@Order(6)
+	void changeWrongPasswordTest() {
+		String oldPw = "Glaziola03";
+		String newPw = "B1s4s4m";
+		if (CheckPassword.checkPW(1337, oldPw))
+			fail("WTF???");
+		try {
+			CheckPassword.changePW(1337, oldPw, newPw);
+			fail("No exception occured");
+		} catch (FalsePasswordException fpe) {
+			assertTrue(true);
+		} catch (NoChangeException nce) {
+			fail("Wrong exception occured");
+		}
+
+	}
+	
+	@Test
+	@Order(7)
+	void changeSamePasswordTest() {
+		String oldPw = "1337speak";
+		String newPw = "1337speak";
+		try {
+			CheckPassword.changePW(1337, oldPw, newPw);
+			fail("No Exception occured");
+		} catch (FalsePasswordException fpe) {
+			fail("Wrong Exception occured");
+		} catch (NoChangeException nce) {
+			assertTrue(true);
+		}
+
 	}
 
 }
