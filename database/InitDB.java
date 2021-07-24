@@ -113,9 +113,10 @@ public class InitDB{
     String table2 = "CREATE TABLE IF NOT EXISTS login ("
             + "MA_ID int NOT NULL, "
             + "password int NOT NULL, " // Es wird der hashcode vom pw gespeichert
-            + "PRIMARY KEY (MA_ID))";
-            // Ich verknüpfe das doch nicht mit der MA-Tabelle, damit nicht der
-            // MA existieren muss, um den Login zu erstellen
+            + "PRIMARY KEY (MA_ID), "
+            + "FOREIGN KEY (MA_ID) REFERENCES Mitarbeiter(MA_ID))";
+            // Verknüpfung ist notwendig, damit dann nicht für nichtexistente User ein Eintrag
+            // angelegt werden soll und das nicht geht, weil der MA nicht existiert
 
     Statement stmt = null;
     try{
