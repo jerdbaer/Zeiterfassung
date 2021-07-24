@@ -17,10 +17,10 @@ public class CalculationController {
 	private LocalTime workEnd;
 	
 	
-	private final Duration LEGAL_BREAK_LIMIT_1 = Duration.ofHours(6);
-	private final Duration LEGAL_BREAK_LIMIT_2 = Duration.ofHours(9);
-	private final Duration LEGAL_BREAK_OVER_SIX_HOURS = Duration.ofMinutes(30);
-	private final Duration LEGAL_BREAK_OVER_NINE_HOURS = Duration.ofMinutes(45);
+	private static final Duration LEGAL_BREAK_LIMIT_1 = Duration.ofHours(6);
+	private static final Duration LEGAL_BREAK_LIMIT_2 = Duration.ofHours(9);
+	private static final Duration LEGAL_BREAK_OVER_SIX_HOURS = Duration.ofMinutes(30);
+	private static final Duration LEGAL_BREAK_OVER_NINE_HOURS = Duration.ofMinutes(45);
 	
 	public CalculationController(ArrayList<Timespann> formattedInput) {
 		this.formattedInput = formattedInput;

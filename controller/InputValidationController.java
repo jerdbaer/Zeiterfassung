@@ -24,12 +24,12 @@ public class InputValidationController {
 	private LocalTime workEndYesterday;
 	private LocalDate selectedDay;
 
-	private final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
-	private final Duration MAX_DAILY_WORKING_TIME = Duration.ofHours(10);
-	private final Duration MAX_WORKING_TIME_WITHOUT_BREAK = Duration.ofHours(6);
-	private final LocalTime WORKING_LIMIT_BEGIN = LocalTime.of(6, 00);
-	private final LocalTime WORKING_LIMIT_END = LocalTime.of(19, 30);
-	private final long DAYS_FOR_REVISION_RELIABILITY = 31;
+	private static  final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
+	private static final Duration MAX_DAILY_WORKING_TIME = Duration.ofHours(10);
+	private static final Duration MAX_WORKING_TIME_WITHOUT_BREAK = Duration.ofHours(6);
+	private static final LocalTime WORKING_LIMIT_BEGIN = LocalTime.of(6, 00);
+	private static final LocalTime WORKING_LIMIT_END = LocalTime.of(19, 30);
+	private static final long DAYS_FOR_REVISION_RELIABILITY = 31;
 
 	public InputValidationController(ArrayList<Timespann> input, Duration legalBreak, 
 			Duration totalWorkingTime, Duration timeAtBreak, LocalTime workBegin, LocalTime workEnd,
