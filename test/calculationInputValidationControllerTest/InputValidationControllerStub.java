@@ -15,9 +15,7 @@ import models.ValidationState;
 import models.Work;
 
 public class InputValidationControllerStub extends InputValidationController {
-	
-	private Duration totalWorkingTimeStub;
-	
+		
 	private final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
 	private final Duration MAX_DAILY_WORKING_TIME = Duration.ofHours(10);
 	private final Duration MAX_WORKING_TIME_WITHOUT_BREAK = Duration.ofHours(6);
@@ -25,12 +23,14 @@ public class InputValidationControllerStub extends InputValidationController {
 	private final LocalTime WORKING_LIMIT_END = LocalTime.of(19, 30);
 	private final long DAYS_FOR_REVISION_RELIABILITY = 31;
 	
-	public InputValidationControllerStub(ArrayList<Timespann> input, Duration legalBreak, Duration timeAtWork,
+	
+	
+	public InputValidationControllerStub(ArrayList<Timespann> input, Duration legalBreak, 
 			Duration totalWorkingTime, Duration timeAtBreak, LocalTime workBegin, LocalTime workEnd,
 			LocalDate selectedDay, LocalTime workEndYesterday) {
-		super(input, legalBreak, timeAtWork, totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterday);
-		this.totalWorkingTimeStub = totalWorkingTime;
+		super(input, legalBreak, totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterday);
 	}
+	
 
 	protected ValidationState checkDurationBetweenWorkingDays(LocalDateTime workEndYesterday,
 			LocalDateTime workBeginToday) {
@@ -42,9 +42,9 @@ public class InputValidationControllerStub extends InputValidationController {
 	}
 	
 	// ersetz totalWorkingTime mit totalWorkingTimeStub
-	protected ValidationState checkTotalWorkingTimeOverTenHours(Duration timeAtWork) {
+	protected ValidationState checkTotalWorkingTimeOverTenHours(Duration totalWorkingTime) {
 		
-		return (totalWorkingTimeStub.compareTo(MAX_DAILY_WORKING_TIME) > 0)
+		return (totalWorkingTime.compareTo(MAX_DAILY_WORKING_TIME) > 0)
 				? ValidationState.NOT_VALID_WORKING_TIME_OVER_TEN_HOURS
 				: ValidationState.VALID;
 	}
@@ -128,7 +128,7 @@ public class InputValidationControllerStub extends InputValidationController {
 				: ValidationState.VALID;
 	}
 
-	protected ValidationState checkTotalBreakCompliance(Duration timeAtwork, Duration timeAtBreak, Duration legalBreak) {
+	protected ValidationState checkTotalBreakCompliance(Duration timeAtBreak, Duration legalBreak) {
 		
 		return timeAtBreak.minus(legalBreak).isNegative() 
 				? ValidationState.NOT_VALID_TOTAL_BREAK_ERROR

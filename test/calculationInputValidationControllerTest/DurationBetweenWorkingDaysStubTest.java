@@ -12,42 +12,46 @@ import org.junit.jupiter.api.Test;
 
 import models.Timespann;
 
-//used Stub class because cannot use private methods in tests otherwise
+//used kind of Stub class because cannot use private methods in tests otherwise
 class DurationBetweenWorkingDaysStubTest {
 	
-	private ArrayList<Timespann> dummyList = new ArrayList<Timespann>();
-	private Duration dummyDuration = Duration.ZERO;
-	private LocalTime dummyTime = LocalTime.of(0,0);
 	private LocalDate today = LocalDate.now();
 	private LocalDate yesterday = LocalDate.now().minusDays(1);
 		
-	private LocalDateTime workBeginToday_0_00 = LocalDateTime.of(today, LocalTime.of(0,0));
-	private LocalTime workBeginToday_8_00 = LocalTime.of(8, 0);
+	private LocalDateTime workBeginToday_7_01 = LocalDateTime.of(today, LocalTime.of(7,1));
+	private LocalDateTime workBeginToday_7_00 = LocalDateTime.of(today, LocalTime.of(7,0));
 	
-	private LocalDateTime workEndYesterday_0_00 = LocalDateTime.of(yesterday, LocalTime.of(0,0));
-	private LocalTime workEndYesterday_16_30 = LocalTime.of(16,30);
-	private LocalTime workEndYesterday_23_59 = LocalTime.of(23,59);
+	private LocalDateTime workEndYesterday_20_00 = LocalDateTime.of(yesterday, LocalTime.of(20,0));
+	private LocalDateTime workEndYesterday_20_01 = LocalDateTime.of(yesterday, LocalTime.of(20,1));
 	
-	
-	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null, 
-			null, null, null, null, null, null, null, null);
+	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
+			null, null, null, null, null, null, null);
 	
 	@Test
-	void daysDifferenceFrom_0_00_TO_0_00_is24H_isValid() {
+	void daysDifferenceFromYesterday20_00_ToToday7_00_is11H_isValid() {
 		String validationBetweenDays = (dummyInputValidationControllerStub
-				.checkDurationBetweenWorkingDays(workEndYesterday_0_00, workBeginToday_0_00))
+				.checkDurationBetweenWorkingDays(workEndYesterday_20_00, workBeginToday_7_00))
 				.toString();
 		
 		assertEquals("VALID", validationBetweenDays);
 	}
 	
-	
-
-	
-	private ArrayList<Timespann> addInputToList(ArrayList<Timespann> list, Timespann... timespann) {
-	for (Timespann element : timespann) {
-		list.add(element);
+	@Test
+	void daysDifferenceFromYesterday20_00_ToToday7_01_is11H01M_isValid() {
+		String validationBetweenDays = (dummyInputValidationControllerStub
+				.checkDurationBetweenWorkingDays(workEndYesterday_20_00, workBeginToday_7_01))
+				.toString();
+		
+		assertEquals("VALID", validationBetweenDays);
 	}
-	return list;
+	
+	@Test
+	void daysDifferenceFromYesterday20_01_ToToday7_00_is10H59M_isNotValid() {
+		String validationBetweenDays = (dummyInputValidationControllerStub
+				.checkDurationBetweenWorkingDays(workEndYesterday_20_01, workBeginToday_7_00))
+				.toString();
+		
+		assertEquals("NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR", validationBetweenDays);
 	}
+	
 }

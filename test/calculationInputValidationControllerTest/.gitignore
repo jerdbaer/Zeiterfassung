@@ -2,3 +2,15 @@
 /InvalidCalculationControllerStub.class
 /InputValidationControllerStub.class
 /DurationBetweenWorkingDaysStubTest.class
+/WorkingTimeOverTenHoursTest.class
+/WorkTimeLimitsTest.class
+/DatepickerComplianceTest.class
+/SingleBreakComplianceTest.class
+/BreakInWorkTime.class
+/InputExistsTest.class
+/TotalBreakComplianceTest.class
+/TimeInputChronologicalOrderTest.class
+/WOrkingTimeOverSixHoursWithoutBreakTest.class
+/WorkingTimeOverSixHoursWithoutBreakTest.class
+/OverSixHoursWithoutBreakTest.class
+/Test.class
