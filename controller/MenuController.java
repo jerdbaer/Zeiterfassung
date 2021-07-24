@@ -38,7 +38,7 @@ public class MenuController {
     	var swapStageController = new SwapStageController();
     	var pressedBtn = (Button)event.getSource();
     	if(pressedBtn == btnWorktimeTop || pressedBtn == btnWorktime) {
-    		swapStageController.goToWorkTime();
+    		swapStageController.goTo("/view/WorkTime.fxml");
     	}
     	else if(pressedBtn == btnAbsenceTop || pressedBtn == btnAbsence) {
  //   		swapStageController.goToAbsence(event);
@@ -50,7 +50,7 @@ public class MenuController {
 //    		swapStageController.goToHelp(event);
     	}
     	else if(pressedBtn == btnLogout) {
-    		swapStageController.goToLogin();
+    		swapStageController.goTo("/view/Login.fxml");
     	}
 
     }

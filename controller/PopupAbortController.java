@@ -12,7 +12,7 @@ public class PopupAbortController {
     	var popup = ((Button)event.getSource()).getScene().getWindow();
     	popup.hide();
     	var swapStageController = new SwapStageController();
-    	swapStageController.goToMenu();
+    	swapStageController.goTo("/view/Menu.fxml");
 
     }
 
