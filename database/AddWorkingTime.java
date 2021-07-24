@@ -71,7 +71,7 @@ public class AddWorkingTime{
   private void createConnection(){
     String url = "jdbc:mysql://localhost/zeiterfassung";
     String user = "root";
-    String pass = "";
+    String pass = "1234";
     try{
       System.out.println("Creating DBConnection");
       connection = DriverManager.getConnection(url, user, pass);
@@ -171,6 +171,20 @@ public class AddWorkingTime{
         }
       }
       return false;
+  }
+  
+  public boolean close() {
+	  try {
+		  if(connection != null && !connection.isClosed()) {
+			connection.close();
+			if(connection.isClosed()) {
+				System.out.println("Connection to Database is closed");
+			}
+		  }
+	  } catch (SQLException e) {
+		  System.out.println("Couldn't close Connection to Database");
+	  }
+	  return true;
   }
 
   /**

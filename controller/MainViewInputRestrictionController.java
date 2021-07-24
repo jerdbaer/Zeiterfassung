@@ -9,6 +9,16 @@ import javafx.scene.control.TextFormatter.Change;
 public class MainViewInputRestrictionController {
 	private TextField[] textfieldHour;
 	private TextField[] textfieldMinute;
+	
+	// restriction rules only Numbers
+	private UnaryOperator<Change> numbers = change -> {
+		if (!change.isContentChange())
+			return change;
+
+		String text = change.getControlNewText();
+
+		return text.matches("[0-9]*") || text.equals("") ? change : null;
+	};
 
 	// restriction rules for hours
 	private UnaryOperator<Change> hours = change -> {
@@ -40,6 +50,10 @@ public class MainViewInputRestrictionController {
 
 	public TextField[] getTextfieldMinute() {
 		return textfieldMinute;
+	}
+	
+	public void setTextFormatterNumbers(TextField textfield) {
+		textfield.setTextFormatter(new TextFormatter<String>(numbers));
 	}
 
 	public void setTextfieldMinute(TextField[] textfieldMinute) {

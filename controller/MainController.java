@@ -181,6 +181,9 @@ public class MainController {
 	private TextField txtfieldBreakEnd5Minutes;
 
 	@FXML
+	private TextField txtComment;
+
+	@FXML
 	private Button btnBreakHide5;
 
 	@FXML
@@ -286,7 +289,6 @@ public class MainController {
 		clear(allTextFields);
 		btnWorkAdd1.setVisible(true);
 		labelErrortxt.setVisible(false);
-		
 
 	}
 
@@ -384,7 +386,7 @@ public class MainController {
 			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();
 			labelErrortxt.setVisible(true);
 			labelErrortxt.setText(Error.toString());
-			
+
 			computeInput(input);
 			swapStageController.showPopupLimits();
 
@@ -401,7 +403,7 @@ public class MainController {
 	}
 
 	private static CalculationModel calculationModel;
-	
+
 	public static CalculationModel getCalculationModel() {
 		return calculationModel;
 	}
@@ -411,10 +413,13 @@ public class MainController {
 		calculationModel = new CalculationModel();
 		var selectedDay = datepicker.getValue();
 		calculationModel.setSelectedDay(selectedDay);
-		// total working time
+		// totalWorkTime
 		var totalWorkTime = calculationController.calculateTotalWorktime();
 		calculationModel.setTotalWorkTime(totalWorkTime);
-
+		
+		// overtime
+//----------------------------------------------- // needs calculation
+		
 		// workbegin
 		var begin = calculationController.getWorkBegin();
 		calculationModel.setWorkBegin(begin);
@@ -426,6 +431,10 @@ public class MainController {
 		// break&interruptions
 		var breakUinterruptionDuration = calculationController.breakUinterruptionDuration();
 		calculationModel.setTotalBreakTime(breakUinterruptionDuration);
+		
+		//comment
+		var comment = txtComment.getText();
+		calculationModel.setComment(comment);
 
 	}
 
