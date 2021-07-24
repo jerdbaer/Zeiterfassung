@@ -107,7 +107,7 @@ public class InitDB{
             + "Arbeitszeit_Ende time NOT NULL, "
             + "Pausengesamtzeit_Tag time NOT NULL, "
             + "Ueberstunden_Tag time NOT NULL, "
-            + "Kommentar char(50), "
+            + "Kommentar varchar(510), "
             + "CONSTRAINT PK_Zeitkonto PRIMARY KEY (work_date,MA_ID), "
             + "FOREIGN KEY (MA_ID) REFERENCES Mitarbeiter(MA_ID))";
     String table2 = "CREATE TABLE IF NOT EXISTS login ("
