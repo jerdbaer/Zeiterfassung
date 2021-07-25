@@ -123,7 +123,32 @@ import java.sql.*;
        resultString = rs.getString(1);
        stmt.close();
      } catch (SQLException e){
-       System.out.println("no WorkEndYesterday");
+       System.err.println("no WorkEndYesterday");
+     } finally {
+       try{
+         if (stmt != null)
+          stmt.close();
+       } catch (SQLException e) {}
+     }
+     return resultString;
+   }
+
+   public String getWorkBeginTomorrow(int MA_ID, String tomorrow){
+     String query = "SELECT Arbeitszeit_Ende FROM zeitkonto "
+       + "WHERE work_date = '" + tomorrow + "' AND "
+       + "MA_ID = " + MA_ID;
+     Statement stmt = null;
+     String resultString = "00:00:00";
+     try {
+       connection.setAutoCommit(false);
+       stmt = connection.createStatement();
+       ResultSet rs = stmt.executeQuery(query);
+       connection.commit();
+       rs.next();
+       resultString = rs.getString(1);
+       stmt.close();
+     } catch (SQLException e){
+       System.err.println("no WorkBeginTomorrow");
      } finally {
        try{
          if (stmt != null)
