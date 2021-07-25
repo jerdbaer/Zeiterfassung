@@ -348,11 +348,7 @@ public class MainController {
 
 	@FXML
 	void abort(ActionEvent event) {
-<<<<<<< HEAD
 		var swapStageController = new SwapSceneController();
-=======
-		var swapStageController = new SwapStageController();
->>>>>>> development
 		swapStageController.showPopup("/view/PopupAbort.fxml");
 	}
 
