@@ -382,7 +382,8 @@ public class MainController {
 		if (validationResult.stream().allMatch(elm -> elm.equals(ValidationState.VALID))) {
 			computeInput(input);
 			swapStageController.showPopup("/view/PopupValid.fxml");
-		} else if (validationResult.stream().anyMatch(elm -> elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
+		} else if (validationResult.stream().allMatch(elm ->  elm.equals(ValidationState.VALID) 
+				|| elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
 				|| elm.equals(ValidationState.VALID_WORKEND_IS_AFTER_19_30))) {
 			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();
 			labelErrortxt.setVisible(true);
