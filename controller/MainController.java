@@ -288,6 +288,8 @@ public class MainController {
 
 		clear(allTextFields);
 		btnWorkAdd1.setVisible(true);
+		
+		txtComment.setText("");
 		labelErrortxt.setVisible(false);
 
 
