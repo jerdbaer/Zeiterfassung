@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
@@ -161,12 +160,12 @@
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </VBox>
-                  <LineChart>
+                  <LineChart fx:id="chart" stylesheets="@Style.css">
                     <xAxis>
-                      <CategoryAxis side="BOTTOM" />
+                      <NumberAxis animated="false" autoRanging="false" side="BOTTOM" upperBound="31.0" />
                     </xAxis>
                     <yAxis>
-                      <NumberAxis side="LEFT" />
+                      <NumberAxis animated="false" autoRanging="false" side="LEFT" upperBound="12.0" />
                     </yAxis>
                   </LineChart>
                </children>
