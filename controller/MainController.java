@@ -2,6 +2,7 @@ package controller;
 
 import models.Break;
 import models.BreakInterruption;
+import models.CalculationModel;
 import models.Interruption;
 import models.Timespann;
 import models.ValidationState;
@@ -11,6 +12,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
+import java.util.Arrays;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -28,10 +31,8 @@ public class MainController {
 	private HBox hBoxWork1;
 
 	@FXML
-	private HBox hBoxBreak1;
-
-	@FXML
 	private TextField txtfieldWorkStart1Hours;
+
 	@FXML
 	private TextField txtfieldWorkStart1Minutes;
 
@@ -63,6 +64,9 @@ public class MainController {
 	private Button btnWorkAdd2;
 
 	@FXML
+	private Button btnWorkHide2;
+
+	@FXML
 	private HBox hBoxWork3;
 
 	@FXML
@@ -76,6 +80,12 @@ public class MainController {
 
 	@FXML
 	private TextField txtfieldWorkEnd3Minutes;
+
+	@FXML
+	private Button btnWorkHide3;
+
+	@FXML
+	private HBox hBoxBreak1;
 
 	@FXML
 	private TextField txtfieldBreakStart1Hours;
@@ -111,6 +121,9 @@ public class MainController {
 	private Button btnBreakAdd2;
 
 	@FXML
+	private Button btnBreakHide2;
+
+	@FXML
 	private HBox hBoxBreak3;
 
 	@FXML
@@ -127,6 +140,9 @@ public class MainController {
 
 	@FXML
 	private Button btnBreakAdd3;
+
+	@FXML
+	private Button btnBreakHide3;
 
 	@FXML
 	private HBox hBoxBreak4;
@@ -147,6 +163,9 @@ public class MainController {
 	private Button btnBreakAdd4;
 
 	@FXML
+	private Button btnBreakHide4;
+
+	@FXML
 	private HBox hBoxBreak5;
 
 	@FXML
@@ -162,13 +181,16 @@ public class MainController {
 	private TextField txtfieldBreakEnd5Minutes;
 
 	@FXML
+	private Button btnBreakHide5;
+
+	@FXML
+	private Button btnReset;
+
+	@FXML
 	private Label labelErrortxt;
 
 	@FXML
 	private Button btnInputValidation;
-
-	@FXML
-	private Button btnDone;
 
 	@FXML
 	public void initialize() {
@@ -200,118 +222,210 @@ public class MainController {
 	}
 
 	@FXML
-	void computeInput(ActionEvent event) {
+	void hideHBox(ActionEvent event) {
+		Button buttonpressed = (Button) event.getSource();
+		if (buttonpressed == btnWorkHide2) {
+			hBoxWork2.setVisible(false);
+			btnWorkAdd1.setVisible(true);
+			TextField[] work2 = { txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes, txtfieldWorkEnd2Hours,
+					txtfieldWorkEnd2Minutes };
+			clear(work2);
+		} else if (buttonpressed == btnWorkHide3) {
+			hBoxWork3.setVisible(false);
+			btnWorkAdd2.setVisible(true);
+			TextField[] work3 = { txtfieldWorkStart3Hours, txtfieldWorkStart3Minutes, txtfieldWorkEnd3Hours,
+					txtfieldWorkEnd3Minutes };
+			clear(work3);
+		} else if (buttonpressed == btnBreakHide2) {
+			hBoxBreak2.setVisible(false);
+			btnBreakAdd1.setVisible(true);
+			TextField[] break2 = { txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes, txtfieldBreakEnd2Hours,
+					txtfieldBreakEnd2Minutes };
+			clear(break2);
 
-		var formattedInput = formatInput();
-		var calculationController = new CalculationController(formattedInput);
+		} else if (buttonpressed == btnBreakHide3) {
+			hBoxBreak3.setVisible(false);
+			btnBreakAdd2.setVisible(true);
+			TextField[] break3 = { txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours,
+					txtfieldBreakEnd3Minutes };
+			clear(break3);
+
+		} else if (buttonpressed == btnBreakHide4) {
+			hBoxBreak4.setVisible(false);
+			btnBreakAdd3.setVisible(true);
+			TextField[] break4 = { txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours,
+					txtfieldBreakEnd4Minutes };
+			clear(break4);
+
+		} else if (buttonpressed == btnBreakHide5) {
+			hBoxBreak5.setVisible(false);
+			btnBreakAdd4.setVisible(true);
+			TextField[] break5 = { txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours,
+					txtfieldBreakEnd5Minutes };
+			clear(break5);
+
+		}
+
+	}
+
+	@FXML
+	void reset(ActionEvent event) {
+		TextField[] allTextFields = { txtfieldWorkStart1Hours, txtfieldWorkStart1Minutes, txtfieldWorkEnd1Hours,
+				txtfieldWorkEnd1Minutes, txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes, txtfieldWorkEnd2Hours,
+				txtfieldWorkEnd2Minutes, txtfieldBreakStart1Hours, txtfieldBreakStart1Minutes, txtfieldBreakEnd1Hours,
+				txtfieldBreakEnd1Minutes, txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes, txtfieldBreakEnd2Hours,
+				txtfieldBreakEnd2Minutes, txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours,
+				txtfieldBreakEnd3Minutes, txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours,
+				txtfieldBreakEnd4Minutes };
+
+		HBox[] allRetractableInputSegments = { hBoxWork2, hBoxWork3, hBoxBreak2, hBoxBreak3, hBoxBreak4, hBoxBreak5 };
+
+		for (HBox InputSegment : allRetractableInputSegments)
+			InputSegment.setVisible(false);
+
+		clear(allTextFields);
+		btnWorkAdd1.setVisible(true);
+		labelErrortxt.setVisible(false);
 		
-		var selectedDay = datepicker.getValue();
-		// ------------------------
-		System.out.println(selectedDay); //LocalDAte
-		// ------------------------
 
-		// total working time
-		var totalWorkTime = calculationController.calculateTotalWorktime();
+	}
 
-		// -------------------------------
-		System.out.println(String.format("Arbeitsbeginn %02d:%02d:%02d", totalWorkTime.toHoursPart(), totalWorkTime.toMinutesPart(), totalWorkTime.toSecondsPart())); //Duration
-		// -------------------------------
-
-		
-		
-		// workbegin
-		var begin = calculationController.getWorkBegin();
-
-		// ------------------------
-		System.out.println("Begin\t" + begin.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))); //LocalTime
-		// ------------------------
-
-		// workend
-		var end = calculationController.getWorkEnd();
-
-		// ------------------------
-		System.out.println("Ende\t" +end.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.MEDIUM))); //LocalTime
-		// ------------------------
-
-		// break&interruptions
-		var breakUinterruptionDuration = calculationController.calculateBreakAndInterruptionDuration();
-
-		// ------------------------
-		System.out.println((String.format("Gesamt Pausenzeit %02d:%02d:%02d", breakUinterruptionDuration.toHoursPart(), breakUinterruptionDuration.toMinutesPart(), breakUinterruptionDuration.toSecondsPart()))); //Duration
-		// ------------------------
-
+	private void clear(TextField[] textfields) {
+		for (TextField textfield : textfields)
+			textfield.clear();
 	}
 
 	@FXML
 	void showHBox(ActionEvent event) {
 
+		TextField[] work1 = { txtfieldWorkStart1Hours, txtfieldWorkStart1Minutes, txtfieldWorkEnd1Hours,
+				txtfieldWorkEnd1Minutes };
+
+		TextField[] work2 = { txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes, txtfieldWorkEnd2Hours,
+				txtfieldWorkEnd2Minutes };
+
+		TextField[] break1 = { txtfieldBreakStart1Hours, txtfieldBreakStart1Minutes, txtfieldBreakEnd1Hours,
+				txtfieldBreakEnd1Minutes };
+
+		TextField[] break2 = { txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes, txtfieldBreakEnd2Hours,
+				txtfieldBreakEnd2Minutes };
+
+		TextField[] break3 = { txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours,
+				txtfieldBreakEnd3Minutes };
+
+		TextField[] break4 = { txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours,
+				txtfieldBreakEnd4Minutes };
+
 		Button buttonpressed = (Button) event.getSource();
-		if (buttonpressed == btnWorkAdd1) {
+		if (buttonpressed == btnWorkAdd1 && !isBlankTextFields(work1)) {
 			hBoxWork2.setVisible(true);
 			btnWorkAdd1.setVisible(false);
-		} else if (buttonpressed == btnWorkAdd2) {
+		} else if (buttonpressed == btnWorkAdd2 && !isBlankTextFields(work2)) {
 			hBoxWork3.setVisible(true);
 			btnWorkAdd2.setVisible(false);
-		} else if (buttonpressed == btnBreakAdd1) {
+		} else if (buttonpressed == btnBreakAdd1 && !isBlankTextFields(break1)) {
 			hBoxBreak2.setVisible(true);
 			btnBreakAdd1.setVisible(false);
-		} else if (buttonpressed == btnBreakAdd2) {
+		} else if (buttonpressed == btnBreakAdd2 && !isBlankTextFields(break2)) {
 			hBoxBreak3.setVisible(true);
 			btnBreakAdd2.setVisible(false);
-		} else if (buttonpressed == btnBreakAdd3) {
+		} else if (buttonpressed == btnBreakAdd3 && !isBlankTextFields(break3)) {
 			hBoxBreak4.setVisible(true);
 			btnBreakAdd3.setVisible(false);
-		} else if (buttonpressed == btnBreakAdd4) {
+		} else if (buttonpressed == btnBreakAdd4 && !isBlankTextFields(break4)) {
 			hBoxBreak5.setVisible(true);
 			btnBreakAdd4.setVisible(false);
 		}
 
 	}
 
+	private boolean isBlankTextFields(TextField[] textfields) {
+		return Arrays.stream(textfields).anyMatch(textfield -> textfield.getText().isBlank());
+	}
+
+	@FXML
+	void abort(ActionEvent event) {
+		var swapStageController = new SwapStageController();
+		swapStageController.showPopup("/view/PopupAbort.fxml");
+	}
+
 	@FXML
 	void validateInput(ActionEvent event) {
 
-		ArrayList<ValidationState> validationResult = new ArrayList<ValidationState>() ;
+		ArrayList<ValidationState> validationResult = new ArrayList<ValidationState>();
 		var input = formatInput();
-		if(input.isEmpty()) {
+		if (input.isEmpty()) {
 			validationResult.add(ValidationState.NOT_VALID_NO_INPUT_FOUND);
 
+		} else {
+			var calculationController = new CalculationController(input);
+			var workBegin = calculationController.getWorkBegin();
+			var workEnd = calculationController.getWorkEnd();
+			var timeAtWork = Duration.between(workBegin, workEnd);
+			var totalWorkingTime = calculationController.calculateTotalWorktime();
+			var timeAtBreak = calculationController.breakUinterruptionDuration();
+			var legalBreak = calculationController.calculateLegalBreak();
+			var selectedDay = datepicker.getValue();
+			// ------------------------------------------
+			var workEndYesterday = LocalTime.of(16, 30); // need database input
+			// -------------------------------------------
+			var inputValidationController = new InputValidationController(input, legalBreak, timeAtWork,
+					totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterday);
+			validationResult.addAll(inputValidationController.validation());
 		}
-		else {
-		var calculationController = new CalculationController(input);	
-		var workBegin = calculationController.getWorkBegin();
-		var workEnd = calculationController.getWorkEnd();
-		var totalWorkingTime = calculationController.calculateTotalWorktime();
-		var timeAtBreak = calculationController.calculateBreakAndInterruptionDuration();
-		var legalBreak = calculationController.calculateLegalBreak();
-		var selectedDay = datepicker.getValue();
-		//------------------------------------------
-		var workEndYesterday = LocalTime.of(16, 30); // need database input
-		//-------------------------------------------
-		var inputValidationController = new InputValidationController(input, legalBreak, totalWorkingTime, timeAtBreak,
-				workBegin, workEnd, selectedDay, workEndYesterday);
-		validationResult.addAll(inputValidationController.validation());
-		}
-		
-		if (validationResult.stream()
-				.allMatch(elm -> elm.equals(ValidationState.VALID)
-						|| elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
-						|| elm.equals(ValidationState.VALID_WORKEND_IS_AFTER_19_30))) {
-			btnDone.setDisable(false);
-			labelErrortxt.setText("VALID");
-			// -----------------------------
-			// -> Popup-Fenster + Textfeld
-			// -----------------------------
+
+		var swapStageController = new SwapStageController();
+
+		if (validationResult.stream().allMatch(elm -> elm.equals(ValidationState.VALID))) {
+			computeInput(input);
+			swapStageController.showPopup("/view/PopupValid.fxml");
+		} else if (validationResult.stream().anyMatch(elm -> elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
+				|| elm.equals(ValidationState.VALID_WORKEND_IS_AFTER_19_30))) {
+			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();
+			labelErrortxt.setVisible(true);
+			labelErrortxt.setText(Error.toString());
+			
+			computeInput(input);
+			swapStageController.showPopup("/view/PopupLimits.fxml");
+
 		} else {
 			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();
+			labelErrortxt.setVisible(true);
 			labelErrortxt.setText(Error.toString());
-			//-------------------------------
-			// switch/case backfire TextDisplayed 
-			//-------------------------------
-			
-			btnDone.setDisable(true);
+			// -------------------------------
+			// switch/case backfire TextDisplayed
+			// -------------------------------
 
 		}
+
+	}
+
+	private static CalculationModel calculationModel;
+	
+	public static CalculationModel getCalculationModel() {
+		return calculationModel;
+	}
+
+	private void computeInput(ArrayList<Timespann> formattedInput) {
+		var calculationController = new CalculationController(formattedInput);
+		calculationModel = new CalculationModel();
+		var selectedDay = datepicker.getValue();
+		calculationModel.setSelectedDay(selectedDay);
+		// total working time
+		var totalWorkTime = calculationController.calculateTotalWorktime();
+		calculationModel.setTotalWorkTime(totalWorkTime);
+
+		// workbegin
+		var begin = calculationController.getWorkBegin();
+		calculationModel.setWorkBegin(begin);
+
+		// workend
+		var end = calculationController.getWorkEnd();
+		calculationModel.setWorkEnd(end);
+
+		// break&interruptions
+		var breakUinterruptionDuration = calculationController.breakUinterruptionDuration();
+		calculationModel.setTotalBreakTime(breakUinterruptionDuration);
 
 	}
 
@@ -334,27 +448,27 @@ public class MainController {
 
 		TextField[] break1 = { txtfieldBreakStart1Hours, txtfieldBreakStart1Minutes, txtfieldBreakEnd1Hours,
 				txtfieldBreakEnd1Minutes };
-		
-		TextField[] breakInterruption1 = {  txtfieldBreakEnd1Hours,	txtfieldBreakEnd1Minutes, 
-				txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes};
+
+		TextField[] breakInterruption1 = { txtfieldBreakEnd1Hours, txtfieldBreakEnd1Minutes, txtfieldBreakStart2Hours,
+				txtfieldBreakStart2Minutes };
 
 		TextField[] break2 = { txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes, txtfieldBreakEnd2Hours,
 				txtfieldBreakEnd2Minutes };
-		
-		TextField[] breakInterruption2 = {  txtfieldBreakEnd2Hours,	txtfieldBreakEnd2Minutes, 
-				txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes};
+
+		TextField[] breakInterruption2 = { txtfieldBreakEnd2Hours, txtfieldBreakEnd2Minutes, txtfieldBreakStart3Hours,
+				txtfieldBreakStart3Minutes };
 
 		TextField[] break3 = { txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours,
 				txtfieldBreakEnd3Minutes };
-		
-		TextField[] breakInterruption3 = {  txtfieldBreakEnd3Hours,	txtfieldBreakEnd3Minutes, 
-				txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes};
+
+		TextField[] breakInterruption3 = { txtfieldBreakEnd3Hours, txtfieldBreakEnd3Minutes, txtfieldBreakStart4Hours,
+				txtfieldBreakStart4Minutes };
 
 		TextField[] break4 = { txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours,
 				txtfieldBreakEnd4Minutes };
-		
-		TextField[] breakInterruption4 = {  txtfieldBreakEnd4Hours,	txtfieldBreakEnd4Minutes, 
-				txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes};
+
+		TextField[] breakInterruption4 = { txtfieldBreakEnd4Hours, txtfieldBreakEnd4Minutes, txtfieldBreakStart5Hours,
+				txtfieldBreakStart5Minutes };
 
 		TextField[] break5 = { txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours,
 				txtfieldBreakEnd5Minutes };
@@ -379,9 +493,9 @@ public class MainController {
 					timespann = new Work(start, end);
 				else if (value.equals(interruption1) || value.equals(interruption2))
 					timespann = new Interruption(start, end);
-				else if (value.equals(breakInterruption1) || value.equals(breakInterruption2) 
+				else if (value.equals(breakInterruption1) || value.equals(breakInterruption2)
 						|| value.equals(breakInterruption3) || value.equals(breakInterruption4))
-					timespann = new BreakInterruption(start,end);
+					timespann = new BreakInterruption(start, end);
 				else
 					timespann = new Break(start, end);
 				formattedInput.add(timespann);
@@ -392,5 +506,5 @@ public class MainController {
 		return formattedInput;
 	}
 
-	
 }
+

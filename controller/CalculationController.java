@@ -16,7 +16,6 @@ public class CalculationController {
 	private LocalTime workBegin;
 	private LocalTime workEnd;
 	
-	
 	private static final Duration LEGAL_BREAK_LIMIT_1 = Duration.ofHours(6);
 	private static final Duration LEGAL_BREAK_LIMIT_2 = Duration.ofHours(9);
 	private static final Duration LEGAL_BREAK_OVER_SIX_HOURS = Duration.ofMinutes(30);

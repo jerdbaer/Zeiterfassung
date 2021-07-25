@@ -1,15 +1,15 @@
-//package test;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//import java.time.LocalTime;
-//import java.util.ArrayList;
-//
-//import org.junit.jupiter.api.Test;
-//
-//import josi.calculation.TotalTimeAtWork;
-//
-//class TotalTimeAtWorkTest {
+package test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalTime;
+import java.util.ArrayList;
+
+import org.junit.jupiter.api.Test;
+
+import josi.calculation.TotalTimeAtWork;
+
+class TotalTimeAtWorkTest {
 //	
 //	static final LocalTime TIME1 = LocalTime.of(1,0);
 //	static final LocalTime TIME2 = LocalTime.of(2,30);
@@ -66,10 +66,10 @@
 //		
 //		assertEquals(expectedTotalTime, actualTotalTime);
 //	}
-//	
-//	/*
-//	 * no need for further test due to restrictions for user input
-//	 * --> no values < 0 for LocalTime
-//	 * --> no values > 24 for LocalTime
-//	 */
-//}
+	
+	/*
+	 * no need for further test due to restrictions for user input
+	 * --> no values < 0 for LocalTime
+	 * --> no values > 24 for LocalTime
+	 */
+}

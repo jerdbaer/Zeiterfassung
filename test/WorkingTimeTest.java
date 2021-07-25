@@ -1,14 +1,14 @@
-//package test;
-//
-//import static org.junit.jupiter.api.Assertions.*;
-//
-//import java.time.LocalTime;
-//
-//import org.junit.jupiter.api.Test;
-//
-//import josi.calculation.WorkingTime;
-//
-//class WorkingTimeTest {
+package test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.time.LocalTime;
+
+import org.junit.jupiter.api.Test;
+
+import josi.calculation.WorkingTime;
+
+class WorkingTimeTest {
 //
 //	@Test
 //	void totalTimeIs0AndTotalBreakIs0_WorkingTimeIs0() {
@@ -69,4 +69,4 @@
 //		
 //		assertEquals(expectedWorkingTime,actualWorkingTime);
 //	}
-//}
+}

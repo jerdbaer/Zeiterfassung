@@ -32,58 +32,5 @@ class FlexiTimeTest {
 		
 		assertEquals(expectedFlexiTime, actualFlexiTime);
 	}
-	
-	
-	@Test
-	void planned8AndWorking0_FlexitimeIsMinus8() {
-		FlexiTime time = new FlexiTime(LocalTime.of(8,0), LocalTime.of(0,0));
-		Duration expectedFlexiTime = Duration.parse("PT8H").negated();
-		
-		Duration actualFlexiTime = time.calculateFlexiTime();
-		
-		assertEquals(expectedFlexiTime,actualFlexiTime);
-	}
-	
-	@Test
-	void planned0AndWorking8_FlexitimeIsPlus8() {
-		FlexiTime time = new FlexiTime(LocalTime.of(0,0), LocalTime.of(8,0));
-		Duration expectedFlexiTime = Duration.parse("PT8H");
-		
-		Duration actualFlexiTime = time.calculateFlexiTime();
-		
-		assertEquals(expectedFlexiTime,actualFlexiTime);
-	}
-	
-	@Test
-	void planned8AndWorked724_FlexitimeIsMinus36() {
-		FlexiTime time = new FlexiTime(LocalTime.of(8,0), LocalTime.of(7,24));
-		Duration expectedFlexiTime = Duration.parse("PT36M").negated();
-		
-		Duration actualFlexiTime = time.calculateFlexiTime();
-		
-		assertEquals(expectedFlexiTime,actualFlexiTime);
-	}
-	
-	@Test
-	void planned430AndWorked724_FlexitimeIsMinus36() {
-		FlexiTime time = new FlexiTime(LocalTime.of(4,30), LocalTime.of(9,15));
-		Duration expectedFlexiTime = Duration.parse("PT4H45M");
-		
-		Duration actualFlexiTime = time.calculateFlexiTime();
-		
-		assertEquals(expectedFlexiTime,actualFlexiTime);
-	}
-	
-	// updateFlexiTime()-Test
-//	@Test
-//	void timeDatabase0AndTimeUpdate0_Is0() {
-//		FlexiTime time = new FlexiTime(TIME,TIME);
-//		Duration expectedFlexiTimeAccount = Duration.ZERO;
-//		
-//		Duration actualFlexiTimeAccount = time.updateFlexiTimeAccount(TIME_UPDATE_ZERO);
-//		
-//		assertEquals(expectedFlexiTimeAccount, actualFlexiTimeAccount);
-//	}
-	
-	
 }
+	
