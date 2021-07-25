@@ -45,7 +45,7 @@ public class LoginController {
     	
     	var swapStageController = new SwapSceneController();
     	if(checkLogin())
-    		swapStageController.goToMenu();
+    		swapStageController.goTo("/view/Menu.fxml");
     	else {
     		txtError.setVisible(true);
 		}
