@@ -60,7 +60,7 @@ class ValidationTest {
 		}
 		return list;
 	}
-		
+//-------- allInputIsValid Pass
 	@Test
 	void allInputsValid_Pass() {
 		Work work = new Work(LocalTime.of(8,0),LocalTime.of(13,0));
@@ -76,12 +76,22 @@ class ValidationTest {
 				LocalDate.now(), 		// selectedDay
 				LocalTime.of(13,0));  	//workEndYesterday
 		ArrayList<String> expecteValidations = new ArrayList<String>();
-		addExpectations(expecteValidations, VALID, VALID, VALID, VALID, VALID, VALID, VALID, VALID, VALID, VALID);
+		addExpectations(expecteValidations, 
+				VALID, // checkDurationBetweenWorkingDays
+				VALID, // checkInputExists
+				VALID, // checkTimeOrderIsChronological
+				VALID, // checkBreaksInWorkTime
+				VALID, // checkTotalBreakCompliance
+				VALID, // checkSingleBreakDurationCompliance
+				VALID, // checkDatepickerCompliance
+				VALID, // checkWorkTimeLimits
+				VALID, // checkTotalWorkingTimeOverTenHours
+				VALID); // checkWorkingTimeOverSixHoursWithoutBreak););
 		String validationAll = inputValidationController.validation().toString();
 		
 		assertEquals(expecteValidations.toString(),validationAll);
 	}
-//--------	
+//--------	noDateSelected
 	@Test
 	void noDateSelected_Fail() {
 		Work work = new Work(LocalTime.of(8,0),LocalTime.of(13,0));
@@ -97,12 +107,23 @@ class ValidationTest {
 				null, 					// selectedDay
 				LocalTime.of(13,0));  	//workEndYesterday
 		ArrayList<String> expecteValidations = new ArrayList<String>();
-		addExpectations(expecteValidations, NOT_VALID_NO_DATE_SELECTED, VALID, VALID, VALID, VALID, VALID, NOT_VALID_NO_DATE_SELECTED, VALID, VALID, VALID);
+		addExpectations(expecteValidations, 
+				NOT_VALID_NO_DATE_SELECTED, // checkDurationBetweenWorkingDays
+				VALID, // checkInputExists
+				VALID, // checkTimeOrderIsChronological
+				VALID, // checkBreaksInWorkTime
+				VALID, // checkTotalBreakCompliance
+				VALID, // checkSingleBreakDurationCompliance
+				VALID, // checkDatepickerCompliance
+				VALID, // checkWorkTimeLimits
+				VALID, // checkTotalWorkingTimeOverTenHours
+				VALID); // checkWorkingTimeOverSixHoursWithoutBreak);
+		
 		String validationAll = inputValidationController.validation().toString();
 		
 		assertEquals(expecteValidations.toString(),validationAll);
 	}
-//--------	
+//-------- no Input in WorkTime
 	@Test
 	void noInputList_Fail() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
@@ -116,12 +137,23 @@ class ValidationTest {
 				LocalDate.now(), 		// selectedDay
 				LocalTime.of(13,0));  	//workEndYesterday
 		ArrayList<String> expecteValidations = new ArrayList<String>();
-		addExpectations(expecteValidations, VALID, NOT_VALID_NO_INPUT_FOUND, VALID, VALID, VALID, VALID, VALID, VALID, VALID, VALID);
+		addExpectations(expecteValidations, 
+				VALID, // checkDurationBetweenWorkingDays
+				NOT_VALID_NO_INPUT_FOUND, // checkInputExists
+				VALID, // checkTimeOrderIsChronological
+				VALID, // checkBreaksInWorkTime
+				VALID, // checkTotalBreakCompliance
+				VALID, // checkSingleBreakDurationCompliance
+				VALID, // checkDatepickerCompliance
+				VALID, // checkWorkTimeLimits
+				VALID, // checkTotalWorkingTimeOverTenHours
+				VALID); // checkWorkingTimeOverSixHoursWithoutBreak
+		
 		String validationAll = inputValidationController.validation().toString();
 		
 		assertEquals(expecteValidations.toString(),validationAll);
 	}
-//--------
+//-------- ChronologicalTimeOrder
 	@Test
 	void workTimeOrderNotChronological_Fail() {
 		Work work1 = new Work(LocalTime.of(16,0),LocalTime.of(17,0));
@@ -139,7 +171,17 @@ class ValidationTest {
 				LocalDate.now(), 		// selectedDay
 				LocalTime.of(13,0));  	//workEndYesterday
 		ArrayList<String> expecteValidations = new ArrayList<String>();
-		addExpectations(expecteValidations, VALID, VALID, NOT_VALID_TIME_INPUT_MUST_BE_IN_CHRONICAL_ORDER, VALID, VALID, VALID, VALID, VALID, VALID, VALID);
+		addExpectations(expecteValidations, 
+				VALID, // checkDurationBetweenWorkingDays
+				VALID, // checkInputExists
+				NOT_VALID_TIME_INPUT_MUST_BE_IN_CHRONICAL_ORDER, // checkTimeOrderIsChronological
+				VALID, // checkBreaksInWorkTime
+				VALID, // checkTotalBreakCompliance
+				VALID, // checkSingleBreakDurationCompliance
+				VALID, // checkDatepickerCompliance
+				VALID, // checkWorkTimeLimits
+				VALID, // checkTotalWorkingTimeOverTenHours
+				VALID); // checkWorkingTimeOverSixHoursWithoutBreak
 		String validationAll = inputValidationController.validation().toString();
 		
 		assertEquals(expecteValidations.toString(),validationAll);
@@ -163,7 +205,18 @@ class ValidationTest {
 				LocalDate.now(), 		// selectedDay
 				LocalTime.of(13,0));  	//workEndYesterday
 		ArrayList<String> expecteValidations = new ArrayList<String>();
-		addExpectations(expecteValidations, VALID, VALID, NOT_VALID_TIME_INPUT_MUST_BE_IN_CHRONICAL_ORDER, VALID, VALID, VALID, VALID, VALID, VALID, VALID);
+		addExpectations(expecteValidations, 
+				VALID, // checkDurationBetweenWorkingDays
+				VALID, // checkInputExists
+				NOT_VALID_TIME_INPUT_MUST_BE_IN_CHRONICAL_ORDER, // checkTimeOrderIsChronological
+				VALID, // checkBreaksInWorkTime
+				VALID, // checkTotalBreakCompliance
+				VALID, // checkSingleBreakDurationCompliance
+				VALID, // checkDatepickerCompliance
+				VALID, // checkWorkTimeLimits
+				VALID, // checkTotalWorkingTimeOverTenHours
+				VALID); // checkWorkingTimeOverSixHoursWithoutBreak
+		
 		String validationAll = inputValidationController.validation().toString();
 		
 		assertEquals(expecteValidations.toString(),validationAll);
@@ -226,8 +279,8 @@ class ValidationTest {
 	// end before date issue fehlt einfach
 	//---------
 	
-//--------	
-	@Test
+//-------- Break In WorkTime	
+	@Test 
 	void breakIsNotInWorkTime_Fail(){
 		Work work1 = new Work(LocalTime.of(10,0),LocalTime.of(15,0));
 		Break break1 = new Break(LocalTime.of(8,0),LocalTime.of(9,0));
