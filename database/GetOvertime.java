@@ -113,7 +113,7 @@ import java.sql.*;
        + "WHERE work_date = '" + yesterday + "' AND "
        + "MA_ID = " + MA_ID;
      Statement stmt = null;
-     String resultString = "";
+     String resultString = "00:00:00";
      try {
        connection.setAutoCommit(false);
        stmt = connection.createStatement();
@@ -121,9 +121,9 @@ import java.sql.*;
        connection.commit();
        rs.next();
        resultString = rs.getString(1);
-       stmt.close()
+       stmt.close();
      } catch (SQLException e){
-       e.printStackTrace();
+       System.out.println("no WorkEndYesterday");
      } finally {
        try{
          if (stmt != null)

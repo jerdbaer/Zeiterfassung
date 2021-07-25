@@ -8,12 +8,14 @@ import models.Timespann;
 import models.ValidationState;
 import models.Work;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import database.GetOvertime;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -366,16 +368,27 @@ public class MainController {
 			var calculationController = new CalculationController(input);
 			var workBegin = calculationController.getWorkBegin();
 			var workEnd = calculationController.getWorkEnd();
-			var timeAtWork = Duration.between(workBegin, workEnd);
+//			var timeAtWork = Duration.between(workBegin, workEnd);
 			var totalWorkingTime = calculationController.calculateTotalWorktime();
 			var timeAtBreak = calculationController.calculateBreakAndInterruptionDuration();
 			var legalBreak = calculationController.calculateLegalBreak();
 			var selectedDay = datepicker.getValue();
-			// ------------------------------------------
-			var workEndYesterday = LocalTime.of(16, 30); // need database input
+			// -----------------------------------------
+			var datacontroller = new GetOvertime();
+			var MA_ID = LoginController.MA_Data.getMA_ID();
+			var yesterday = selectedDay.minusDays(1).toString();
+			String workEndYesterday = datacontroller.getWorkEndYesterday(MA_ID, yesterday);
+			
+			LocalTime workEndYesterdayTime; 
+			if(workEndYesterday.isBlank()) {
+				workEndYesterdayTime = LocalTime.MIN;
+			}else {
+				workEndYesterdayTime = LocalTime.parse(workEndYesterday);
+			}
 			// -------------------------------------------
 			var inputValidationController = new InputValidationController(input, legalBreak, 
-					totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterday);
+					totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterdayTime, workBeginTomorrowTime);
+			
 			validationResult.addAll(inputValidationController.validation());
 		}
 
