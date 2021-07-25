@@ -6,6 +6,7 @@ import javafx.scene.control.Button;
 
 public class OverviewController {
 
+
     @FXML
     private Button btnWorktimeTop;
 
@@ -22,14 +23,26 @@ public class OverviewController {
     private Button btnLogout;
 
     @FXML
+    private Button btnThisWeek;
+
+    @FXML
+    private Button btnThisMonth;
+
+    @FXML
+    private Button btnOtherMonth;
+
+    @FXML
+    private Button btnWorkTime;
+
+    @FXML
     void switchScene(ActionEvent event) {
     	var swapStageController = new SwapStageController();
     	var pressedBtn = (Button)event.getSource();
-    	if(pressedBtn == btnWorktimeTop) {
+    	if(pressedBtn == btnWorktimeTop || pressedBtn == btnWorkTime) {
     		swapStageController.goTo("/view/WorkTime.fxml");
     	}
     	else if(pressedBtn == btnAbsenceTop) {
- //   		swapStageController.goToAbsence(event);
+ //   		swapStageController.goTo(Absence);
     	}
     	else if(pressedBtn == btnOverviewTop) {
     		swapStageController.goTo("/view/Overview.fxml");
@@ -41,6 +54,11 @@ public class OverviewController {
     		swapStageController.goTo("/view/Login.fxml");
     	}
 
+    }
+    
+    @FXML
+    void showSampleData(ActionEvent event) {
+    	
     }
 
 }

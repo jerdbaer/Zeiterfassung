@@ -103,13 +103,13 @@
          <children>
             <HBox>
                <children>
-                  <Button mnemonicParsing="false" text="Aktuelle Woche" />
-                  <Button mnemonicParsing="false" text="Aktueller Monat">
+                  <Button fx:id="btnThisWeek" mnemonicParsing="false" text="Aktuelle Woche" />
+                  <Button fx:id="btnThisMonth" mnemonicParsing="false" text="Aktueller Monat">
                      <HBox.margin>
                         <Insets left="5.0" right="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button mnemonicParsing="false" text="Anderer Monat" />
+                  <Button fx:id="btnOtherMonth" mnemonicParsing="false" onAction="#showSampleData" text="Anderer Monat" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
@@ -148,7 +148,7 @@
                               </VBox>
                            </center>
                         </BorderPane>
-                        <Button mnemonicParsing="false" style="-fx-background-color: #709ce7;" text="Arbeitszeit erfassung" textFill="WHITE">
+                        <Button fx:id="btnWorkTime" mnemonicParsing="false" style="-fx-background-color: #709ce7;" text="Arbeitszeit erfassung" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
