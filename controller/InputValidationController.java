@@ -43,6 +43,7 @@ public class InputValidationController {
 		this.workEnd = workEnd;
 		this.selectedDay = selectedDay;
 		this.workEndYesterday = workEndYesterday;
+		this.workBeginTomorrow = workBeginTomorrow;
 	}
 
 	public ArrayList<ValidationState> validation() {

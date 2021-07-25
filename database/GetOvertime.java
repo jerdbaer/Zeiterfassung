@@ -134,11 +134,11 @@ import java.sql.*;
    }
 
    public String getWorkBeginTomorrow(int MA_ID, String tomorrow){
-     String query = "SELECT Arbeitszeit_Ende FROM zeitkonto "
+     String query = "SELECT Arbeitszeit_Beginn FROM zeitkonto "
        + "WHERE work_date = '" + tomorrow + "' AND "
        + "MA_ID = " + MA_ID;
      Statement stmt = null;
-     String resultString = "00:00:00";
+     String resultString = "23:59:59";
      try {
        connection.setAutoCommit(false);
        stmt = connection.createStatement();

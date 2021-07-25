@@ -376,15 +376,15 @@ public class MainController {
 			// -----------------------------------------
 			var datacontroller = new GetOvertime();
 			var MA_ID = LoginController.MA_Data.getMA_ID();
+			
 			var yesterday = selectedDay.minusDays(1).toString();
 			String workEndYesterday = datacontroller.getWorkEndYesterday(MA_ID, yesterday);
+			LocalTime workEndYesterdayTime =  LocalTime.parse(workEndYesterday);
 			
-			LocalTime workEndYesterdayTime; 
-			if(workEndYesterday.isBlank()) {
-				workEndYesterdayTime = LocalTime.MIN;
-			}else {
-				workEndYesterdayTime = LocalTime.parse(workEndYesterday);
-			}
+			var tomorrow = selectedDay.plusDays(1).toString();
+			String workBeginTomorrow = datacontroller.getWorkBeginTomorrow(MA_ID, tomorrow);
+			LocalTime workBeginTomorrowTime =  LocalTime.parse(workBeginTomorrow);
+			
 			// -------------------------------------------
 			var inputValidationController = new InputValidationController(input, legalBreak, 
 					totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterdayTime, workBeginTomorrowTime);
