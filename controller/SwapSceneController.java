@@ -57,18 +57,5 @@ public class SwapSceneController{
 		}
     }
 
-    public void showPopupAbort() {
-        try {
-			final Stage dialog = new Stage();
-			dialog.initModality(Modality.APPLICATION_MODAL);
-			var popupContent = (BorderPane)FXMLLoader.load(getClass().getResource(filename));
-			var popup = new Scene(popupContent);
-			dialog.initStyle(StageStyle.UNDECORATED);
-			dialog.setScene(popup);
-			dialog.show();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-    }
 
 }
