@@ -1,5 +1,8 @@
 package controller;
 
+import java.sql.BatchUpdateException;
+
+import database.AddWorkingTime;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -12,6 +15,8 @@ public class PopupValidController {
 
     @FXML
     private Label txtTimes;
+    
+    public static AddWorkingTime addWorkingTime;
     
     @FXML
     public void initialize() {
@@ -28,12 +33,38 @@ public class PopupValidController {
     void abortToWorktime(ActionEvent event) {
     	var popup = ((Button)event.getSource()).getScene().getWindow();
     	popup.hide();
-
+    	
     }
 
     @FXML
     void saveToMenu(ActionEvent event) {
-
+    	var calculations = MainController.getCalculationModel();
+    	var MA_ID = LoginController.MA_Data.getMA_ID();
+    	var workDate = calculations.getSelectedDay();
+    	addWorkingTime = new AddWorkingTime(workDate, MA_ID);
+    	
+    	var data = MainController.getCalculationModel();
+    	var beginTime = data.getWorkBegin();
+    	var endTime = data.getWorkEnd();
+    	var totalBreak = data.getTotalBreakTime();
+    	var overtime = "00:00:00";
+    	var comment = data.getComment();
+    	try {
+    		
+    		addWorkingTime.addWorkingTime(beginTime, endTime, totalBreak, overtime, comment);
+    		addWorkingTime.close();
+    		var popup = ((Button)event.getSource()).getScene().getWindow();
+        	popup.hide();
+    		
+    	}catch(BatchUpdateException e) {
+    		var swapSceneController = new SwapSceneController();
+    		var popup = ((Button)event.getSource()).getScene().getWindow();
+    		swapSceneController.showPopup("/view/PopupDoubleEntry.fxml");
+        	popup.hide();
+        	
+    	}
+    	
+    	
     }
 
 }

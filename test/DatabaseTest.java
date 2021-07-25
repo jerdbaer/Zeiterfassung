@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Order;
 import java.sql.*;
 import database.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class DatabaseTest {
@@ -32,7 +33,7 @@ class DatabaseTest {
 	private static void createConnection() throws SQLException {
 		String url = "jdbc:mysql://localhost/zeiterfassung";
 		String user = "root";
-		String pass = "";
+		String pass = "1234";
 		System.out.println("Creating DBConnection");
 		connection = DriverManager.getConnection(url, user, pass);
 	}
@@ -40,11 +41,8 @@ class DatabaseTest {
 	@BeforeAll
 	private static void addTestMA() {
 		String query0 = "DELETE FROM zeitkonto WHERE MA_ID = 134";
-		String query1 = "DELETE FROM zeitkonto WHERE MA_ID = 138";
-		String query2 = "DELETE FROM mitarbeiter WHERE MA_ID = 134";
-		String query3 = "DELETE FROM mitarbeiter WHERE MA_ID = 138";
-		String query4 = "INSERT IGNORE INTO mitarbeiter VALUES (134, 'Erika', 'Musterfrau', 'G�rschstr. 32', '13187', 'Berlin', 'Buchhaltung', 'e.muster@gmail.com', 30, '08:00:00', 'ja')";
-		String query5 = "INSERT IGNORE INTO mitarbeiter VALUES (138, 'Matthias', 'Musterfrau', 'G�rschstr. 32', '13187', 'Berlin', 'Buchhaltung', 'mat.muster@gmail.com', 30, '08:00:00', 'ja')";
+		String query1 = "DELETE FROM mitarbeiter WHERE MA_ID = 134";
+		String query2 = "INSERT IGNORE INTO mitarbeiter VALUES (134, 'Erika', 'Musterfrau', 'G�rschstr. 32', '13187', 'Berlin', 'Buchhaltung', 'e.muster@gmail.com', 30, '08:00:00', 'ja')";
 		Statement stmt = null;
 		try {
 			createConnection();
@@ -53,9 +51,6 @@ class DatabaseTest {
 			stmt.addBatch(query0);
 			stmt.addBatch(query1);
 			stmt.addBatch(query2);
-			stmt.addBatch(query3);
-			stmt.addBatch(query4);
-			stmt.addBatch(query5);
 			stmt.executeBatch();
 			connection.commit();
 			stmt.close();
@@ -73,18 +68,15 @@ class DatabaseTest {
 	@AfterAll
 	public static void deleteTestMA() {
 		String query0 = "DELETE FROM zeitkonto WHERE MA_ID = 134";
-		String query1 = "DELETE FROM zeitkonto WHERE MA_ID = 138";
-		String query2 = "DELETE FROM mitarbeiter WHERE MA_ID = 134";
-		String query3 = "DELETE FROM mitarbeiter WHERE MA_ID = 138";
+		String query1 = "DELETE FROM mitarbeiter WHERE MA_ID = 134";
 		Statement stmt = null;
 		try {
 			createConnection();
 			connection.setAutoCommit(false);
 			stmt = connection.createStatement();
 			stmt.addBatch(query0);
+			stmt.executeBatch();
 			stmt.addBatch(query1);
-			stmt.addBatch(query2);
-			stmt.addBatch(query3);
 			stmt.executeBatch();
 			connection.commit();
 			stmt.close();
@@ -268,6 +260,22 @@ class DatabaseTest {
 		
 		String expected = "-2:00:00";
 		assertEquals(expected, result);
+	}
+	
+	@Test
+	@Order(6)
+	void getWorkingTimeTest() {
+		AddWorkingTime addAz = new AddWorkingTime("2021-07-15", 134);
+		HashMap<String, String> result = addAz.getWorkingTime();
+		
+		HashMap<String, String> expected = new HashMap<String, String>();
+		expected.put("Arbeitszeit_Beginn", "08:00:00");
+		expected.put("Arbeitszeit_Ende", "12:00:00");
+		expected.put("Pausengesamtzeit_Tag", "00:00:00");
+		expected.put("Ueberstunden_Tag", "-4:00:00");
+		expected.put("Kommentar", "halbtags");
+		
+		assertTrue(result.equals(expected));
 	}
 
 }

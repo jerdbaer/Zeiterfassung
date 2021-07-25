@@ -416,7 +416,7 @@
                   <Insets bottom="5.0" />
                </VBox.margin>
             </Label>
-            <TextField promptText="z.B. Dienstreise, Home Office, ...">
+            <TextField fx:id="txtComment" promptText="z.B. Dienstreise, Home Office, ...">
                <VBox.margin>
                   <Insets bottom="5.0" />
                </VBox.margin>
