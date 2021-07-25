@@ -290,6 +290,7 @@ public class MainController {
 		btnWorkAdd1.setVisible(true);
 		labelErrortxt.setVisible(false);
 
+
 	}
 
 	private void clear(TextField[] textfields) {
@@ -348,7 +349,7 @@ public class MainController {
 	@FXML
 	void abort(ActionEvent event) {
 		var swapStageController = new SwapSceneController();
-		swapStageController.showPopupAbort();
+		swapStageController.showPopup("/view/PopupAbort.fxml");
 	}
 
 	@FXML
@@ -380,7 +381,7 @@ public class MainController {
 
 		if (validationResult.stream().allMatch(elm -> elm.equals(ValidationState.VALID))) {
 			computeInput(input);
-			swapStageController.showPopupValid();
+			swapStageController.showPopup("/view/PopupValid.fxml");
 		} else if (validationResult.stream().anyMatch(elm -> elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
 				|| elm.equals(ValidationState.VALID_WORKEND_IS_AFTER_19_30))) {
 			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();
@@ -388,7 +389,7 @@ public class MainController {
 			labelErrortxt.setText(Error.toString());
 
 			computeInput(input);
-			swapStageController.showPopupLimits();
+			swapStageController.showPopup("/view/PopupLimits.fxml");
 
 		} else {
 			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();
@@ -416,10 +417,10 @@ public class MainController {
 		// totalWorkTime
 		var totalWorkTime = calculationController.calculateTotalWorktime();
 		calculationModel.setTotalWorkTime(totalWorkTime);
-		
+
 		// overtime
-//----------------------------------------------- // needs calculation
-		
+		// needs calculation
+
 		// workbegin
 		var begin = calculationController.getWorkBegin();
 		calculationModel.setWorkBegin(begin);
@@ -431,8 +432,8 @@ public class MainController {
 		// break&interruptions
 		var breakUinterruptionDuration = calculationController.breakUinterruptionDuration();
 		calculationModel.setTotalBreakTime(breakUinterruptionDuration);
-		
-		//comment
+
+		// comment
 		var comment = txtComment.getText();
 		calculationModel.setComment(comment);
 
