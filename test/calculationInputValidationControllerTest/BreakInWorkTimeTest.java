@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import models.Break;
 import models.Timespann;
+import models.ValidationState;
 import models.Work;
 
 class BreakInWorkTimeTest {
@@ -36,56 +37,56 @@ class BreakInWorkTimeTest {
 	@Test
 	void breakEqualsWork_breakNeedsToStartExclusivelyAfterWorkBeginAndEndExclusivelyBeforeWorkEnd_isNotCompliant() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, BREAK_8_TO_18, WORK_8_TO_18);
+		list = addInputToList(list, BREAK_8_TO_18, WORK_8_TO_18);
 
-		String validationBreakInWork = dummyInputValidationControllerStub
-				.checkBreaksInWorkTime(list, WORK_BEGIN, WORK_END).toString();
+		ValidationState validationBreakInWork = dummyInputValidationControllerStub
+				.checkBreaksInWorkTime(list, WORK_BEGIN, WORK_END);
 
-		assertEquals("NOT_VALID_BREAK_IS_NOT_IN_WORKTIME", validationBreakInWork);
+		assertEquals(ValidationState.NOT_VALID_BREAK_IS_NOT_IN_WORKTIME, validationBreakInWork);
 	}
 	
 	@Test
 	void workFrom8To18AndBreakFrom8H01MTo17H59_breakIsInWork_isCompliant() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, BREAK_IN_8_01_TO_17_59, WORK_8_TO_18);
+		list = addInputToList(list, BREAK_IN_8_01_TO_17_59, WORK_8_TO_18);
 
-		String validationBreakInWork = dummyInputValidationControllerStub
-				.checkBreaksInWorkTime(list, WORK_BEGIN, WORK_END).toString();
+		ValidationState validationBreakInWork = dummyInputValidationControllerStub
+				.checkBreaksInWorkTime(list, WORK_BEGIN, WORK_END);
 
-		assertEquals("VALID", validationBreakInWork);
+		assertEquals(ValidationState.VALID, validationBreakInWork);
 	}
 	
 	@Test
 	void workFrom8To18AndBreakFrom7H59MTo18H01_breakIsOutOfWork_isNotCompliant() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, BREAK_OUT_7_59_TO_18_01, WORK_8_TO_18);
+		list = addInputToList(list, BREAK_OUT_7_59_TO_18_01, WORK_8_TO_18);
 
-		String validationBreakInWork = dummyInputValidationControllerStub
-				.checkBreaksInWorkTime(list, WORK_BEGIN, WORK_END).toString();
+		ValidationState validationBreakInWork = dummyInputValidationControllerStub
+				.checkBreaksInWorkTime(list, WORK_BEGIN, WORK_END);
 
-		assertEquals("NOT_VALID_BREAK_IS_NOT_IN_WORKTIME", validationBreakInWork);
+		assertEquals(ValidationState.NOT_VALID_BREAK_IS_NOT_IN_WORKTIME, validationBreakInWork);
 	}
 	
 	
 	@Test
 	void workFrom8To18AndBreakAtWorkBegin_breakIsInWorkButCannotBeAtBegin_isNotCompliant() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, BREAK_AT_WORKBEGIN, WORK_8_TO_18);
+		list = addInputToList(list, BREAK_AT_WORKBEGIN, WORK_8_TO_18);
 
-		String validationBreakInWork = dummyInputValidationControllerStub
-				.checkBreaksInWorkTime(list, WORK_BEGIN, WORK_END).toString();
+		ValidationState validationBreakInWork = dummyInputValidationControllerStub
+				.checkBreaksInWorkTime(list, WORK_BEGIN, WORK_END);
 
-		assertEquals("NOT_VALID_BREAK_CANNOT_BE_AT_WORKING_BEGIN_OR_END", validationBreakInWork);
+		assertEquals(ValidationState.NOT_VALID_BREAK_CANNOT_BE_AT_WORKING_BEGIN_OR_END, validationBreakInWork);
 	}
 
 	@Test
 	void workFrom8To18AndBreakAtWorkEnd_breakIsInWorkButCannotBeAtEnd_isNotCompliant() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, BREAK_AT_WORKEND, WORK_8_TO_18);
+		list = addInputToList(list, BREAK_AT_WORKEND, WORK_8_TO_18);
 
-		String validationBreakInWork = dummyInputValidationControllerStub
-				.checkBreaksInWorkTime(list, WORK_BEGIN, WORK_END).toString();
+		ValidationState validationBreakInWork = dummyInputValidationControllerStub
+				.checkBreaksInWorkTime(list, WORK_BEGIN, WORK_END);
 
-		assertEquals("NOT_VALID_BREAK_CANNOT_BE_AT_WORKING_BEGIN_OR_END", validationBreakInWork);
+		assertEquals(ValidationState.NOT_VALID_BREAK_CANNOT_BE_AT_WORKING_BEGIN_OR_END, validationBreakInWork);
 	}
 }

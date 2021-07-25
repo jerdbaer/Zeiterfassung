@@ -6,6 +6,8 @@ import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
 
+import models.ValidationState;
+
 
 class WorkingTimeOverTenHoursTest {
 
@@ -14,31 +16,28 @@ class WorkingTimeOverTenHoursTest {
 	
 	@Test
 	void workingTimeIs10H_isValid() {
-		String validationWorkingTime = dummyInputValidationControllerStub
-				.checkTotalWorkingTimeOverTenHours(Duration.ofHours(10))
-				.toString();
+		ValidationState validationWorkingTime = dummyInputValidationControllerStub
+				.checkTotalWorkingTimeOverTenHours(Duration.ofHours(10));
 		
-		assertEquals("VALID", validationWorkingTime);
+		assertEquals(ValidationState.VALID, validationWorkingTime);
 	}
 	
 	
 
 	@Test
 	void workingTimeIs9H59M_isValid() {
-		String validationWorkingTime = dummyInputValidationControllerStub
-				.checkTotalWorkingTimeOverTenHours(Duration.parse("PT9H59M"))
-				.toString();
+		ValidationState validationWorkingTime = dummyInputValidationControllerStub
+				.checkTotalWorkingTimeOverTenHours(Duration.parse("PT9H59M"));
 		
-		assertEquals("VALID", validationWorkingTime);
+		assertEquals(ValidationState.VALID, validationWorkingTime);
 	}
 	
 	@Test
 	void workingTimeIs10H01M_isNotValid() {
 		
-		String validationWorkingTime = dummyInputValidationControllerStub
-				.checkTotalWorkingTimeOverTenHours(Duration.parse("PT10H1M"))
-				.toString();
+		ValidationState validationWorkingTime = dummyInputValidationControllerStub
+				.checkTotalWorkingTimeOverTenHours(Duration.parse("PT10H1M"));
 		
-		assertEquals("NOT_VALID_WORKING_TIME_OVER_TEN_HOURS", validationWorkingTime);
+		assertEquals(ValidationState.NOT_VALID_WORKING_TIME_OVER_TEN_HOURS, validationWorkingTime);
 	}
 }

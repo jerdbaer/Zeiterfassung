@@ -11,11 +11,12 @@ import org.junit.jupiter.api.Test;
 import models.Break;
 import models.Interruption;
 import models.Timespann;
+import models.ValidationState;
 
 class SingleBreakComplianceTest {
 
-	private Duration LEGAL_BREAK_30 = Duration.ofMinutes(30);
-	private Duration LEGAL_BREAK_45 = Duration.ofMinutes(45);
+	private static Duration LEGAL_BREAK_30 = Duration.ofMinutes(30);
+	private static Duration LEGAL_BREAK_45 = Duration.ofMinutes(45);
 
 	private static final Break BREAK_0 = new Break(LocalTime.of(0, 0), LocalTime.of(0, 0));
 	private static final Break BREAK_29 = new Break(LocalTime.of(18, 0), LocalTime.of(18, 29));
@@ -38,8 +39,8 @@ class SingleBreakComplianceTest {
 	}
 	
 	/**
-	 * Interruption and Breaks implement both Timespann.class with totally same
-	 * characteristics therefore LEGAL_BREAK_30 is tested for Break, LEGAL_BREAK_45
+	 * Interruption and Breaks implement both Timespann.class with totally same characteristics 
+herefore LEGAL_BREAK_30 is tested for Break, LEGAL_BREAK_45
 	 * is tested for Interruptions
 	 */
 
@@ -47,89 +48,89 @@ class SingleBreakComplianceTest {
 	@Test
 	void breakIs0AndLegalBreakIs30_isNotCompliant() {
 		ArrayList<Timespann> breakList = new ArrayList<Timespann>();
-		addInputToList(breakList, BREAK_0);
+		breakList = addInputToList(breakList, BREAK_0);
 
-		String validationSingleBreak = dummyInputValidationControllerStub
-				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_30).toString();
+		ValidationState validationSingleBreak = dummyInputValidationControllerStub
+				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_30);
 
-		assertEquals("NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR", validationSingleBreak);
+		assertEquals(ValidationState.NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR, validationSingleBreak);
 	}
 
 	@Test
 	void interruptionIs0AndLegalBreakIs45_isNotCompliant() {
 		ArrayList<Timespann> breakList = new ArrayList<Timespann>();
-		addInputToList(breakList, INTERRUPTION_0);
+		breakList = addInputToList(breakList, INTERRUPTION_0);
 
-		String validationSingleBreak = dummyInputValidationControllerStub
-				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_45).toString();
+		ValidationState validationSingleBreak = dummyInputValidationControllerStub
+				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_45);
 
-		assertEquals("NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR", validationSingleBreak);
+		assertEquals(ValidationState.NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR, validationSingleBreak);
 	}
 
 	@Test
 	void breakIs30AndLegalBreakIs30_isCompliant() {
 		ArrayList<Timespann> breakList = new ArrayList<Timespann>();
-		addInputToList(breakList, BREAK_30);
+		breakList = addInputToList(breakList, BREAK_30);
 
-		String validationSingleBreak = dummyInputValidationControllerStub
-				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_30).toString();
+		ValidationState validationSingleBreak = dummyInputValidationControllerStub
+				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_30);
 
-		assertEquals("VALID", validationSingleBreak);
+		assertEquals(ValidationState.VALID, validationSingleBreak);
 	}
 
 	@Test
 	void interruptionIs45AndLegalBreakIs45_isCompliant() {
 		ArrayList<Timespann> breakList = new ArrayList<Timespann>();
-		addInputToList(breakList, INTERRUPTION_45);
+		breakList = addInputToList(breakList, INTERRUPTION_45);
 
-		String validationSingleBreak = dummyInputValidationControllerStub
-				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_45).toString();
+		ValidationState validationSingleBreak = dummyInputValidationControllerStub
+				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_45);
 
-		assertEquals("VALID", validationSingleBreak);
+		assertEquals(ValidationState.VALID, validationSingleBreak);
 	}
 
 	@Test
 	void breakIs29AndLegalBreakIs30_isCompliant() {
 		ArrayList<Timespann> breakList = new ArrayList<Timespann>();
-		addInputToList(breakList, BREAK_29);
+		breakList = addInputToList(breakList, BREAK_29);
 
-		String validationSingleBreak = dummyInputValidationControllerStub
-				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_30).toString();
+		ValidationState validationSingleBreak = dummyInputValidationControllerStub
+				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_30);
 
-		assertEquals("NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR", validationSingleBreak);
+		assertEquals(ValidationState.NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR, validationSingleBreak);
 	}
 
 	@Test
 	void interruptionIs44AndLegalBreakIs45_isCompliant() {
 		ArrayList<Timespann> breakList = new ArrayList<Timespann>();
-		addInputToList(breakList, INTERRUPTION_44);
+		breakList = addInputToList(breakList, INTERRUPTION_44);
 
-		String validationSingleBreak = dummyInputValidationControllerStub
-				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_45).toString();
+		ValidationState validationSingleBreak = dummyInputValidationControllerStub
+				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_45);
 
-		assertEquals("NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR", validationSingleBreak);
+		assertEquals(ValidationState.NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR, validationSingleBreak);
 	}
 
 	@Test
 	void breakIs31AndLegalBreakIs30_isCompliant() {
 		ArrayList<Timespann> breakList = new ArrayList<Timespann>();
-		addInputToList(breakList, BREAK_31);
+		breakList = addInputToList(breakList, BREAK_31);
 
-		String validationSingleBreak = dummyInputValidationControllerStub
-				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_30).toString();
+		ValidationState validationSingleBreak = dummyInputValidationControllerStub
+				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_30);
 
-		assertEquals("VALID", validationSingleBreak);
+		assertEquals(ValidationState.VALID, validationSingleBreak);
 	}
 
 	@Test
 	void interruptionIs46AndLegalBreakIs45_isCompliant() {
 		ArrayList<Timespann> breakList = new ArrayList<Timespann>();
-		addInputToList(breakList, INTERRUPTION_46);
+		breakList = addInputToList(breakList, INTERRUPTION_46);
 
-		String validationSingleBreak = dummyInputValidationControllerStub
-				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_45).toString();
+		ValidationState validationSingleBreak = dummyInputValidationControllerStub
+				.checkSingleBreakDurationCompliance(breakList, LEGAL_BREAK_45);
 
-		assertEquals("VALID", validationSingleBreak);
+		assertEquals(ValidationState.VALID, validationSingleBreak);
 	}
 
 	

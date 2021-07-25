@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import models.Break;
 import models.Timespann;
+import models.ValidationState;
 import models.Work;
 
 class WorkingTimeOverSixHoursWithoutBreakTest {
@@ -46,10 +47,10 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		addInputToList(list, WORK_TWO_6_TO_10);
 		
-		String validationSixHours = dummyInputValidationControllerStub
-				.checkWorkingTimeOverSixHoursWithoutBreak(list).toString();
+		ValidationState validationSixHours = dummyInputValidationControllerStub
+				.checkWorkingTimeOverSixHoursWithoutBreak(list);
 		
-		assertEquals("VALID", validationSixHours);
+		assertEquals(ValidationState.VALID, validationSixHours);
 	}
 	
 	@Test
@@ -57,10 +58,10 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		addInputToList(list, WORK_ONE_6_TO_19, BREAK_ONE_12_TO_13);
 		
-		String validationSixHours = dummyInputValidationControllerStub
-				.checkWorkingTimeOverSixHoursWithoutBreak(list).toString();
+		ValidationState validationSixHours = dummyInputValidationControllerStub
+				.checkWorkingTimeOverSixHoursWithoutBreak(list);
 		
-		assertEquals("VALID", validationSixHours);
+		assertEquals(ValidationState.VALID, validationSixHours);
 	}
 	
 	@Test
@@ -68,10 +69,10 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		addInputToList(list, WORK_ONE_6_TO_19, BREAK_THREE_11_59_TO_12_59);
 		
-		String validationSixHours = dummyInputValidationControllerStub
-				.checkWorkingTimeOverSixHoursWithoutBreak(list).toString();
+		ValidationState validationSixHours = dummyInputValidationControllerStub
+				.checkWorkingTimeOverSixHoursWithoutBreak(list);
 		
-		assertEquals("NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR", validationSixHours);
+		assertEquals(ValidationState.NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR, validationSixHours);
 	}
 	
 	@Test
@@ -79,10 +80,10 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		addInputToList(list, WORK_ONE_6_TO_19, BREAK_TWO_12_01_TO_13);
 		
-		String validationSixHours = dummyInputValidationControllerStub
-				.checkWorkingTimeOverSixHoursWithoutBreak(list).toString();
+		ValidationState validationSixHours = dummyInputValidationControllerStub
+				.checkWorkingTimeOverSixHoursWithoutBreak(list);
 		
-		assertEquals("NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR", validationSixHours);
+		assertEquals(ValidationState.NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR, validationSixHours);
 	}
 	
 	@Test
@@ -90,10 +91,10 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		addInputToList(list, WORK_ONE_6_TO_19, BREAK_FOUR_9_TO_10, BREAK_THREE_11_59_TO_12_59);
 		
-		String validationSixHours = dummyInputValidationControllerStub
-				.checkWorkingTimeOverSixHoursWithoutBreak(list).toString();
+		ValidationState validationSixHours = dummyInputValidationControllerStub
+				.checkWorkingTimeOverSixHoursWithoutBreak(list);
 		
-		assertEquals("NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR", validationSixHours);
+		assertEquals(ValidationState.NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR, validationSixHours);
 	}
 	
 	@Test
@@ -101,10 +102,10 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		addInputToList(list, WORK_ONE_6_TO_19, BREAK_FOUR_9_TO_10,BREAK_ONE_12_TO_13);
 		
-		String validationSixHours = dummyInputValidationControllerStub
-				.checkWorkingTimeOverSixHoursWithoutBreak(list).toString();
+		ValidationState validationSixHours = dummyInputValidationControllerStub
+				.checkWorkingTimeOverSixHoursWithoutBreak(list);
 		
-		assertEquals("VALID", validationSixHours);
+		assertEquals(ValidationState.VALID, validationSixHours);
 	}
 
 	
@@ -114,10 +115,10 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		addInputToList(list, BREAK_ONE_12_TO_13, WORK_TWO_6_TO_10, WORK_THREE_11_TO_18);
 		
-		String validationSixHours = dummyInputValidationControllerStub
-				.checkWorkingTimeOverSixHoursWithoutBreak(list).toString();
+		ValidationState validationSixHours = dummyInputValidationControllerStub
+				.checkWorkingTimeOverSixHoursWithoutBreak(list);
 		
-		assertEquals("VALID", validationSixHours);
+		assertEquals(ValidationState.VALID, validationSixHours);
 	}
 	
 	@Test
@@ -125,10 +126,10 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		addInputToList(list, BREAK_ONE_12_TO_13, WORK_TWO_6_TO_10, WORK_FOUR_15_TO_23, BREAK_Six_16_30_TO_17_00);
 		
-		String validationSixHours = dummyInputValidationControllerStub
-				.checkWorkingTimeOverSixHoursWithoutBreak(list).toString();
+		ValidationState validationSixHours = dummyInputValidationControllerStub
+				.checkWorkingTimeOverSixHoursWithoutBreak(list);
 		
-		assertEquals("VALID", validationSixHours);
+		assertEquals(ValidationState.VALID, validationSixHours);
 	}
 	
 	@Test
@@ -136,10 +137,10 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		addInputToList(list, BREAK_ONE_12_TO_13, WORK_TWO_6_TO_10, WORK_FOUR_15_TO_23, BREAK_Five_15_15_TO_15_30);
 		
-		String validationSixHours = dummyInputValidationControllerStub
-				.checkWorkingTimeOverSixHoursWithoutBreak(list).toString();
+		ValidationState validationSixHours = dummyInputValidationControllerStub
+				.checkWorkingTimeOverSixHoursWithoutBreak(list);
 		
-		assertEquals("NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR", validationSixHours);
+		assertEquals(ValidationState.NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR, validationSixHours);
 	}
 	
 	
@@ -149,10 +150,10 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		addInputToList(list, WORK_TWO_6_TO_10, WORK_FIVE_11_TO_14, WORK_FOUR_15_TO_23,BREAK_Five_15_15_TO_15_30);
 		
-		String validationSixHours = dummyInputValidationControllerStub
-				.checkWorkingTimeOverSixHoursWithoutBreak(list).toString();
+		ValidationState validationSixHours = dummyInputValidationControllerStub
+				.checkWorkingTimeOverSixHoursWithoutBreak(list);
 		
-		assertEquals("NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR", validationSixHours);
+		assertEquals(ValidationState.NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR, validationSixHours);
 	}
 	
 	@Test
@@ -160,10 +161,10 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		addInputToList(list, WORK_TWO_6_TO_10, WORK_FIVE_11_TO_14, WORK_FOUR_15_TO_23,BREAK_Six_16_30_TO_17_00);
 		
-		String validationSixHours = dummyInputValidationControllerStub
-				.checkWorkingTimeOverSixHoursWithoutBreak(list).toString();
+		ValidationState validationSixHours = dummyInputValidationControllerStub
+				.checkWorkingTimeOverSixHoursWithoutBreak(list);
 		
-		assertEquals("VALID", validationSixHours);
+		assertEquals(ValidationState.VALID, validationSixHours);
 	}
 	
 	

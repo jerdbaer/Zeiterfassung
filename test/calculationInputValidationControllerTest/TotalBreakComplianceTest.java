@@ -6,6 +6,8 @@ import java.time.Duration;
 
 import org.junit.jupiter.api.Test;
 
+import models.ValidationState;
+
 class TotalBreakComplianceTest {
 	
 	private final Duration TIME_AT_BREAK_0 = Duration.ofMinutes(0);
@@ -26,65 +28,65 @@ class TotalBreakComplianceTest {
 	
 	@Test
 	void TimeAtBreak0AndLegalBreakRequired0_isCompliant() {
-		String validationTotalBreak = dummyInputValidationControllerStub
-				.checkTotalBreakCompliance(TIME_AT_BREAK_0, LEGAL_BREAK_0).toString();
+		ValidationState validationTotalBreak = dummyInputValidationControllerStub
+				.checkTotalBreakCompliance(TIME_AT_BREAK_0, LEGAL_BREAK_0);
 		
-		assertEquals("VALID", validationTotalBreak);
+		assertEquals(ValidationState.VALID, validationTotalBreak);
 	}
 	
 	@Test
 	void TimeAtBreakOver0AndLegalBreakRequired0_isCompliant() {
-		String validationTotalBreak = dummyInputValidationControllerStub
-				.checkTotalBreakCompliance(TIME_AT_BREAK_30, LEGAL_BREAK_0).toString();
+		ValidationState validationTotalBreak = dummyInputValidationControllerStub
+				.checkTotalBreakCompliance(TIME_AT_BREAK_30, LEGAL_BREAK_0);
 		
-		assertEquals("VALID", validationTotalBreak);
+		assertEquals(ValidationState.VALID, validationTotalBreak);
 	}
 	
 	@Test
 	void TimeAtBreak29AndLegalBreakRequired30_isNotCompliant_breakIsToShort() {
-		String validationTotalBreak = dummyInputValidationControllerStub
-				.checkTotalBreakCompliance(TIME_AT_BREAK_29, LEGAL_BREAK_30).toString();
+		ValidationState validationTotalBreak = dummyInputValidationControllerStub
+				.checkTotalBreakCompliance(TIME_AT_BREAK_29, LEGAL_BREAK_30);
 		
-		assertEquals("NOT_VALID_TOTAL_BREAK_ERROR", validationTotalBreak);
+		assertEquals(ValidationState.NOT_VALID_TOTAL_BREAK_ERROR, validationTotalBreak);
 	}
 	
 	@Test
 	void TimeAtBreak30AndLegalBreakRequired30_isCompliant() {
-		String validationTotalBreak = dummyInputValidationControllerStub
-				.checkTotalBreakCompliance(TIME_AT_BREAK_30, LEGAL_BREAK_30).toString();
+		ValidationState validationTotalBreak = dummyInputValidationControllerStub
+				.checkTotalBreakCompliance(TIME_AT_BREAK_30, LEGAL_BREAK_30);
 		
-		assertEquals("VALID", validationTotalBreak);
+		assertEquals(ValidationState.VALID, validationTotalBreak);
 	}
 	
 	@Test
 	void TimeAtBreak31AndLegalBreakRequired30_isCompliant() {
-		String validationTotalBreak = dummyInputValidationControllerStub
-				.checkTotalBreakCompliance(TIME_AT_BREAK_31, LEGAL_BREAK_30).toString();
+		ValidationState validationTotalBreak = dummyInputValidationControllerStub
+				.checkTotalBreakCompliance(TIME_AT_BREAK_31, LEGAL_BREAK_30);
 		
-		assertEquals("VALID", validationTotalBreak);
+		assertEquals(ValidationState.VALID, validationTotalBreak);
 	}
 	@Test
 	void TimeAtBreak44AndLegalBreakRequired45_isNotCompliant_breakIsToShort() {
-		String validationTotalBreak = dummyInputValidationControllerStub
-				.checkTotalBreakCompliance(TIME_AT_BREAK_44, LEGAL_BREAK_45).toString();
+		ValidationState validationTotalBreak = dummyInputValidationControllerStub
+				.checkTotalBreakCompliance(TIME_AT_BREAK_44, LEGAL_BREAK_45);
 		
-		assertEquals("NOT_VALID_TOTAL_BREAK_ERROR", validationTotalBreak);
+		assertEquals(ValidationState.NOT_VALID_TOTAL_BREAK_ERROR, validationTotalBreak);
 	}
 	
 	@Test
 	void TimeAtBreak45AndLegalBreakRequired45_isCompliant() {
-		String validationTotalBreak = dummyInputValidationControllerStub
-				.checkTotalBreakCompliance(TIME_AT_BREAK_45, LEGAL_BREAK_45).toString();
+		ValidationState validationTotalBreak = dummyInputValidationControllerStub
+				.checkTotalBreakCompliance(TIME_AT_BREAK_45, LEGAL_BREAK_45);
 		
-		assertEquals("VALID", validationTotalBreak);
+		assertEquals(ValidationState.VALID, validationTotalBreak);
 	}
 	
 	@Test
 	void TimeAtBreak46AndLegalBreakRequired45_isCompliant() {
-		String validationTotalBreak = dummyInputValidationControllerStub
-				.checkTotalBreakCompliance(TIME_AT_BREAK_46, LEGAL_BREAK_45).toString();
+		ValidationState validationTotalBreak = dummyInputValidationControllerStub
+				.checkTotalBreakCompliance(TIME_AT_BREAK_46, LEGAL_BREAK_45);
 		
-		assertEquals("VALID", validationTotalBreak);
+		assertEquals(ValidationState.VALID, validationTotalBreak);
 	
 	}
 }

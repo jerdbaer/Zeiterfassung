@@ -23,8 +23,6 @@ public class InputValidationControllerStub extends InputValidationController {
 	private static final LocalTime WORKING_LIMIT_END = LocalTime.of(19, 30);
 	private static final long DAYS_FOR_REVISION_RELIABILITY = 31;
 	
-	
-	
 	public InputValidationControllerStub(ArrayList<Timespann> input, Duration legalBreak, 
 			Duration totalWorkingTime, Duration timeAtBreak, LocalTime workBegin, LocalTime workEnd,
 			LocalDate selectedDay, LocalTime workEndYesterday) {
@@ -41,7 +39,6 @@ public class InputValidationControllerStub extends InputValidationController {
 				: ValidationState.VALID;
 	}
 	
-	// ersetz totalWorkingTime mit totalWorkingTimeStub
 	protected ValidationState checkTotalWorkingTimeOverTenHours(Duration totalWorkingTime) {
 		
 		return (totalWorkingTime.compareTo(MAX_DAILY_WORKING_TIME) > 0)

@@ -6,6 +6,8 @@ import java.time.LocalDate;
 
 import org.junit.jupiter.api.Test;
 
+import models.ValidationState;
+
 class DatepickerComplianceTest {
 
 	private static final LocalDate TODAY = LocalDate.now();
@@ -19,39 +21,37 @@ class DatepickerComplianceTest {
 
 	@Test
 	void inputDateIsToday_isCompliant() {
-		String validationDate = dummyInputValidationControllerStub.checkDatepickerCompliance(TODAY).toString();
+		ValidationState validationDate = dummyInputValidationControllerStub.checkDatepickerCompliance(TODAY);
 
-		assertEquals("VALID", validationDate);
+		assertEquals(ValidationState.VALID, validationDate);
 	}
 
 	@Test
 	void inputDateIsTomorrow_isNotCompliant_DateInFuture() {
-		String validationDate = dummyInputValidationControllerStub.checkDatepickerCompliance(TOMORROW).toString();
+		ValidationState validationDate = dummyInputValidationControllerStub.checkDatepickerCompliance(TOMORROW);
 
-		assertEquals("NOT_VALID_SELECTED_DAY_IS_IN_THE_FUTURE", validationDate);
+		assertEquals(ValidationState.NOT_VALID_SELECTED_DAY_IS_IN_THE_FUTURE, validationDate);
 	}
 
 	@Test
 	void inputDateIsYesterday_isCompliant() {
-		String validationDate = dummyInputValidationControllerStub.checkDatepickerCompliance(YESTERDAY).toString();
+		ValidationState validationDate = dummyInputValidationControllerStub.checkDatepickerCompliance(YESTERDAY);
 
-		assertEquals("VALID", validationDate);
+		assertEquals(ValidationState.VALID, validationDate);
 	}
 
 	@Test
 	void inputDateIsPast31Days_isCompliant() {
-		String validationDate = dummyInputValidationControllerStub.checkDatepickerCompliance(DATE_31_DAYS_BACK)
-				.toString();
+		ValidationState validationDate = dummyInputValidationControllerStub.checkDatepickerCompliance(DATE_31_DAYS_BACK);
 
-		assertEquals("VALID", validationDate);
+		assertEquals(ValidationState.VALID, validationDate);
 	}
 
 	@Test
 	void inputDateIsPast31Days_isNotCompliant_DateToFarInPast() {
-		String validationDate = dummyInputValidationControllerStub.checkDatepickerCompliance(DATE_32_DAYS_BACK)
-				.toString();
+		ValidationState validationDate = dummyInputValidationControllerStub.checkDatepickerCompliance(DATE_32_DAYS_BACK);
 
-		assertEquals("NOT_VALID_SELECTED_DAY_IS_TO_FAR_IN_THE_PAST", validationDate);
+		assertEquals(ValidationState.NOT_VALID_SELECTED_DAY_IS_TO_FAR_IN_THE_PAST, validationDate);
 	}
 
 }

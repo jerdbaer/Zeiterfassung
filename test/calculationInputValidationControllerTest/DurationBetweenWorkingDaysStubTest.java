@@ -7,6 +7,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import org.junit.jupiter.api.Test;
 
+import models.ValidationState;
+
 //used kind of Stub class because cannot use private methods in tests otherwise
 class DurationBetweenWorkingDaysStubTest {
 	
@@ -24,29 +26,26 @@ class DurationBetweenWorkingDaysStubTest {
 	
 	@Test
 	void daysDifferenceFromYesterday20_00_ToToday7_00_is11H_isValid() {
-		String validationBetweenDays = (dummyInputValidationControllerStub
-				.checkDurationBetweenWorkingDays(workEndYesterday_20_00, workBeginToday_7_00))
-				.toString();
+		ValidationState validationBetweenDays = (dummyInputValidationControllerStub
+				.checkDurationBetweenWorkingDays(workEndYesterday_20_00, workBeginToday_7_00));
 		
-		assertEquals("VALID", validationBetweenDays);
+		assertEquals(ValidationState.VALID, validationBetweenDays);
 	}
 	
 	@Test
 	void daysDifferenceFromYesterday20_00_ToToday7_01_is11H01M_isValid() {
-		String validationBetweenDays = (dummyInputValidationControllerStub
-				.checkDurationBetweenWorkingDays(workEndYesterday_20_00, workBeginToday_7_01))
-				.toString();
+		ValidationState validationBetweenDays = (dummyInputValidationControllerStub
+				.checkDurationBetweenWorkingDays(workEndYesterday_20_00, workBeginToday_7_01));
 		
-		assertEquals("VALID", validationBetweenDays);
+		assertEquals(ValidationState.VALID, validationBetweenDays);
 	}
 	
 	@Test
 	void daysDifferenceFromYesterday20_01_ToToday7_00_is10H59M_isNotValid() {
-		String validationBetweenDays = (dummyInputValidationControllerStub
-				.checkDurationBetweenWorkingDays(workEndYesterday_20_01, workBeginToday_7_00))
-				.toString();
+		ValidationState validationBetweenDays = (dummyInputValidationControllerStub
+				.checkDurationBetweenWorkingDays(workEndYesterday_20_01, workBeginToday_7_00));
 		
-		assertEquals("NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR", validationBetweenDays);
+		assertEquals(ValidationState.NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR, validationBetweenDays);
 	}
 	
 }

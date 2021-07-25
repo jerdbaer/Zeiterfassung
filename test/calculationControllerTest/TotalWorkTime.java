@@ -23,11 +23,17 @@ class TotalWorkTime {
 	private final Break BREAK_8H15_TO_8H30M_IS_0H15M = new Break(LocalTime.of(8,15), LocalTime.of(8,30));	
 	private final Break BREAK_13_TO_14_IS_1H = new Break(LocalTime.of(13,0), LocalTime.of(14,00));
 	
+	private ArrayList<Timespann> addInputToList(ArrayList<Timespann> list, Timespann... timespann) {
+		for (Timespann element : timespann) {
+			list.add(element);
+		}
+		return list;
+	}
 	
 	@Test
 	void Work0AndBreak0_TotalWorkTimeIs0() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_0H, BREAK_0);
+		list = addInputToList(list, WORK_0H, BREAK_0);
 		CalculationController calculationController = new CalculationController(list);
 		
 		Duration actualWorkingTime = calculationController.calculateTotalWorktime();
@@ -38,7 +44,7 @@ class TotalWorkTime {
 	@Test
 	void singleWork0AndSingleBreak1_TotalWorkTimeIsMinus1() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_0H, BREAK_13_TO_14_IS_1H);
+		list = addInputToList(list, WORK_0H, BREAK_13_TO_14_IS_1H);
 		CalculationController calculationController = new CalculationController(list);
 		
 		Duration actualWorkingTime = calculationController.calculateTotalWorktime();
@@ -49,7 +55,7 @@ class TotalWorkTime {
 	@Test
 	void singleWork6AndBreak0_TotalWorkTimeIs6() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_6H, BREAK_0);
+		list = addInputToList(list, WORK_6H, BREAK_0);
 		CalculationController calculationController = new CalculationController(list);
 		
 		Duration actualWorkingTime = calculationController.calculateTotalWorktime();
@@ -60,7 +66,7 @@ class TotalWorkTime {
 	@Test
 	void allWorkAndBreak0_ALL_WORK_CONSTANTS_TotalWorkTimeIs9H30M() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_6H, WORK_0H, WORK_3H30M);
+		list = addInputToList(list, WORK_6H, WORK_0H, WORK_3H30M);
 		CalculationController calculationController = new CalculationController(list);
 		
 		Duration actualWorkingTime = calculationController.calculateTotalWorktime();
@@ -71,7 +77,7 @@ class TotalWorkTime {
 	@Test
 	void allWorkAndallBreak_ALL_CONSTANTS_TotalWorkTimeIs9H30M() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, BREAK_0, BREAK_13_TO_14_IS_1H, WORK_6H, WORK_0H, BREAK_8H15_TO_8H30M_IS_0H15M, WORK_3H30M);
+		list = addInputToList(list, BREAK_0, BREAK_13_TO_14_IS_1H, WORK_6H, WORK_0H, BREAK_8H15_TO_8H30M_IS_0H15M, WORK_3H30M);
 		CalculationController calculationController = new CalculationController(list);
 		
 		Duration actualWorkingTime = calculationController.calculateTotalWorktime();
@@ -79,10 +85,4 @@ class TotalWorkTime {
 		assertEquals(Duration.parse("PT8H15M"), actualWorkingTime);
 	}
 	
-	private ArrayList<Timespann> addInputToList(ArrayList<Timespann> list, Timespann... timespann) {
-		for (Timespann element : timespann) {
-			list.add(element);
-		}
-		return list;
-		}
 }

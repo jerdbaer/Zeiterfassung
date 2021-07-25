@@ -111,9 +111,7 @@ class LegalBreakTest {
 				
 		assertEquals(LEGAL_BREAK_45, calculatedLegalBreak);
 	}
-	
-	
-	
+
 }
 		
 

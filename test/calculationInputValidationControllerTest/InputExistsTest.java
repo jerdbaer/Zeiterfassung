@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import models.Break;
 import models.Timespann;
+import models.ValidationState;
 import models.Work;
 
 class InputExistsTest {
@@ -32,40 +33,39 @@ class InputExistsTest {
 	void emptyList_inputDoesNotExit_isNotValid() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		
-		String validationInputExists = dummyInputValidationControllerStub.checkInputExists(list).toString();
+		ValidationState validationInputExists = dummyInputValidationControllerStub.checkInputExists(list);
 
-		assertEquals("NOT_VALID_NO_INPUT_FOUND", validationInputExists);
+		assertEquals(ValidationState.NOT_VALID_NO_INPUT_FOUND, validationInputExists);
 	}
 	
 	@Test
 	void workInList_inputExits_isValid() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_8_TO_18);
+		list = addInputToList(list, WORK_8_TO_18);
 
-		String validationInputExists = dummyInputValidationControllerStub.checkInputExists(list).toString();
+		ValidationState validationInputExists = dummyInputValidationControllerStub.checkInputExists(list);
 
-		assertEquals("VALID", validationInputExists);
+		assertEquals(ValidationState.VALID, validationInputExists);
 	}
 	
 	@Test
 	void omlyBreakInList_inputDoesNotExit_isNotValid() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, BREAK_8_TO_18);
+		list = addInputToList(list, BREAK_8_TO_18);
 
-		String validationInputExists = dummyInputValidationControllerStub.checkInputExists(list).toString();
+		ValidationState validationInputExists = dummyInputValidationControllerStub.checkInputExists(list);
 
-		assertEquals("NOT_VALID_NO_INPUT_FOUND", validationInputExists);
+		assertEquals(ValidationState.NOT_VALID_NO_INPUT_FOUND, validationInputExists);
 	}
 	
 	@Test
 	void workAndBreakInList_inputExits_isValid() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, BREAK_8_TO_18,WORK_8_TO_18);
+		list = addInputToList(list, BREAK_8_TO_18,WORK_8_TO_18);
 
-		String validationInputExists = dummyInputValidationControllerStub.checkInputExists(list).toString();
+		ValidationState validationInputExists = dummyInputValidationControllerStub.checkInputExists(list);
 
-		assertEquals("VALID", validationInputExists);
+		assertEquals(ValidationState.VALID, validationInputExists);
 	}
 	
-
 }

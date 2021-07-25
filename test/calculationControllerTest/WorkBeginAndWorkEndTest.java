@@ -17,11 +17,18 @@ class WorkBeginAndWorkEndTest {
 	private final Work WORK_10_TO_16H30_IS_6H30M = new Work(LocalTime.of(10, 0), LocalTime.of(16,30));
 	private final Work WORK_6H30_TO_19H30_IS_13 = new Work(LocalTime.of(6, 30), LocalTime.of(19,30));
 	
+	private ArrayList<Timespann> addInputToList(ArrayList<Timespann> list, Timespann... timespann) {
+		for (Timespann element : timespann) {
+			list.add(element);
+		}
+		return list;
+	}
+	
 	// Test for pickWorkBeginFromInput() --> private weil im Konstruktor
 	@Test
 	void singleInputWork_WORK_8_TO_17_BeginIs8() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_8_TO_17_IS_9);
+		list = addInputToList(list, WORK_8_TO_17_IS_9);
 		CalculationController calculationController = new CalculationController(list);
 		
 		LocalTime actualBegin = calculationController.getWorkBegin();
@@ -32,7 +39,7 @@ class WorkBeginAndWorkEndTest {
 	@Test
 	void doubleInputWorkMixed_WORK_8_TO_17_WORK_6H30_TO_19H30_BeginIs6H30M() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_8_TO_17_IS_9, WORK_6H30_TO_19H30_IS_13);
+		list = addInputToList(list, WORK_8_TO_17_IS_9, WORK_6H30_TO_19H30_IS_13);
 		CalculationController calculationController = new CalculationController(list);
 		
 		LocalTime actualBegin = calculationController.getWorkBegin();
@@ -43,7 +50,7 @@ class WorkBeginAndWorkEndTest {
 	@Test
 	void doubleInputWorkSorted_WORK_6H30_TO_19H30_WORK_8_TO_17_BeginIsAlso6H30M() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_6H30_TO_19H30_IS_13,WORK_8_TO_17_IS_9);
+		list = addInputToList(list, WORK_6H30_TO_19H30_IS_13,WORK_8_TO_17_IS_9);
 		CalculationController calculationController = new CalculationController(list);
 		
 		LocalTime actualBegin = calculationController.getWorkBegin();
@@ -54,7 +61,7 @@ class WorkBeginAndWorkEndTest {
 	@Test
 	void doubleInputWorkSameValue_WORK_8_TO_17_IS_9_WORK_8_TO_17_IS_9_BeginIs8WithoutError() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_8_TO_17_IS_9, WORK_8_TO_17_IS_9);
+		list = addInputToList(list, WORK_8_TO_17_IS_9, WORK_8_TO_17_IS_9);
 		CalculationController calculationController = new CalculationController(list);
 		
 		LocalTime actualBegin = calculationController.getWorkBegin();
@@ -65,7 +72,7 @@ class WorkBeginAndWorkEndTest {
 	@Test
 	void tripleInputWorkMixed_WORK_8_TO_17_WORK_6H30_TO_19H30_WORK_10_TO_16H30_BeginIs6H30M() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_8_TO_17_IS_9, WORK_6H30_TO_19H30_IS_13,WORK_10_TO_16H30_IS_6H30M);
+		list = addInputToList(list, WORK_8_TO_17_IS_9, WORK_6H30_TO_19H30_IS_13,WORK_10_TO_16H30_IS_6H30M);
 		CalculationController calculationController = new CalculationController(list);
 		
 		LocalTime actualBegin = calculationController.getWorkBegin();
@@ -78,7 +85,7 @@ class WorkBeginAndWorkEndTest {
 	@Test
 	void singleInputWork_WORK_8_TO_17_EndIs17() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_8_TO_17_IS_9);
+		list = addInputToList(list, WORK_8_TO_17_IS_9);
 		CalculationController calculationController = new CalculationController(list);
 		
 		LocalTime actualEnd = calculationController.getWorkEnd();
@@ -89,7 +96,7 @@ class WorkBeginAndWorkEndTest {
 	@Test
 	void doubleInputWorkMixed_WORK_8_TO_17_WORK_6H30_TO_19H30_EndIs19H30M() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_8_TO_17_IS_9, WORK_6H30_TO_19H30_IS_13);
+		list = addInputToList(list, WORK_8_TO_17_IS_9, WORK_6H30_TO_19H30_IS_13);
 		CalculationController calculationController = new CalculationController(list);
 		
 		LocalTime actualEnd = calculationController.getWorkEnd();
@@ -100,7 +107,7 @@ class WorkBeginAndWorkEndTest {
 	@Test
 	void doubleInputWorkSorted_WORK_6H30_TO_19H30_WORK_8_TO_17_EndIsAlso19H30M() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_6H30_TO_19H30_IS_13,WORK_8_TO_17_IS_9);
+		list = addInputToList(list, WORK_6H30_TO_19H30_IS_13,WORK_8_TO_17_IS_9);
 		CalculationController calculationController = new CalculationController(list);
 		
 		LocalTime actualEnd = calculationController.getWorkEnd();
@@ -111,7 +118,7 @@ class WorkBeginAndWorkEndTest {
 	@Test
 	void doubleInputWorkSameValue_WORK_10_TO_16H30_WORK_10_TO_16H30_EndIs16H30MWithoutError() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_8_TO_17_IS_9, WORK_8_TO_17_IS_9);
+		list = addInputToList(list, WORK_8_TO_17_IS_9, WORK_8_TO_17_IS_9);
 		CalculationController calculationController = new CalculationController(list);
 		
 		LocalTime actualEnd = calculationController.getWorkEnd();
@@ -122,7 +129,7 @@ class WorkBeginAndWorkEndTest {
 	@Test
 	void tripleInputWorkMixed_WORK_8_TO_17_WORK_6H30_TO_19H30_WORK_10_TO_16H30_EndIs19H30M() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
-		addInputToList(list, WORK_8_TO_17_IS_9, WORK_6H30_TO_19H30_IS_13,WORK_10_TO_16H30_IS_6H30M);
+		list = addInputToList(list, WORK_8_TO_17_IS_9, WORK_6H30_TO_19H30_IS_13,WORK_10_TO_16H30_IS_6H30M);
 		CalculationController calculationController = new CalculationController(list);
 		
 		LocalTime actualEnd = calculationController.getWorkEnd();
@@ -130,13 +137,4 @@ class WorkBeginAndWorkEndTest {
 		assertEquals(WORK_6H30_TO_19H30_IS_13.getEnd(), actualEnd);
 	}
 	
-	
-	
-	
-	private ArrayList<Timespann> addInputToList(ArrayList<Timespann> list, Timespann... timespann) {
-	for (Timespann element : timespann) {
-		list.add(element);
-	}
-	return list;
-	}
 }
