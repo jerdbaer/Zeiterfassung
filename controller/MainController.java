@@ -346,7 +346,7 @@ public class MainController {
 	@FXML
 	void abort(ActionEvent event) {
 		var swapStageController = new SwapStageController();
-		swapStageController.showPopup("/view/PopupAbort.fxml");
+		swapStageController.showPopupAbort();
 	}
 
 	@FXML
@@ -378,7 +378,7 @@ public class MainController {
 
 		if (validationResult.stream().allMatch(elm -> elm.equals(ValidationState.VALID))) {
 			computeInput(input);
-			swapStageController.showPopup("/view/PopupValid.fxml");
+			swapStageController.showPopupValid();
 		} else if (validationResult.stream().anyMatch(elm -> elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
 				|| elm.equals(ValidationState.VALID_WORKEND_IS_AFTER_19_30))) {
 			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();
@@ -386,7 +386,7 @@ public class MainController {
 			labelErrortxt.setText(Error.toString());
 			
 			computeInput(input);
-			swapStageController.showPopup("/view/PopupLimits.fxml");
+			swapStageController.showPopupLimits();
 
 		} else {
 			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();

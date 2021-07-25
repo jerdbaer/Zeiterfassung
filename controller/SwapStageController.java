@@ -18,10 +18,10 @@ import view.Main;
 public class SwapStageController{
 	
 	
-	public void goTo(String filename) {
+	public void goToMenu() {
     	try {
     		var stage = Main.primarystage;
-        	var menuContent = (BorderPane)FXMLLoader.load(getClass().getResource(filename));
+        	var menuContent = (BorderPane)FXMLLoader.load(getClass().getResource("/view/Menu.fxml"));
         	var menu = new Scene(menuContent);
         	stage.setScene(menu);
         	stage.show();
@@ -29,13 +29,69 @@ public class SwapStageController{
 			e.printStackTrace();
 
     	}
-    }	
+    }
 	
-    public void showPopup(String filename) {
+	
+	public void goToWorkTime() {
+    	try {
+    		var stage = Main.primarystage;
+        	var workTimeContent = (BorderPane)FXMLLoader.load(getClass().getResource("/view/WorkTime.fxml"));
+        	var workTime = new Scene(workTimeContent);
+        	stage.setScene(workTime);
+        	
+    	}catch(IOException e) {
+			e.printStackTrace();
+
+    	}
+    }
+	
+	
+	public void goToLogin() {
+    	try {
+    		var stage = Main.primarystage;;
+        	var loginContent = (BorderPane)FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
+        	var login = new Scene(loginContent);
+        	stage.setScene(login);
+    	}catch(IOException e) {
+			e.printStackTrace();
+
+    	}
+    }
+	
+	
+    public void showPopupAbort() {
         try {
 			final Stage dialog = new Stage();
 			dialog.initModality(Modality.APPLICATION_MODAL);
-			var popupContent = (BorderPane)FXMLLoader.load(getClass().getResource(filename));
+			var popupContent = (BorderPane)FXMLLoader.load(getClass().getResource("/view/PopupAbort.fxml"));
+			var popup = new Scene(popupContent);
+			dialog.initStyle(StageStyle.UNDECORATED);
+			dialog.setScene(popup);
+			dialog.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public void showPopupValid() {
+    	try {
+			final Stage dialog = new Stage();
+			dialog.initModality(Modality.APPLICATION_MODAL);
+			var popupContent = (BorderPane)FXMLLoader.load(getClass().getResource("/view/PopupValid.fxml"));
+			var popup = new Scene(popupContent);
+			dialog.initStyle(StageStyle.UNDECORATED);
+			dialog.setScene(popup);
+			dialog.show();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+    }
+    
+    public void showPopupLimits() {
+    	try {
+			final Stage dialog = new Stage();
+			dialog.initModality(Modality.APPLICATION_MODAL);
+			var popupContent = (BorderPane)FXMLLoader.load(getClass().getResource("/view/PopupLimits.fxml"));
 			var popup = new Scene(popupContent);
 			dialog.initStyle(StageStyle.UNDECORATED);
 			dialog.setScene(popup);

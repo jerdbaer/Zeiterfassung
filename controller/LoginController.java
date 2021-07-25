@@ -33,7 +33,7 @@ public class LoginController {
     void login(ActionEvent event) {
     	var swapStageController = new SwapStageController();
     	if(checkLogin())
-    		swapStageController.goTo("/view/Menu.fxml");
+    		swapStageController.goToMenu();
     	else {
     		txtError.setVisible(true);
 		}
