@@ -1,5 +1,6 @@
 package controller;
 
+import database.CheckPassword;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -53,12 +54,14 @@ public class LoginController {
     
     private boolean checkLogin() {
     	MA_Data.setMA_ID(Integer.parseInt(userinput.getText()));
-    	MA_Data.setPassword(passswordinput.getText());	
+    	MA_Data.setPassword(passswordinput.getText());
     	
-    	 //---------------------
-    	return true;
-    	//----------------------
-    }
+    	var MA_ID = MA_Data.getMA_ID();
+    	var pw = MA_Data.getPassword();
+    	
+    	return CheckPassword.checkPW(MA_ID, pw);
+    	
+    	}
     
     
     
