@@ -9,6 +9,16 @@ import models.Interruption;
 import models.Timespann;
 import models.Work;
 
+/**
+ * Ein Programm zur Berechnung von Arbeitsdauer, Arbeitsbeginn, ArbeitsEnde aus einer Liste von 
+ * Arbeitszeit- und Pausenzeiteingaben, die aus einer UI-Anbindung übermittelt werden.
+ * 
+ * @author Tom Weißflog
+ * @author Josephine Luksch
+ * @version 1.0
+ */
+
+
 public class CalculationController {
 	
 	private ArrayList<Timespann> formattedInput;
@@ -16,11 +26,26 @@ public class CalculationController {
 	private LocalTime workBegin;
 	private LocalTime workEnd;
 	
-	
 	private static final Duration LEGAL_BREAK_LIMIT_1 = Duration.ofHours(6);
 	private static final Duration LEGAL_BREAK_LIMIT_2 = Duration.ofHours(9);
 	private static final Duration LEGAL_BREAK_OVER_SIX_HOURS = Duration.ofMinutes(30);
 	private static final Duration LEGAL_BREAK_OVER_NINE_HOURS = Duration.ofMinutes(45);
+	
+	/**
+	 * Konstruktor
+	 * Bestimmt Arbeitbeginn und Arbeitsende aus den eingetragenen Arbeitszeit- und Pausenzeiten, die als
+	 * formatierter Input in Form einer ArrayList des Typs Timespann übergeben wird.
+	 * 
+	 * Berechnet Arbeitsdauer, Gesamtpausendauer, rechtliche Pausenzeitforderung und Gesamtarbeitszeit.
+	 * 
+	 * @param formattedInput ist eine ArrayList des Typs Timespann
+	 * 
+	 * @see calculateBreakAndInterruptionDuration()
+	 * @see calculateLegalBreak()
+	 * @see Duration calculateTotalWorktime()
+	 * @see pickWorkBeginFromInput()
+	 * @see pickWorkEndFromInput()
+	 */
 	
 	public CalculationController(ArrayList<Timespann> formattedInput) {
 		this.formattedInput = formattedInput;
@@ -41,6 +66,12 @@ public class CalculationController {
 		return this.workEnd;
 	}
 	
+	/**
+	 * Berechnet die Gesamtpausendauer aus allen übergebenen Pausenzeiten und Arbeitszeitunterbrechungen
+	 * 
+	 * @return Gesamtpausenzeit
+	 */
+	
 	public Duration calculateBreakAndInterruptionDuration() {
 		var breakAndInterruptionList = new ArrayList<Duration>();
 		formattedInput.stream().filter(elm -> (elm instanceof Break) || (elm instanceof Interruption))
@@ -51,7 +82,13 @@ public class CalculationController {
 		}
 		return breakAndInterruptionDuration;
 	}
-
+	
+	/**
+	 * Berechnet die nach Arbeitsschutzgesetz geforderte gesetzliche Pausenzeit anhand der Arbeitszeit
+	 * 
+	 * @return Gesamtpausenzeit
+	 */
+	
 	public Duration calculateLegalBreak() {
 		Duration legalBreak;
 		if (timeAtWork.minus(LEGAL_BREAK_LIMIT_1).isNegative())
@@ -64,6 +101,12 @@ public class CalculationController {
 		return legalBreak;
 	}
 
+	/**
+	 * Berechnet die Gesamtarbeitszeit aus Arbeitszeit minus Pausenzeit
+	 * 
+	 * @return Gesamtarbeitszeit
+	 */
+	
 	public Duration calculateTotalWorktime() {
 		Duration totalWorkTime = Duration.ZERO;
 		for (Timespann segment : formattedInput) {
