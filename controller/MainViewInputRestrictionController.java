@@ -7,20 +7,19 @@ import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 
 public class MainViewInputRestrictionController {
+	
 	private TextField[] textfieldHour;
 	private TextField[] textfieldMinute;
 
-	// restriction rules for hours
 	private UnaryOperator<Change> hours = change -> {
 		if (!change.isContentChange())
 			return change;
-
+		
 		String text = change.getControlNewText();
 
 		return text.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3])$") || text.equals("") ? change : null;
 	};
 
-	// restriction rules for minutes
 	private UnaryOperator<Change> minutes = change -> {
 		if (!change.isContentChange())
 			return change;
