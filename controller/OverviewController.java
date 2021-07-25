@@ -41,7 +41,7 @@ public class OverviewController {
 
     @FXML
     void switchScene(ActionEvent event) {
-    	var swapStageController = new SwapStageController();
+    	var swapStageController = new SwapSceneController();
     	var pressedBtn = (Button)event.getSource();
     	if(pressedBtn == btnWorktimeTop || pressedBtn == btnWorkTime) {
     		swapStageController.goTo("/view/WorkTime.fxml");

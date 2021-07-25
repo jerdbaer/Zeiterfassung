@@ -288,6 +288,8 @@ public class MainController {
 
 		clear(allTextFields);
 		btnWorkAdd1.setVisible(true);
+		
+		txtComment.setText("");
 		labelErrortxt.setVisible(false);
 
 
@@ -366,13 +368,13 @@ public class MainController {
 			var workEnd = calculationController.getWorkEnd();
 			var timeAtWork = Duration.between(workBegin, workEnd);
 			var totalWorkingTime = calculationController.calculateTotalWorktime();
-			var timeAtBreak = calculationController.breakUinterruptionDuration();
+			var timeAtBreak = calculationController.calculateBreakAndInterruptionDuration();
 			var legalBreak = calculationController.calculateLegalBreak();
 			var selectedDay = datepicker.getValue();
 			// ------------------------------------------
 			var workEndYesterday = LocalTime.of(16, 30); // need database input
 			// -------------------------------------------
-			var inputValidationController = new InputValidationController(input, legalBreak, timeAtWork,
+			var inputValidationController = new InputValidationController(input, legalBreak, 
 					totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterday);
 			validationResult.addAll(inputValidationController.validation());
 		}
@@ -382,7 +384,8 @@ public class MainController {
 		if (validationResult.stream().allMatch(elm -> elm.equals(ValidationState.VALID))) {
 			computeInput(input);
 			swapStageController.showPopup("/view/PopupValid.fxml");
-		} else if (validationResult.stream().anyMatch(elm -> elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
+		} else if (validationResult.stream().allMatch(elm ->  elm.equals(ValidationState.VALID) 
+				|| elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
 				|| elm.equals(ValidationState.VALID_WORKEND_IS_AFTER_19_30))) {
 			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();
 			labelErrortxt.setVisible(true);
@@ -430,7 +433,7 @@ public class MainController {
 		calculationModel.setWorkEnd(end);
 
 		// break&interruptions
-		var breakUinterruptionDuration = calculationController.breakUinterruptionDuration();
+		var breakUinterruptionDuration = calculationController.calculateBreakAndInterruptionDuration();
 		calculationModel.setTotalBreakTime(breakUinterruptionDuration);
 
 		// comment

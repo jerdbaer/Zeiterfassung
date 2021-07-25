@@ -23,7 +23,7 @@ public class HelpController {
     
     @FXML
     void switchScene(ActionEvent event) {
-    	var swapStageController = new SwapStageController();
+    	var swapStageController = new SwapSceneController();
     	var pressedBtn = (Button)event.getSource();
     	if(pressedBtn == btnWorktimeTop) {
     		swapStageController.goTo("/view/WorkTime.fxml");

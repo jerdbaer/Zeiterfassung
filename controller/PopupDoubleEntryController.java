@@ -37,7 +37,15 @@ public class PopupDoubleEntryController {
 	@FXML
 	public void initialize() {
 
-		var addWorkTime = PopupValidController.addWorkingTime;
+		AddWorkingTime addWorkTime;
+		if(PopupValidController.addWorkingTime != null) {
+			addWorkTime = PopupValidController.addWorkingTime;
+		}else{
+			addWorkTime = PopupLimitsController.addWorkingTime;
+		}
+
+			
+		
 		var MA_ID = LoginController.MA_Data.getMA_ID();
 
 		// new
@@ -76,7 +84,12 @@ public class PopupDoubleEntryController {
 	@FXML
 	void saveToMenu(ActionEvent event) {
 		
-		var addWorkTime = PopupValidController.addWorkingTime;
+		AddWorkingTime addWorkTime;
+		if(PopupValidController.addWorkingTime != null) {
+			addWorkTime = PopupValidController.addWorkingTime;
+		}else{
+			addWorkTime = PopupLimitsController.addWorkingTime;
+		}
 		var data = MainController.getCalculationModel();
 		
 		var beginTime = data.getWorkBegin();
