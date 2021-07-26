@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.*;
+import java.util.*;
 
 /**
  * Ein Programm zum Erhalt der Überstunden.
@@ -158,8 +159,34 @@ import java.sql.*;
      return resultString;
    }
 
-   public static void main(String[] args){
+   public HashMap<String, String> getMultipleDays(int MA_ID, String beginDate, String endDate){
+     String query = "SELECT work_date, Ueberstunden_Tag FROM zeitkonto "
+      + "WHERE MA_ID = " + MA_ID + " AND "
+      + "work_date BETWEEN '" + beginDate + "' AND '" + endDate + "'";
+    Statement stmt = null;
+    HashMap<String, String> result = new HashMap<String, String>();
+    try{
+      connection.setAutoCommit(false);
+      stmt = connection.createStatement();
+      ResultSet rs = stmt.executeQuery(query);
+      connection.commit();
+      while(rs.next()){
+        result.put(rs.getString(1), rs.getString(2));
+      }
+      stmt.close();
+    } catch (SQLException e) {
+      System.err.println("Could not get the necessary data");
+    } finally {
+      try{
+        if (stmt != null)
+          stmt.close();
+      } catch (SQLException e){}
+    }
+    return result;
+   }
 
+   public static void main(String[] args){
+     
    }
 
  }
