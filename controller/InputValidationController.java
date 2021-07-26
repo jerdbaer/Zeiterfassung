@@ -102,9 +102,10 @@ public class InputValidationController {
 	 * @param workEnd end of working time at working day in hh:mm
 	 * @param selectedDay date of considered working day for which the working day information should be calculated 
 	 * and recorded in yyyy-mm-dd
-	 * @param workEndYesterday end of working time the day before the selected working day in hh:mm 
-	 * 
+	 * @param workEndYesterday end of working time the day before the selected working day in hh:mm
+	 * @param workBeginTomorrow begin of working time the day after the selected working day in hh:mm
 	 */
+	
 	public InputValidationController(ArrayList<Timespann> input, Duration legalBreak, 
 			Duration totalWorkingTime, Duration timeAtBreak, LocalTime workBegin, LocalTime workEnd,
 			LocalDate selectedDay, LocalTime workEndYesterday, LocalTime workBeginTomorrow) {
