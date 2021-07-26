@@ -32,15 +32,15 @@ public class InputValidationController {
 	 */
 	private Duration legalBreak;
 	/**
-	 * total break duration in hh:mm:ss 
+	 * total break duration in PTnHnMnS (ISO-8601)  
 	 */
 	private Duration timeAtBreak;
 	/**
-	 * total working duration at a working day in hh:mm:ss
+	 * total working duration at a working day in PTnHnMnS (ISO-8601) 
 	 */
 	private Duration totalWorkingTime;
 	/**
-	 * begin of working time at working day in hh:mm:ss 
+	 * begin of working time at working day in hh:mm
 	 */
 	private LocalTime workBegin;
 	/**
@@ -62,16 +62,16 @@ public class InputValidationController {
 	private LocalDate selectedDay;
 
 	/**
-	 * constant for the minimum duration between the end of one and the begin of the following working day in hh:mm:ss
+	 * constant for the minimum duration between the end of one and the begin of the following working day in PTnHnMnS (ISO-8601) 
 	 */
 	private static final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
 	/**
-	 * constant for the maximum amount of working hours which are legally allowed for one working day in hh:mm:ss
+	 * constant for the maximum amount of working hours which are legally allowed for one working day in PTnHnMnS (ISO-8601) 
 	 */
 	private static final Duration MAX_DAILY_WORKING_TIME = Duration.ofHours(10);
 	/** 
 	 * constant for the maximal single work duration without taking a break which are leagally allowed for one 
-	 * working period in hh:mm:ss
+	 * working period in PTnHnMnS (ISO-8601) 
 	 */
 	private static final Duration MAX_WORKING_TIME_WITHOUT_BREAK = Duration.ofHours(6);
 	/**
@@ -95,14 +95,14 @@ public class InputValidationController {
 	 * Class constructor creating input validation controller 
 	 * 
 	 * @param input a list of working times, break times, work interruptions and break interruptions in Timespann
-	 * @param legalBreak legally required minimum break duration based on working time in hh:mm:ss
-	 * @param totalWorkingTime total working duration at a working day in hh:mm:ss 
-	 * @param timeAtBreak total break duration in hh:mm:ss
+	 * @param legalBreak legally required minimum break duration based on working time in PTnHnMnS (ISO-8601) 
+	 * @param totalWorkingTime total working duration at a working day in PTnHnMnS (ISO-8601)  
+	 * @param timeAtBreak total break duration in PTnHnMnS (ISO-8601) 
 	 * @param workBegin begin of working time at working day in hh:mm
 	 * @param workEnd end of working time at working day in hh:mm
 	 * @param selectedDay date of considered working day for which the working day information should be calculated 
 	 * and recorded in yyyy-mm-dd
-	 * @param workEndYesterday end of working time the day before the selected working day in yyyy-mm-dd 
+	 * @param workEndYesterday end of working time the day before the selected working day in hh:mm 
 	 * 
 	 */
 	public InputValidationController(ArrayList<Timespann> input, Duration legalBreak, 
@@ -154,30 +154,16 @@ public class InputValidationController {
 		return validation;
 
 	}
-
-	/**
-	 * validates, if duration between work begin of the selected working day and the work end of the previous day
-	 * fulfill the legal requirements of rest period
-	 * 2021, in Germany: 11 hours 
-	 * 
-	 * @param workEndYesterday end of working time the day before the selected working day in yyyy-mm-dd hh:mm:ss 
-	 * which are provided by a database
-	 * @param workBeginToday begin of working time at the selected working day in yyyy-mm-dd hh:mm:ss
-	 * 
-	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR)
-	 * 
-	 * @see ValidationState
-	 */
 	
 	/**
 	 * validates, if duration between work begin of the selected working day and the work end of the previous day
 	 * fulfill the legal requirements of rest period
 	 * 2021, in Germany: 11 hours 
 	 * 
-	 * @param workEndYesterday end of working time the day before the selected working day in yyyy-mm-dd hh:mm:ss 
-	 * @param workBeginTomorrow begin of working time the day after the selected working day in yyyy-mm-dd hh:mm:ss 
-	 * @param workBeginToday begin of working time at the selected working day in yyyy-mm-dd hh:mm:ss
-	 * @param workEndToday end of working time at the selected working day in yyyy-mm-dd hh:mm:ss
+	 * @param workEndYesterday end of working time the day before the selected working day in hh:mm 
+	 * @param workBeginTomorrow begin of working time the day after the selected working day in hh:mm 
+	 * @param workBeginToday begin of working time at the selected working day in hh:mm
+	 * @param workEndToday end of working time at the selected working day in hh:mm
 	 * 
 	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR)
 	 * 
@@ -195,10 +181,10 @@ public class InputValidationController {
 	}
 
 	/**
-	 * validates, if total working duration fulfills the maxmimum amount of legally allowed working hours at one working day
+	 * validates, if total working duration fulfills the maximum amount of legally allowed working hours at one working day
 	 * 2021, Germany: 10 hours
 	 * 
-	 * @param totalWorkingTime total working duration at a working day in hh:mm:ss
+	 * @param totalWorkingTime total working duration at a working day in PTnHnMnS (ISO-8601)
 	 * 
 	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_WORKING_TIME_OVER_TEN_HOURS)
 	 * 
@@ -270,7 +256,7 @@ public class InputValidationController {
 	 * 2021, Germany: 15 minutes
 	 * 
 	 * @param formattedInput a list of working times, break times, work interruptions and break interruptions in Timespann
-	 * @param legalBreak legally required minimum break duration based on working time in hh:mm:ss
+	 * @param legalBreak legally required minimum break duration based on working time in PTnHnMnS (ISO-8601)
 	 * 
 	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR)
 	 * 
@@ -372,8 +358,8 @@ public class InputValidationController {
 	/**
 	 * validates, if total break duration fulfills the legal required break duration
 	 * 
-	 * @param timeAtBreak total break duration in hh:mm
-	 * @param legalBreak legally required minimum break duration based on working time in hh:mm
+	 * @param timeAtBreak total break duration in PTnHnMnS (ISO-8601)
+	 * @param legalBreak legally required minimum break duration based on working time in PTnHnMnS (ISO-8601)
 	 * 
 	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_TOTAL_BREAK_ERROR)
 	 * 
