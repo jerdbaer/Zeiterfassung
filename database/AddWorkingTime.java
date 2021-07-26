@@ -22,7 +22,7 @@ public class AddWorkingTime {
 	 * Calls a method to establish a connection to the database and defines its behavior after closing the program. 
 	 *
 	 * @param workDate date of working day in yyyy-mm-dd
-	 * @param MA_ID individual employee identification number in int
+	 * @param MA_ID individual employee's id in int
 	 *
 	 * @see createConnection()
 	 */

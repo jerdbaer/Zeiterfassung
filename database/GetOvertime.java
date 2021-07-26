@@ -79,7 +79,7 @@ import java.sql.*;
     * Selects sum of overtime records for a selected employee to pass it as total overtime to UI
     * Remark: sum of overtime can be positive and negative
     *
-    * @param MA_ID individual employee identification number in int
+    * @param MA_ID individual employee's id in int
     * @return sum of overtime records as String in hh:mm:ss / -hh:mm:ss for double digit hour values or 
     * -h:mm:ss for single digit hour values
     */
@@ -114,7 +114,7 @@ import java.sql.*;
     * Selects the time of working end of the database record on the day before the selected date for the new working 
     * time record for user input validation
     * 
-    * @param MA_ID individual employee identification number in int
+    * @param MA_ID individual employee's id in int
     * @param yesterday date of the day before the selected date for working time record
     * 
     * @return time of working end of the previous day as String String in hh:mm:ss
@@ -148,7 +148,7 @@ import java.sql.*;
     * Selects the time of working begin of the database record on the day after the selected date for the new working 
     * time record for user input validation
     * 
-    * @param MA_ID individual employee identification number in int
+    * @param MA_ID individual employee's id number in int
     * @param tomorrow date of the day after the selected date for working time record
     * 
     * @return time of working begin of the following day as String String in hh:mm:ss
