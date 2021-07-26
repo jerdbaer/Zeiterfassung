@@ -22,6 +22,7 @@ public class InputValidationController {
 	private LocalTime workBegin;
 	private LocalTime workEnd;
 	private LocalTime workEndYesterday;
+	private LocalTime workBeginTomorrow;
 	private LocalDate selectedDay;
 
 	private static final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
@@ -33,7 +34,7 @@ public class InputValidationController {
 
 	public InputValidationController(ArrayList<Timespann> input, Duration legalBreak, 
 			Duration totalWorkingTime, Duration timeAtBreak, LocalTime workBegin, LocalTime workEnd,
-			LocalDate selectedDay, LocalTime workEndYesterday) {
+			LocalDate selectedDay, LocalTime workEndYesterday, LocalTime workBeginTomorrow) {
 		this.inputList = input;
 		this.legalBreak = legalBreak;
 		this.totalWorkingTime = totalWorkingTime;
@@ -42,14 +43,17 @@ public class InputValidationController {
 		this.workEnd = workEnd;
 		this.selectedDay = selectedDay;
 		this.workEndYesterday = workEndYesterday;
+		this.workBeginTomorrow = workBeginTomorrow;
 	}
 
 	public ArrayList<ValidationState> validation() {
 		var validation = new ArrayList<ValidationState>();
 		try {
 			var workBeginToday = LocalDateTime.of(selectedDay, workBegin);
+			var workEndToday = LocalDateTime.of(selectedDay, workEnd);
 			var workEndYesterdayLDT = LocalDateTime.of(selectedDay.minusDays(1), workEndYesterday);
-			validation.add(checkDurationBetweenWorkingDays(workEndYesterdayLDT, workBeginToday));
+			var workBeginTomorrowLDT = LocalDateTime.of(selectedDay.plusDays(1), workBeginTomorrow);
+			validation.add(checkDurationBetweenWorkingDays(workEndYesterdayLDT,workBeginTomorrowLDT, workBeginToday, workEndToday));
 		} catch (NullPointerException e) {
 			validation.add(ValidationState.NOT_VALID_NO_DATE_SELECTED);
 		}
@@ -71,11 +75,12 @@ public class InputValidationController {
 
 	}
 
-	private ValidationState checkDurationBetweenWorkingDays(LocalDateTime workEndYesterday,
-			LocalDateTime workBeginToday) {
+	private ValidationState checkDurationBetweenWorkingDays(LocalDateTime workEndYesterday, LocalDateTime workBeginTomorrow,
+			LocalDateTime workBeginToday, LocalDateTime workEndToday) {
 		var duration = Duration.between(workEndYesterday, workBeginToday);
+		var otherDuration = Duration.between(workEndToday, workBeginTomorrow);
 
-		return duration.minus(MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS).isNegative()
+		return (duration.minus(MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS).isNegative() || otherDuration.minus(MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS).isNegative())
 				? ValidationState.NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR
 				: ValidationState.VALID;
 	}
