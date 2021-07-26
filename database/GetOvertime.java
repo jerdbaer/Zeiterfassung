@@ -159,6 +159,16 @@ import java.util.*;
      return resultString;
    }
 
+   /**
+    * Collects Overtime for multiple dates in a time interval.
+    * Data will be displayed in a chart in UI
+    * 
+    * @param MA_ID is the ID of the employee whose data needs to be displayed
+    * @param beginDate is the begin of the timespan which includes {@code beginDate}
+    * @param endDate ist the end of the timespan which includes {@code endDate}
+    * @return a HashMap of the data, the keys are the names of the columns in the table
+    */
+   
    public HashMap<String, String> getMultipleDays(int MA_ID, String beginDate, String endDate){
      String query = "SELECT work_date, Ueberstunden_Tag FROM zeitkonto "
       + "WHERE MA_ID = " + MA_ID + " AND "
