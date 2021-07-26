@@ -13,6 +13,14 @@ import models.Timespann;
 import models.ValidationState;
 import models.Work;
 
+/**
+ * Ein Programm zur Validierung der Nutzereingaben einer Arbeitszeiterfassungsanwendung.
+ * 
+ * @author Tom Weißflog
+ * @author Josephine Luksch
+ * @version 1.0
+ */
+
 public class InputValidationController {
 
 	private ArrayList<Timespann> inputList;
@@ -31,6 +39,33 @@ public class InputValidationController {
 	private static final LocalTime WORKING_LIMIT_END = LocalTime.of(19, 30);
 	private static final long DAYS_FOR_REVISION_RELIABILITY = 31;
 
+	/**
+	 * Konstruktor
+	 * Legt einen InputValidationController an
+	 * 
+	 * @param input ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
+	 * Pausenzeitunterbrechungen im Format Timespann
+	 * @param legalBreak ist die gesetzliche festgelegte Pausenzeit aufgrund der Arbeitszeit im Format hh:mm
+	 * @param totalWorkingTime ist die Gesamtarbeitzeit im Format hh:mm
+	 * @param timeAtBreak ist die Gesamtpausenzeit im Format hh:mm
+	 * @param workBegin ist der Beginn der Arbeitszeit am Arbeitstag im Format hh:mm
+	 * @param workEnd ist das Ende der Arbeitszeit am Arbeitstag im Format hh:mm
+	 * @param selectedDay ist das Datum des ausgewählten Arbeitstages im Format yyyy.mm.dd
+	 * @param workEndYesterday ist das Datum des Vortags des ausgewählten Arbeitstags im Format yyyy.mm.dd
+	 * 
+	 * @see Timespann
+	 * @see checkBreaksInWorkTime()
+	 * @see checkDatepickerCompliance()
+	 * @see checkDurationBetweenWorkingDays()
+	 * @see checkInputExists()
+	 * @see checkSingleBreakDurationCompliance()
+	 * @see checkTimeOrderIsChronological()
+	 * @see checkTotalBreakCompliance()
+	 * @see checkTotalWorkingTimeOverTenHours()
+	 * @see checkWorkingTimeOverSixHoursWithoutBreak()
+	 * @see checkWorkTimeLimits()
+	 */
+	
 	public InputValidationController(ArrayList<Timespann> input, Duration legalBreak, 
 			Duration totalWorkingTime, Duration timeAtBreak, LocalTime workBegin, LocalTime workEnd,
 			LocalDate selectedDay, LocalTime workEndYesterday) {
@@ -44,6 +79,12 @@ public class InputValidationController {
 		this.workEndYesterday = workEndYesterday;
 	}
 
+	/**
+	 * Führt die einzelnen Validierungsberechnungen aus
+	 * 
+	 * @ return [Rückmeldung]
+	 * @ throws NullPointerException
+	 */
 	public ArrayList<ValidationState> validation() {
 		var validation = new ArrayList<ValidationState>();
 		try {
@@ -71,6 +112,18 @@ public class InputValidationController {
 
 	}
 
+	/**
+	 * Validiert ob zwischen dem Arbeitszeitende des Vortags und dem Arbeitsbeginn des ausgewählten Arbeitstags 
+	 * eine gesetzlich festgelegte Ruhezeit eingehalten wird
+	 * Stand 2021: 11 Stunden
+	 * 
+	 * @param workEndYesterday ist das Ende der Arbeitszeit des Vortages des ausgewählten Tages, welche aus der 
+	 * Datenbank gezogen wird im Format yyyy.mm.dd hh:mm:ss
+	 * @param workBeginToday ist der Beginn der Arbeitszeit des ausgewählten Tages im Format yyyy.mm.dd hh:mm:ss
+	 * 
+	 * @return [Rückmeldung]
+	 */
+	
 	private ValidationState checkDurationBetweenWorkingDays(LocalDateTime workEndYesterday,
 			LocalDateTime workBeginToday) {
 		var duration = Duration.between(workEndYesterday, workBeginToday);
@@ -80,6 +133,15 @@ public class InputValidationController {
 				: ValidationState.VALID;
 	}
 
+	/**
+	 * Validiert, ob länger als die gesetzlich maximal zulässige Arbeitszeit pro Arbeitstag gearbeitet wurde
+	 * Stand 2021: 10 Stunden
+	 * 
+	 * @param totalWorkingTime ist die Gesamtarbeitszeit eines Arbeitstages im Format hh:mm
+	 * 
+	 * @return [Rückmeldung]
+	 */
+	
 	private ValidationState checkTotalWorkingTimeOverTenHours(Duration totalWorkingTime) {
 		
 		return (totalWorkingTime.compareTo(MAX_DAILY_WORKING_TIME) > 0)
@@ -87,6 +149,15 @@ public class InputValidationController {
 				: ValidationState.VALID;
 	}
 
+	/**
+	 * Validiert, der Beginn und das Ende der Arbeitszeit in dem betrieblich festgelegten Arbeitszeitrahmen liegen
+	 * 
+	 * @param workBegin ist der Beginn der Arbeitszeit im Format hh:00
+	 * @param workEnd ist das Ende der Arbeitszeit im Format hh:00
+	 * 
+	 * @return [Rückmeldung]
+	 */
+	
 	private ValidationState checkWorkTimeLimits(LocalTime workBegin, LocalTime workEnd) {
 		if (workBegin.isBefore(WORKING_LIMIT_BEGIN))
 			return ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00;
@@ -97,6 +168,17 @@ public class InputValidationController {
 		return ValidationState.VALID;
 	}
 
+	/**
+	 * Validiert, ob das ausgewählte Datum in den zulässigen Grenzen liegen:
+	 * Es kann keine Arbeitszeit für Tage in der Zukunft erfasst werden und es darf wegen der Bedingung der 
+	 * Revisionssicherheit nur eine festgelegte Anzahl an Tagen in der Vergangenheit zum immer aktuellen Tag 
+	 * zurückgegangen werden.
+	 * 
+	 * @param selectedDay ist das Datum des ausgewählten Arbeitstages im Format yyyy.mm.dd
+	 * 
+	 * @return [Rückmeldung]
+	 */
+	
 	private ValidationState checkDatepickerCompliance(LocalDate selectedDay) {
 		try {
 			if (selectedDay.isAfter(LocalDate.now()))
@@ -110,6 +192,19 @@ public class InputValidationController {
 		return ValidationState.VALID;
 	}
 
+	/**
+	 * Validiert, ob die gesetzlich festgelegte Pausenzeit auch in Abhängigkeit zur Länge der Einzelpausenlängen
+	 * erreicht wird. Um als gesetzliche Pausenlänge zu gelten, muss eine festgelegte Pausenlänge erreicht werden. 
+	 * Die Gesamtpausenzeit kann aus Einzelpausen unterhalb, gleich oder oberhalb dieser gesetzlich geforderten 
+	 * Pausenlänge liegen. Es ist jedoch notwendig
+	 * Stand 2021: 15 Minuten
+	 * 
+	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
+	 * Pausenzeitunterbrechungen im Format Timespann
+	 * @param legalBreak ist die gesetzliche festgelegte Pausenzeit aufgrund der Arbeitszeit im Format hh:mm
+	 * @return [Rückmeldung]
+	 */
+	
 	private ValidationState checkSingleBreakDurationCompliance(ArrayList<Timespann> formattedInput,
 			Duration legalBreak) {
 		var legalBreakList = new ArrayList<Timespann>();
@@ -127,6 +222,18 @@ public class InputValidationController {
 				: ValidationState.VALID;
 	}
 
+	/**
+	 * Validiert, ob die einzelnen Pausenzeiten innerhalb eines Arbeitsabschnittes liegen und dabei weder am Anfang 
+	 * noch am Ende des Arbeitstages liegen. Dafür dürfen Beginn und Ende der Pausenzeiten nicht exakt mit den Zeiten 
+	 * des Arbeitsbeginns und Arbeitsendes des Arbeitstages übereinstimmen.
+	 * 
+	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
+	 * Pausenzeitunterbrechungen im Format Timespann
+	 * @param workBegin ist der Beginn der Arbeitszeit am Arbeitstag im Format hh:mm
+	 * @param workEnd ist das Ende der Arbeitszeit am Arbeitstag im Format hh:mm
+	 * 
+	 * @return [Rückmeldung]
+	 */
 	private ValidationState checkBreaksInWorkTime(ArrayList<Timespann> formattedInput, LocalTime workBegin,
 			LocalTime workEnd) {
 		var breakList = new ArrayList<Break>();
@@ -149,6 +256,16 @@ public class InputValidationController {
 		return ValidationState.VALID;
 	}
 
+	/**
+	 * Validiert, ob die eingetragenen Arbeitszeiten und Pausenzeiten chronologisch (von früh zu spät) geordnet sind. 
+	 * Außerdem wird validiert, ob die Startzeit immer vor der Endzeit eines Zeitabschnitts eingetragen ist.
+	 * 
+	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
+	 * Pausenzeitunterbrechungen im Format Timespann
+	 * 
+	 * @return [Rückmeldung]
+	 */
+	
 	private ValidationState checkTimeOrderIsChronological(ArrayList<Timespann> formattedInput) {
 		if (formattedInput.stream().filter(elm -> (elm instanceof Interruption) || (elm instanceof BreakInterruption))
 				.anyMatch(elm -> elm.getDuration().isNegative()))
@@ -159,6 +276,16 @@ public class InputValidationController {
 		return ValidationState.VALID;
 	}
 
+	/**
+	 * Validiert, ob es mindestens einen vollständigen Eintrag eines Arbeitszeitabschnittes gibt, d.h. es muss sowohl
+	 * Startzeit (hh:mm) als auch Endzeit (hh:mm) vollständig eingetragen sein)
+	 * 
+	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
+	 * Pausenzeitunterbrechungen im Format Timespann
+	 * 
+	 * @return [Rückmeldung]
+	 */
+	
 	private ValidationState checkInputExists(ArrayList<Timespann> formattedInput) {
 		
 		return (formattedInput.stream().noneMatch(elm -> elm instanceof Work))
@@ -166,6 +293,15 @@ public class InputValidationController {
 				: ValidationState.VALID;
 	}
 
+	/**
+	 * Validiert, ob die Gesamtpausenzeit die gesetzlich geforderte Pausenzeit erfüllt.
+	 * 
+	 * @param timeAtBreak ist die Gesamtpausenzeit im Format hh:mm
+	 * @param legalBreak ist die gesetzliche festgelegte Pausenzeit aufgrund der Arbeitszeit im Format hh:mm
+	 * 
+	 * @return [Rückmeldung]
+	 */
+	
 	private ValidationState checkTotalBreakCompliance(Duration timeAtBreak, Duration legalBreak) {
 		
 		return timeAtBreak.minus(legalBreak).isNegative() 
@@ -173,6 +309,16 @@ public class InputValidationController {
 				: ValidationState.VALID;
 	}
 
+	/**
+	 * Validiert, ob Arbeitsabschnitte ohne Pausen oder Unterbrechungen vorhanden sind, die länger sind als eine 
+	 * gesetzlichzulässige Länge.
+	 * Stand 2021: max. 6 Stunden ohne Pause
+	 * 
+	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
+	 * Pausenzeitunterbrechungen im Format Timespann
+	 * @return [Rückmeldung]
+	 */
+	
 	private ValidationState checkWorkingTimeOverSixHoursWithoutBreak(ArrayList<Timespann> formattedInput) {
 		var workList = new ArrayList<Work>();
 		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> workList.add((Work) work));
