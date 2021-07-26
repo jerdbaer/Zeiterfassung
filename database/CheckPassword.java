@@ -35,7 +35,7 @@ public class CheckPassword{
   private static void createConnection(){
     String url = "jdbc:mysql://localhost/zeiterfassung";
     String user = "root";
-    String pass = "";
+    String pass = "xxxxxxxx";
     try {
       System.out.println("Creating DBConnection");
       connection = DriverManager.getConnection(url, user, pass);

@@ -10,8 +10,11 @@ import models.Timespann;
 import models.Work;
 
 /**
- * Ein Programm zur Berechnung von Arbeitsdauer, Arbeitsbeginn, ArbeitsEnde aus einer Liste von 
- * Arbeitszeit- und Pausenzeiteingaben, die aus einer UI-Anbindung zur übermittelt werden.
+ * Program to get information about a working day from a list of working times, break times, 
+ * break interruptions and working time interruptions which are given by an ui-interface.
+ * 
+ * Calculated values are time at work, total work time, work begin, work end, (required) legal break time, 
+ * and total break time.
  * 
  * @author Tom Weißflog
  * @author Josephine Luksch
@@ -32,21 +35,16 @@ public class CalculationController {
 	private static final Duration LEGAL_BREAK_OVER_NINE_HOURS = Duration.ofMinutes(45);
 	
 	/**
-	 * Konstruktor
-	 * Bestimmt Arbeitbeginn und Arbeitsende aus den eingetragenen Arbeitszeit- und Pausenzeiten, die als
-	 * formatierter Input in Form einer ArrayList des Typs Timespann übergeben wird.
+	 * Constructor
 	 * 
-	 * Berechnet Arbeitsdauer, Gesamtpausendauer, rechtliche Pausenzeitforderung und Gesamtarbeitszeit.
+	 * Selects time of begin and end of working day as work begin and work end from the given list with working times,
+	 * break times, break interruptions and working time interruptions.
+	 * Also calculates time at work as duration between work begin and work end of working day
 	 * 
-	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
-	 * Pausenzeitunterbrechungen im Format Timespann
+	 * @param formattedInput is a list of single working times, break times, break interruptions and working time 
+	 * interruptions in format Timespann
 	 * 
 	 * @see Timespann
-	 * @see calculateBreakAndInterruptionDuration()
-	 * @see calculateLegalBreak()
-	 * @see Duration calculateTotalWorktime()
-	 * @see pickWorkBeginFromInput()
-	 * @see pickWorkEndFromInput()
 	 */
 	
 	public CalculationController(ArrayList<Timespann> formattedInput) {
@@ -56,22 +54,40 @@ public class CalculationController {
 		this.timeAtWork = Duration.between(workBegin, workEnd);
 	}
 	
+	/**
+	 * returns time at work for a working day
+	 * 
+	 * @return time at work in format hh:mm:ss
+	 */
+	
 	public Duration getTimeAtWork() {
 		return this.timeAtWork;
 	}
 	
+	/**
+	 * returns work begin for a working day
+	 * 
+	 * @return work begin in format hh:mm:ss
+	 */
+		
 	public LocalTime getWorkBegin() {
 		return this.workBegin;
 	}
+	
+	/**
+	 * returns work end for a working day
+	 * 
+	 * @return work end in hh:mm
+	 */
 	
 	public LocalTime getWorkEnd() {
 		return this.workEnd;
 	}
 	
 	/**
-	 * Berechnet die Gesamtpausendauer aus allen übergebenen Pausenzeiten und Arbeitszeitunterbrechungen
+	 * calculates total break duration from all given break times and work interruption times
 	 * 
-	 * @return Gesamtpausenzeit
+	 * @return total break time in hh:mm:ss
 	 */
 	
 	public Duration calculateBreakAndInterruptionDuration() {
@@ -86,9 +102,9 @@ public class CalculationController {
 	}
 	
 	/**
-	 * Berechnet die nach Arbeitsschutzgesetz geforderte gesetzliche Pausenzeit anhand der Arbeitszeit
+	 * calculates required legal break based on all work periods and Work Conditions Act
 	 * 
-	 * @return gesetzliche Pausenzeit
+	 * @return legal break in hh:mm:ss
 	 */
 	
 	public Duration calculateLegalBreak() {
@@ -104,9 +120,9 @@ public class CalculationController {
 	}
 
 	/**
-	 * Berechnet die Gesamtarbeitszeit aus Arbeitszeit minus Pausenzeit
+	 * calculates total working time based on working times minus break times
 	 * 
-	 * @return Gesamtarbeitszeit
+	 * @return total time at work in hh:mm:ss
 	 */
 	
 	public Duration calculateTotalWorktime() {
@@ -120,6 +136,12 @@ public class CalculationController {
 		return totalWorkTime;
 	}
 	
+	/**
+	 * selects first work begin of all working times
+	 * 
+	 * @return work begin of a working day in hh:mm
+	 */
+	
 	private LocalTime pickWorkBeginFromInput() {
 		var beginList = new ArrayList<LocalTime>();
 		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> beginList.add(work.getBegin()));
@@ -127,6 +149,12 @@ public class CalculationController {
 		return begin;
 	}
 
+	/**
+	 * selects last work end of all working times
+	 * 
+	 * @return work end of a working day in hh:mm
+	 */
+	
 	private LocalTime pickWorkEndFromInput() {
 		var endlist = new ArrayList<LocalTime>();
 		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> endlist.add(work.getEnd()));

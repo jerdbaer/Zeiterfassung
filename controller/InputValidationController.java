@@ -14,56 +14,91 @@ import models.ValidationState;
 import models.Work;
 
 /**
- * Ein Programm zur Validierung der Nutzereingaben einer Arbeitszeiterfassungsanwendung.
+ * programm to validate user input in working time management tool
  * 
  * @author Tom Weißflog
  * @author Josephine Luksch
  * @version 1.0
- */
+ */ 
 
 public class InputValidationController {
 
+	/**
+	 * list of working times, break times, work interruptions and break interruptions in Timespann
+	 */
 	private ArrayList<Timespann> inputList;
+	/**
+	 * legally required minimum break duration based on working time in hh:mm
+	 */
 	private Duration legalBreak;
+	/**
+	 * total break duration in hh:mm:ss 
+	 */
 	private Duration timeAtBreak;
+	/**
+	 * total working duration at a working day in hh:mm:ss
+	 */
 	private Duration totalWorkingTime;
+	/**
+	 * begin of working time at working day in hh:mm:ss 
+	 */
 	private LocalTime workBegin;
+	/**
+	 * end of working time at working day in hh:mm 
+	 */
 	private LocalTime workEnd;
+	/**
+	 * end of working day at the day before the selected working day in yyyy.mm.dd workEndYesterday 
+	 */
 	private LocalTime workEndYesterday;
+	/**
+	 * date of considered working day for which the working day information should be calculated and recorded 
+	 * in yyyy-mm-dd
+	 */
 	private LocalDate selectedDay;
 
+	/**
+	 * constant for the minimum duration between the end of one and the begin of the following working day in hh
+	 */
 	private static final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
+	/**
+	 * constant for the maximum amount of working hours which are legally allowed for one working day in hh:mm:ss
+	 */
 	private static final Duration MAX_DAILY_WORKING_TIME = Duration.ofHours(10);
+	/** 
+	 * constant for the maximal single work duration without taking a break which are leagally allowed for one 
+	 * working period in hh:mm:ss
+	 */
 	private static final Duration MAX_WORKING_TIME_WITHOUT_BREAK = Duration.ofHours(6);
+	/**
+	 * constant for the earliest work begin which are given by the operational working time frame (defined by company) 
+	 * in hh:mm
+	 */
 	private static final LocalTime WORKING_LIMIT_BEGIN = LocalTime.of(6, 00);
+	/**
+	 *  constant for the latest work end which are given by the operational working time frame (defined by company) 
+	 * in hh:mm
+	 */
 	private static final LocalTime WORKING_LIMIT_END = LocalTime.of(19, 30);
+	/**
+	 * constant for ensuring revision safety in the way that working days of the past can be updated only for a 
+	 * defined time period in days
+	 */
 	private static final long DAYS_FOR_REVISION_RELIABILITY = 31;
 
 	/**
-	 * Konstruktor
-	 * Legt einen InputValidationController an
+	 * Class constructor creating input validation controller 
 	 * 
-	 * @param input ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
-	 * Pausenzeitunterbrechungen im Format Timespann
-	 * @param legalBreak ist die gesetzliche festgelegte Pausenzeit aufgrund der Arbeitszeit im Format hh:mm
-	 * @param totalWorkingTime ist die Gesamtarbeitzeit im Format hh:mm
-	 * @param timeAtBreak ist die Gesamtpausenzeit im Format hh:mm
-	 * @param workBegin ist der Beginn der Arbeitszeit am Arbeitstag im Format hh:mm
-	 * @param workEnd ist das Ende der Arbeitszeit am Arbeitstag im Format hh:mm
-	 * @param selectedDay ist das Datum des ausgewählten Arbeitstages im Format yyyy.mm.dd
-	 * @param workEndYesterday ist das Datum des Vortags des ausgewählten Arbeitstags im Format yyyy.mm.dd
+	 * @param input a list of working times, break times, work interruptions and break interruptions in Timespann
+	 * @param legalBreak legally required minimum break duration based on working time in hh:mm:ss
+	 * @param totalWorkingTime total working duration at a working day in hh:mm:ss 
+	 * @param timeAtBreak total break duration in hh:mm:ss
+	 * @param workBegin begin of working time at working day in hh:mm
+	 * @param workEnd end of working time at working day in hh:mm
+	 * @param selectedDay date of considered working day for which the working day information should be calculated 
+	 * and recorded in yyyy-mm-dd
+	 * @param workEndYesterday end of working time the day before the selected working day in yyyy-mm-dd 
 	 * 
-	 * @see Timespann
-	 * @see checkBreaksInWorkTime()
-	 * @see checkDatepickerCompliance()
-	 * @see checkDurationBetweenWorkingDays()
-	 * @see checkInputExists()
-	 * @see checkSingleBreakDurationCompliance()
-	 * @see checkTimeOrderIsChronological()
-	 * @see checkTotalBreakCompliance()
-	 * @see checkTotalWorkingTimeOverTenHours()
-	 * @see checkWorkingTimeOverSixHoursWithoutBreak()
-	 * @see checkWorkTimeLimits()
 	 */
 	
 	public InputValidationController(ArrayList<Timespann> input, Duration legalBreak, 
@@ -80,11 +115,12 @@ public class InputValidationController {
 	}
 
 	/**
-	 * Führt die einzelnen Validierungsberechnungen aus
+	 * executes validation steps
 	 * 
-	 * @ return [Rückmeldung]
-	 * @ throws NullPointerException
+	 * @return a list of ValidationStates with VALID (means pass) or NOT_VALID+Failing outcome (means fail)
+	 * @throws NullPointerException when no date is selected
 	 */
+	
 	public ArrayList<ValidationState> validation() {
 		var validation = new ArrayList<ValidationState>();
 		try {
@@ -113,15 +149,17 @@ public class InputValidationController {
 	}
 
 	/**
-	 * Validiert ob zwischen dem Arbeitszeitende des Vortags und dem Arbeitsbeginn des ausgewählten Arbeitstags 
-	 * eine gesetzlich festgelegte Ruhezeit eingehalten wird
-	 * Stand 2021: 11 Stunden
+	 * validates, if duration between work begin of the selected working day and the work end of the previous day
+	 * fulfill the legal requirements of rest period
+	 * 2021, in Germany: 11 hours 
 	 * 
-	 * @param workEndYesterday ist das Ende der Arbeitszeit des Vortages des ausgewählten Tages, welche aus der 
-	 * Datenbank gezogen wird im Format yyyy.mm.dd hh:mm:ss
-	 * @param workBeginToday ist der Beginn der Arbeitszeit des ausgewählten Tages im Format yyyy.mm.dd hh:mm:ss
+	 * @param workEndYesterday end of working time the day before the selected working day in yyyy-mm-dd hh:mm:ss 
+	 * which are provided by a database
+	 * @param workBeginToday begin of working time at the selected working day in yyyy-mm-dd hh:mm:ss
 	 * 
-	 * @return [Rückmeldung]
+	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR)
+	 * 
+	 * @see ValidationState
 	 */
 	
 	private ValidationState checkDurationBetweenWorkingDays(LocalDateTime workEndYesterday,
@@ -134,12 +172,14 @@ public class InputValidationController {
 	}
 
 	/**
-	 * Validiert, ob länger als die gesetzlich maximal zulässige Arbeitszeit pro Arbeitstag gearbeitet wurde
-	 * Stand 2021: 10 Stunden
+	 * validates, if total working duration fulfills the maxmimum amount of legally allowed working hours at one working day
+	 * 2021, Germany: 10 hours
 	 * 
-	 * @param totalWorkingTime ist die Gesamtarbeitszeit eines Arbeitstages im Format hh:mm
+	 * @param totalWorkingTime total working duration at a working day in hh:mm:ss
 	 * 
-	 * @return [Rückmeldung]
+	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_WORKING_TIME_OVER_TEN_HOURS)
+	 * 
+	 * @see ValidationState
 	 */
 	
 	private ValidationState checkTotalWorkingTimeOverTenHours(Duration totalWorkingTime) {
@@ -150,12 +190,16 @@ public class InputValidationController {
 	}
 
 	/**
-	 * Validiert, der Beginn und das Ende der Arbeitszeit in dem betrieblich festgelegten Arbeitszeitrahmen liegen
+	 * validates, if work begin and/or work end exceeds operational working time frame (defined by company)
+	 * 2021, AfS Berlin-Brandenburg: 6:30 - 19:30
 	 * 
-	 * @param workBegin ist der Beginn der Arbeitszeit im Format hh:00
-	 * @param workEnd ist das Ende der Arbeitszeit im Format hh:00
+	 * @param workBegin begin of working time at working day in hh:mm
+	 * @param workEnd end of working time at working day in hh:mm
 	 * 
-	 * @return [Rückmeldung]
+	 * @return validation result as ValidationState of pass (VALID) or fail (VALID_WORKBEGIN_IS_BEFORE_6_00 or
+	 * VALID_WORKEND_IS_AFTER_19_30)
+	 * 
+	 * @see ValidationState
 	 */
 	
 	private ValidationState checkWorkTimeLimits(LocalTime workBegin, LocalTime workEnd) {
@@ -169,15 +213,19 @@ public class InputValidationController {
 	}
 
 	/**
-	 * Validiert, ob das ausgewählte Datum in den zulässigen Grenzen liegen:
-	 * Es kann keine Arbeitszeit für Tage in der Zukunft erfasst werden und es darf wegen der Bedingung der 
-	 * Revisionssicherheit nur eine festgelegte Anzahl an Tagen in der Vergangenheit zum immer aktuellen Tag 
-	 * zurückgegangen werden.
+	 * validates, if selected working day exceeds operating limits (defined by company)
+	 * 2021, AfS Berlin-Brandenburg: not allows are dates in the future or dates earlier than 31 days in the past of the 
+	 * actual calendar date
 	 * 
-	 * @param selectedDay ist das Datum des ausgewählten Arbeitstages im Format yyyy.mm.dd
+	 * @param selectedDay date of considered working day for which the working day information should be calculated 
+	 * and recorded in yyyy-mm-dd
 	 * 
-	 * @return [Rückmeldung]
+	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_SELECTED_DAY_IS_IN_THE_FUTURE or
+	 * NOT_VALID_SELECTED_DAY_IS_TO_FAR_IN_THE_PAST)
+	 * 
+	 * @see ValidationState
 	 */
+
 	
 	private ValidationState checkDatepickerCompliance(LocalDate selectedDay) {
 		try {
@@ -193,16 +241,18 @@ public class InputValidationController {
 	}
 
 	/**
-	 * Validiert, ob die gesetzlich festgelegte Pausenzeit auch in Abhängigkeit zur Länge der Einzelpausenlängen
-	 * erreicht wird. Um als gesetzliche Pausenlänge zu gelten, muss eine festgelegte Pausenlänge erreicht werden. 
-	 * Die Gesamtpausenzeit kann aus Einzelpausen unterhalb, gleich oder oberhalb dieser gesetzlich geforderten 
-	 * Pausenlänge liegen. Es ist jedoch notwendig
-	 * Stand 2021: 15 Minuten
+	 * validates, if single break durations fulfill a legally required single break duration.
+	 * For understanding: total break duration is the sum of all single break durations which can be under, equal or 
+	 * higher of the legal requirements. To count as legally valid single break duration, break duration must have or  
+	 * exceed the given threshold.
+	 * 2021, Germany: 15 minutes
 	 * 
-	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
-	 * Pausenzeitunterbrechungen im Format Timespann
-	 * @param legalBreak ist die gesetzliche festgelegte Pausenzeit aufgrund der Arbeitszeit im Format hh:mm
-	 * @return [Rückmeldung]
+	 * @param formattedInput a list of working times, break times, work interruptions and break interruptions in Timespann
+	 * @param legalBreak legally required minimum break duration based on working time in hh:mm:ss
+	 * 
+	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR)
+	 * 
+	 * @see ValidationState
 	 */
 	
 	private ValidationState checkSingleBreakDurationCompliance(ArrayList<Timespann> formattedInput,
@@ -223,17 +273,19 @@ public class InputValidationController {
 	}
 
 	/**
-	 * Validiert, ob die einzelnen Pausenzeiten innerhalb eines Arbeitsabschnittes liegen und dabei weder am Anfang 
-	 * noch am Ende des Arbeitstages liegen. Dafür dürfen Beginn und Ende der Pausenzeiten nicht exakt mit den Zeiten 
-	 * des Arbeitsbeginns und Arbeitsendes des Arbeitstages übereinstimmen.
+	 * validates, if single breaks are within working durations.
+	 * Ensures that the break's begin or end time doesn't match the exact work begin or work end of the working day.
 	 * 
-	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
-	 * Pausenzeitunterbrechungen im Format Timespann
-	 * @param workBegin ist der Beginn der Arbeitszeit am Arbeitstag im Format hh:mm
-	 * @param workEnd ist das Ende der Arbeitszeit am Arbeitstag im Format hh:mm
+	 * @param formattedInput  a list of working times, break times, work interruptions and break interruptions in Timespann
+	 * @param workBegin begin of working time at working day in hh:mm
+	 * @param workEnd end of working time at working day in hh:mm
 	 * 
-	 * @return [Rückmeldung]
+	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_BREAK_IS_NOT_IN_WORKTIME or 
+	 * NOT_VALID_BREAK_CANNOT_BE_AT_WORKING_BEGIN_OR_END)
+	 * 
+	 * @see ValidationState
 	 */
+	
 	private ValidationState checkBreaksInWorkTime(ArrayList<Timespann> formattedInput, LocalTime workBegin,
 			LocalTime workEnd) {
 		var breakList = new ArrayList<Break>();
@@ -257,13 +309,15 @@ public class InputValidationController {
 	}
 
 	/**
-	 * Validiert, ob die eingetragenen Arbeitszeiten und Pausenzeiten chronologisch (von früh zu spät) geordnet sind. 
-	 * Außerdem wird validiert, ob die Startzeit immer vor der Endzeit eines Zeitabschnitts eingetragen ist.
+	 * validates, if the work and break input (by the user) is chronological (from earlier to later) and if the start time
+	 * is always given before the end time (meaning also from earlier to later).
 	 * 
-	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
-	 * Pausenzeitunterbrechungen im Format Timespann
+	 * @param formattedInput a list of working times, break times, work interruptions and break interruptions in Timespann
 	 * 
-	 * @return [Rückmeldung]
+	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_START_IS_AFTER_END or 
+	 * NOT_VALID_TIME_INPUT_MUST_BE_IN_CHRONICAL_ORDER)
+	 * 
+	 * @see ValidationState
 	 */
 	
 	private ValidationState checkTimeOrderIsChronological(ArrayList<Timespann> formattedInput) {
@@ -277,13 +331,13 @@ public class InputValidationController {
 	}
 
 	/**
-	 * Validiert, ob es mindestens einen vollständigen Eintrag eines Arbeitszeitabschnittes gibt, d.h. es muss sowohl
-	 * Startzeit (hh:mm) als auch Endzeit (hh:mm) vollständig eingetragen sein)
+	 * validates, if at least one full work input is given (meaning start and end time)
 	 * 
-	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
-	 * Pausenzeitunterbrechungen im Format Timespann
+	 * @param formattedInput a list of working times, break times, work interruptions and break interruptions in Timespann
 	 * 
-	 * @return [Rückmeldung]
+	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_NO_INPUT_FOUND)
+	 * 
+	 * @see ValidationState
 	 */
 	
 	private ValidationState checkInputExists(ArrayList<Timespann> formattedInput) {
@@ -294,12 +348,14 @@ public class InputValidationController {
 	}
 
 	/**
-	 * Validiert, ob die Gesamtpausenzeit die gesetzlich geforderte Pausenzeit erfüllt.
+	 * validates, if total break duration fulfills the legal required break duration
 	 * 
-	 * @param timeAtBreak ist die Gesamtpausenzeit im Format hh:mm
-	 * @param legalBreak ist die gesetzliche festgelegte Pausenzeit aufgrund der Arbeitszeit im Format hh:mm
+	 * @param timeAtBreak total break duration in hh:mm
+	 * @param legalBreak legally required minimum break duration based on working time in hh:mm
 	 * 
-	 * @return [Rückmeldung]
+	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_TOTAL_BREAK_ERROR)
+	 * 
+	 * @see ValidationState
 	 */
 	
 	private ValidationState checkTotalBreakCompliance(Duration timeAtBreak, Duration legalBreak) {
@@ -310,13 +366,15 @@ public class InputValidationController {
 	}
 
 	/**
-	 * Validiert, ob Arbeitsabschnitte ohne Pausen oder Unterbrechungen vorhanden sind, die länger sind als eine 
-	 * gesetzlichzulässige Länge.
-	 * Stand 2021: max. 6 Stunden ohne Pause
+	 * validates, if there is any work period without breaks or interruptions which are longer than a legally admitted 
+	 * working duration without breaks or interruptions
+	 * 2021, Germany: 6 hours of working time without break
 	 * 
-	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
-	 * Pausenzeitunterbrechungen im Format Timespann
-	 * @return [Rückmeldung]
+	 * @param formattedInput a list of working times, break times, work interruptions and break interruptions in Timespann
+	 * 
+	 * @return validation result as ValidationState of pass (VALID) or fail (NOT_VALID_WORKING_TIME_WITHOUT_BREAK_ERROR)
+	 * 
+	 * @see ValidationState
 	 */
 	
 	private ValidationState checkWorkingTimeOverSixHoursWithoutBreak(ArrayList<Timespann> formattedInput) {
