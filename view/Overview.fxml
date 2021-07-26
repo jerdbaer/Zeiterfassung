@@ -103,7 +103,7 @@
             <HBox>
                <children>
                   <Button fx:id="btnThisWeek" mnemonicParsing="false" text="Aktuelle Woche" />
-                  <Button fx:id="btnThisMonth" mnemonicParsing="false" text="Aktueller Monat">
+                  <Button fx:id="btnThisMonth" mnemonicParsing="false" onAction="#showRealData" text="Aktueller Monat">
                      <HBox.margin>
                         <Insets left="5.0" right="5.0" />
                      </HBox.margin>
@@ -162,7 +162,7 @@
                   </VBox>
                   <LineChart fx:id="chart" stylesheets="@Style.css">
                     <xAxis>
-                      <NumberAxis animated="false" autoRanging="false" side="BOTTOM" upperBound="31.0" />
+                      <NumberAxis animated="false" side="BOTTOM" upperBound="31.0" />
                     </xAxis>
                     <yAxis>
                       <NumberAxis animated="false" autoRanging="false" side="LEFT" upperBound="12.0" />

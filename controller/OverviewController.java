@@ -1,10 +1,18 @@
 package controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import database.GetOvertime;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
+import models.ComparatorOvertime;
+import models.Overtime;
 
 public class OverviewController {
 
@@ -62,6 +70,34 @@ public class OverviewController {
     }
     
     @FXML
+    void showRealData(ActionEvent event) {
+    	chart.getData().clear();
+    	chart.setCreateSymbols(false);
+    	
+    	var SOLL_ARBEITSZEIT_IN_STUNDEN = 8;
+    	var MA_ID = LoginController.MA_Data.getMA_ID();
+    	var beginDate = LocalDate.now().minusDays(30).toString();
+    	var endDate = LocalDate.now().toString();
+    	var overtimeList = fetchData(MA_ID, beginDate, endDate);
+    	
+    	var workTime = new XYChart.Series<Number, Number>();
+    	var solltime = new XYChart.Series<Number, Number>();
+    	
+    	for(Overtime ot : overtimeList) {
+    		solltime.getData().add(new XYChart.Data<Number, Number>(ot.getDate().getDayOfMonth(),SOLL_ARBEITSZEIT_IN_STUNDEN));
+    		workTime.getData().add(new XYChart.Data<Number, Number>(ot.getDate().getDayOfMonth(),SOLL_ARBEITSZEIT_IN_STUNDEN + ot.getOvertime()));
+    	}
+    	
+    	chart.getData().add(workTime);
+    	chart.getData().add(solltime);
+    	
+    	solltime.nodeProperty().get().setStyle("-fx-stroke: #0f358e;");
+		workTime.nodeProperty().get().setStyle("-fx-stroke: #f92047;");
+    	
+    	
+    }
+    
+    @FXML
     void showSampleData(ActionEvent event) {
     	chart.getData().clear();
     	chart.setCreateSymbols(false);
@@ -85,5 +121,23 @@ public class OverviewController {
 		sollTime.nodeProperty().get().setStyle("-fx-stroke: #0f358e;");
 		workTime.nodeProperty().get().setStyle("-fx-stroke: #f92047;");
 	}    
-
+    private ArrayList<Overtime> fetchData(int MA_ID, String beginDate, String endDate){
+    	var dataMapController = new GetOvertime();
+    	var dataMap = dataMapController.getMultipleDays(MA_ID, beginDate, endDate);
+    	ArrayList<Overtime> data = new ArrayList<>();
+    	dataMap.keySet().stream().forEach(key 
+    			->{
+    				var date = key;
+    				var hhMmSs = dataMap.get(key);
+    				var overtimeModel = new Overtime(date, hhMmSs);
+    				data.add(overtimeModel);
+    			});
+    	
+    	data.sort(new ComparatorOvertime());
+    	
+    	
+    	return data;
+    }
 }
+
+
