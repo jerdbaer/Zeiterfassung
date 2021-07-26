@@ -25,8 +25,9 @@ public class InputValidationControllerStub extends InputValidationController {
 	
 	public InputValidationControllerStub(ArrayList<Timespann> input, Duration legalBreak, 
 			Duration totalWorkingTime, Duration timeAtBreak, LocalTime workBegin, LocalTime workEnd,
-			LocalDate selectedDay, LocalTime workEndYesterday) {
-		super(input, legalBreak, totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterday);
+			LocalDate selectedDay, LocalTime workEndYesterday, LocalTime workBeginTomorrow) {
+		super(input, legalBreak, totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterday, 
+				workBeginTomorrow);
 	}
 	
 

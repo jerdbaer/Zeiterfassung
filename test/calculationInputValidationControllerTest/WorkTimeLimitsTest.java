@@ -18,8 +18,8 @@ class WorkTimeLimitsTest {
 	private static final LocalTime WORK_END_19_30 = LocalTime.of(19,30);
 	private static final LocalTime WORK_END_19_31 = LocalTime.of(19,31);
 	
-	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
-			null, null, null, null, null, null, null);
+	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(
+			null, null, null, null, null, null, null, null, null);
 	
 	@Test
 	void beginAndEndInLimitsExcludingEquals_IsWithinLimits() {

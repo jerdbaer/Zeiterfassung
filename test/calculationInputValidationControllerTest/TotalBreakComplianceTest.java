@@ -23,8 +23,8 @@ class TotalBreakComplianceTest {
 	private final Duration LEGAL_BREAK_45 = Duration.ofMinutes(45);
 	
 	
-	InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
-			null, null, null, null, null, null, null);
+	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(
+			null, null, null, null, null, null, null, null, null);
 	
 	@Test
 	void TimeAtBreak0AndLegalBreakRequired0_isCompliant() {
