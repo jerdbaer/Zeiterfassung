@@ -3,7 +3,7 @@ package database;
 import java.sql.*;
 
 /**
- * Ein Programm zum Erstellen der Datenbank, die erstmal leer sein wird
+ * Program to create a database, which will be empty at first.
  *
  * @author Simon Valiente
  * @author Julian Erxleben
@@ -15,8 +15,8 @@ public class InitDB{
   private Connection connection; // Erstellt ein Objekt der Klasse Connection
 
   /**
-   * Stellt Verbindung zum MySQL-Treiber her.
-   * Misslingt die Verbindung, ist womöglich der CLASSPATH falsch gesetzt
+   * Establish connection to MySQL driver
+   * Remark: if connection fails, check if CLASSPATH variable is set correctly.
    */
 
   static {
@@ -32,9 +32,11 @@ public class InitDB{
   }
 
   /**
-   * Leerer Konstruktor, der die Methode zum Aufbau der Verbindung zur DB aufruft
-   * und diese danach anlegt. Zudem legt er fest, was beim Schließen des Programms passiert
-   *
+   * Empty Constructor
+   * 
+   * Calls a method to establish a connection to the database and creates database afterwards. 
+   * Beside, it also defines the behavior after closing the program.
+   * 
    * @see createConnection()
    * @see createDBStructure()
    */
@@ -62,7 +64,7 @@ public class InitDB{
   }
 
   /**
-   * Stellt die Verbindung zum Datenbankserver her
+   * Establish connection to the database server 
    */
 
   private void createConnection() {
@@ -79,7 +81,7 @@ public class InitDB{
   }
 
   /**
-   * Erstellt mittels SQL die benötigte Datenbank
+   * Creates the needed database by use of SQL 
    */
 
   private boolean createDBStructure() {
@@ -149,9 +151,9 @@ public class InitDB{
   }
 
   /**
-   * Hauptprogramm
+   * Main programm
    *
-   * @param args Kommandozeilenparameter
+   * @param args command line parameters
    */
 
   public static void main(String[] args){
