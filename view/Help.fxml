@@ -24,7 +24,7 @@
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
                </HBox.margin></Button>
-            <Button fx:id="btnHelpTop" mnemonicParsing="false" onAction="#switchScene" style="-fx-background-color: #0c2454;" styleClass="header" text="Hilfe" textFill="#dddfe7">
+            <Button fx:id="btnHelpTop" mnemonicParsing="false" onAction="#switchScene" style="-fx-background-color: #0c2454;" styleClass="header" text="Hauptmenü" textFill="#dddfe7">
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
                </HBox.margin></Button>

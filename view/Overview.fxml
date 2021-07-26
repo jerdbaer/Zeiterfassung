@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #0c2454;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OverviewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #0c2454;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OverviewController">
    <top>
-      <HBox BorderPane.alignment="CENTER">
+      <HBox stylesheets="@Style.css" BorderPane.alignment="CENTER">
          <children>
             <Button fx:id="btnWorktimeTop" mnemonicParsing="false" onAction="#switchScene" style="-fx-background-color: #0c2454;" styleClass="header" text="Arbeitszeit erfassen" textFill="#dddfe7">
                <HBox.margin>
@@ -22,7 +22,7 @@
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
                </HBox.margin></Button>
-            <Button fx:id="btnOverviewTop" mnemonicParsing="false" onAction="#switchScene" style="-fx-background-color: #0c2454;" styleClass="header" text="Übersicht" textFill="#dddfe7">
+            <Button fx:id="btnOverviewTop" mnemonicParsing="false" onAction="#switchScene" style="-fx-background-color: #0c2454;" styleClass="header" text="Hauptmenü" textFill="#dddfe7">
                <HBox.margin>
                   <Insets left="10.0" right="10.0" />
                </HBox.margin></Button>
@@ -102,13 +102,13 @@
          <children>
             <HBox>
                <children>
-                  <Button fx:id="btnThisWeek" mnemonicParsing="false" onAction="#showSampleData" styleClass="overview" text="Aktuelle Woche" />
-                  <Button fx:id="btnThisMonth" mnemonicParsing="false" onAction="#showSampleData" styleClass="overview" text="Aktueller Monat">
+                  <Button fx:id="btnThisWeek" mnemonicParsing="false" onAction="#showSampleData" style="-fx-background-color: #ffffff; -fx-border-color: #9dadca;" styleClass="overview" text="Aktuelle Woche" textFill="#0f358e" />
+                  <Button fx:id="btnThisMonth" mnemonicParsing="false" onAction="#showSampleData" style="-fx-background-color: #ffffff; -fx-border-color: #9dadca;" styleClass="overview" text="Aktueller Monat" textFill="#0f358e">
                      <HBox.margin>
                         <Insets left="5.0" right="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnOtherMonth" mnemonicParsing="false" onAction="#showSampleData" styleClass="overview" text="Anderer Monat" />
+                  <Button fx:id="btnOtherMonth" mnemonicParsing="false" onAction="#showSampleData" style="-fx-background-color: #ffffff; -fx-border-color: #9dadca;" text="Zufallswerte" textFill="#0f358e" />
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
@@ -147,7 +147,7 @@
                               </VBox>
                            </center>
                         </BorderPane>
-                        <Button fx:id="btnWorkTime" mnemonicParsing="false" style="-fx-background-color: #709ce7;" text="Arbeitszeit erfassung" textFill="WHITE">
+                        <Button fx:id="btnWorkTime" mnemonicParsing="false" style="-fx-background-color: #709ce7;" stylesheets="@Style.css" text="Arbeitszeit erfassung" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>

@@ -11,11 +11,6 @@ Button:hover{
 	-fx-underline: true;
 }
 
-.overview {
-	-fx-background-color: #ffffff;
-	-fx-border-color:  #9dadca;
-	-fx-text-fill:  #0f358e;
-}
 
 
 

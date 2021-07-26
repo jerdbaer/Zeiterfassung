@@ -53,7 +53,7 @@ public class OverviewController {
  //   		swapStageController.goTo(Absence);
     	}
     	else if(pressedBtn == btnOverviewTop) {
-    		swapStageController.goTo("/view/Overview.fxml");
+    		swapStageController.goTo("/view/Menu.fxml");
     	}
     	else if(pressedBtn == btnHelpTop) {
     		swapStageController.goTo("/view/Help.fxml");
@@ -104,10 +104,9 @@ public class OverviewController {
     		clickedButton.setStyle("-fx-background-color: #0f358e; -fx-border-color: #0f358e; -fx-text-fill: #ffffff;");
     		
     		for(Button button : otherButtons) {
-    			var initStyle = button.getStyleClass();
-    			for(String style : initStyle) {
-        			button.setStyle(style);
-    			}
+    			button.setStyle("-fx-background-color: #ffffff;"
+    					+ "	-fx-border-color:  #9dadca;"
+    					+ "	-fx-text-fill:  #0f358e;");
     		}
 
     		

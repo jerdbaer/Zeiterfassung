@@ -35,7 +35,7 @@ public class HelpController {
     		swapStageController.goTo("/view/Overview.fxml");
     	}
     	else if(pressedBtn == btnHelpTop) {
-    		swapStageController.goTo("/view/Help.fxml");
+    		swapStageController.goTo("/view/Menu.fxml");
     	}
     	else if(pressedBtn == btnLogout) {
     		swapStageController.goTo("/view/Login.fxml");
