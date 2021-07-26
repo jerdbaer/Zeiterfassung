@@ -13,7 +13,7 @@ import models.Break;
 import models.Timespann;
 import models.Work;
 
-class TotalWorkTime {
+class TotalWorkTimeTest {
 
 	private final Work WORK_0H = new Work(LocalTime.of(0,0), LocalTime.of(0,0));
 	private final Work WORK_3H30M = new Work(LocalTime.of(10,0), LocalTime.of(13,30));
