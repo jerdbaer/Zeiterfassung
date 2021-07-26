@@ -183,7 +183,7 @@ public class AddWorkingTime {
 	/**
 	 * Selects work time data from database when a possible double entry of the same working day occurs to warn the user
 	 * about an possible overwrite if his/her data. 
-	 * Selected data will be displayed at user interfase and the user is asked to compare the entry data (new and 
+	 * Selected data will be displayed at user interface and the user is asked to compare the entry data (new and 
 	 * existing) and decide how to proceed.
 	 * 
 	 * @return collection of working time data
