@@ -11,7 +11,7 @@ import models.Work;
 
 /**
  * Ein Programm zur Berechnung von Arbeitsdauer, Arbeitsbeginn, ArbeitsEnde aus einer Liste von 
- * Arbeitszeit- und Pausenzeiteingaben, die aus einer UI-Anbindung übermittelt werden.
+ * Arbeitszeit- und Pausenzeiteingaben, die aus einer UI-Anbindung zur übermittelt werden.
  * 
  * @author Tom Weißflog
  * @author Josephine Luksch
@@ -38,8 +38,10 @@ public class CalculationController {
 	 * 
 	 * Berechnet Arbeitsdauer, Gesamtpausendauer, rechtliche Pausenzeitforderung und Gesamtarbeitszeit.
 	 * 
-	 * @param formattedInput ist eine ArrayList des Typs Timespann
+	 * @param formattedInput ist eine Liste mit Arbeitszeiten, Pausenzeiten, Arbeistzeitunterbrechungen und 
+	 * Pausenzeitunterbrechungen im Format Timespann
 	 * 
+	 * @see Timespann
 	 * @see calculateBreakAndInterruptionDuration()
 	 * @see calculateLegalBreak()
 	 * @see Duration calculateTotalWorktime()
@@ -86,7 +88,7 @@ public class CalculationController {
 	/**
 	 * Berechnet die nach Arbeitsschutzgesetz geforderte gesetzliche Pausenzeit anhand der Arbeitszeit
 	 * 
-	 * @return Gesamtpausenzeit
+	 * @return gesetzliche Pausenzeit
 	 */
 	
 	public Duration calculateLegalBreak() {
