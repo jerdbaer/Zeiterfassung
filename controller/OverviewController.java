@@ -1,5 +1,8 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -63,6 +66,12 @@ public class OverviewController {
     
     @FXML
     void showSampleData(ActionEvent event) {
+    	var buttons = new ArrayList<Button>();
+    	buttons.add(btnThisWeek);
+    	buttons.add(btnThisMonth);
+    	buttons.add(btnOtherMonth);
+
+    	style(buttons, event);
     	chart.getData().clear();
     	chart.setCreateSymbols(false);
     	
@@ -84,6 +93,28 @@ public class OverviewController {
 		chart.getData().add(workTime);
 		sollTime.nodeProperty().get().setStyle("-fx-stroke: #0f358e;");
 		workTime.nodeProperty().get().setStyle("-fx-stroke: #f92047;");
-	}    
+	}
+    
+    private void style(ArrayList<Button> buttons, ActionEvent buttonclick) {
+    	var clickedButton = (Button)buttonclick.getSource();
+    	var otherButtons = buttons;
+    	var clickedButtonIsInButtons = buttons.stream().anyMatch(button -> button.equals(clickedButton));
+    	otherButtons.remove(clickedButton);
+    	if(clickedButtonIsInButtons) {
+    		clickedButton.setStyle("-fx-background-color: #0f358e; -fx-border-color: #0f358e; -fx-text-fill: #ffffff;");
+    		
+    		for(Button button : otherButtons) {
+    			var initStyle = button.getStyleClass();
+    			for(String style : initStyle) {
+        			button.setStyle(style);
+    			}
+    		}
+
+    		
+
+
+    		
+    	}
+    }
 
 }

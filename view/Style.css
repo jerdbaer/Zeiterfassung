@@ -1,8 +1,22 @@
+Button:pressed {
+	-fx-border-radius: 7;
+	-fx-background-radius: 7;
+}
+
 Button:hover{
-	-fx-border-radius: 10;
-	-fx-background-radius: 10;
+	
 }
 
 .header:hover{
 	-fx-underline: true;
 }
+
+.overview {
+	-fx-background-color: #ffffff;
+	-fx-border-color:  #9dadca;
+	-fx-text-fill:  #0f358e;
+}
+
+
+
+
