@@ -3,7 +3,7 @@ package database;
 import java.sql.*;
 
 /**
- * Ein Programm zum Erhalt der Überstunden.
+ * Program to select overtime data for specific time period
  *
  * @author Simon Valiente
  * @version 2.0
@@ -14,9 +14,9 @@ import java.sql.*;
    private Connection connection;
 
    /**
-    * Konstruktor, ruft die Methode zum Aufbau der Verbindung zur DB auf
-    * und legt bereits fest, was beim Schließen des Programms passiert
-    *
+    * Constructor
+    * 
+    * Calls a method to establish a connection to the database and defines its behavior after closing the program.
     *
     * @see createConnection()
     */
@@ -42,9 +42,9 @@ import java.sql.*;
    }
 
    /**
-    * Stellt Verbindung zum MySQL-Treiber her.
-    * Misslingt die Verbindung, ist womöglich der CLASSPATH falsch gesetzt
-    */
+	 * Establish connection to MySQL driver
+	 * Remark: if connection fails, check if CLASSPATH variable is set correctly.
+	 */
 
    static {
      try{
@@ -59,8 +59,8 @@ import java.sql.*;
    }
 
    /**
-    * Stellt die Verbindung zur Datenbank her
-    */
+	 * Establish connection to the database
+	 */
 
    private void createConnection(){
      String url = "jdbc:mysql://localhost/zeiterfassung";
@@ -76,10 +76,12 @@ import java.sql.*;
    }
 
    /**
-    * Zieht die Summe der Überstunden von einem Mitarbeiter.
+    * Selects sum of overtime records for a selected employee to pass it as total overtime to UI
+    * Remark: sum of overtime can be positive and negative
     *
-    * @param MA_ID ist die ID des/der Mitarbeiter:in
-    * @return Summe der Überstunden als String im Format hh:mm:ss (negativ einstellig: -h:mm:ss, negativ zweistellig -hh:mm:ss)
+    * @param MA_ID individual employee identification number in int
+    * @return sum of overtime records as String in hh:mm:ss / -hh:mm:ss for double digit hour values or 
+    * -h:mm:ss for single digit hour values
     */
 
    public String getSum(int MA_ID){
@@ -108,6 +110,15 @@ import java.sql.*;
       return resultString;
    }
 
+   /**
+    * Selects the time of working end of the database record on the day before the selected date for the new working 
+    * time record for user input validation
+    * 
+    * @param MA_ID individual employee identification number in int
+    * @param yesterday date of the day before the selected date for working time record
+    * 
+    * @return time of working end of the previous day as String String in hh:mm:ss
+    */
    public String getWorkEndYesterday(int MA_ID, String yesterday){
      String query = "SELECT Arbeitszeit_Ende FROM zeitkonto "
        + "WHERE work_date = '" + yesterday + "' AND "
@@ -133,6 +144,15 @@ import java.sql.*;
      return resultString;
    }
 
+   /**
+    * Selects the time of working begin of the database record on the day after the selected date for the new working 
+    * time record for user input validation
+    * 
+    * @param MA_ID individual employee identification number in int
+    * @param tomorrow date of the day after the selected date for working time record
+    * 
+    * @return time of working begin of the following day as String String in hh:mm:ss
+    */
    public String getWorkBeginTomorrow(int MA_ID, String tomorrow){
      String query = "SELECT Arbeitszeit_Beginn FROM zeitkonto "
        + "WHERE work_date = '" + tomorrow + "' AND "
@@ -156,10 +176,6 @@ import java.sql.*;
        } catch (SQLException e) {}
      }
      return resultString;
-   }
-
-   public static void main(String[] args){
-
    }
 
  }
