@@ -74,12 +74,12 @@ public class OverviewController {
     	}
 
     }
- //------------------must be updated -------------------   
+   
     /**
-     * Displays working time data for declared user of declared time period (current week, current month or earlier month)
-     * @param event button click "on"
+     * Displays random working time data to show the chart function
+     * @param event button click "Zufallsdaten"
      */
- //----------------------------------------------------
+
     @FXML
     void showSampleData(ActionEvent event) {
     	chart.getData().clear();
