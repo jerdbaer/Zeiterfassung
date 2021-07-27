@@ -68,7 +68,7 @@ public class InitDB{
   private void createConnection() {
     String url = "jdbc:mysql://localhost/?rewriteBatchedStatements=true";
     String user = "root";
-    String pass = "";
+    String pass = "1234";
     try {
       System.out.println("Creating DBConnection");
       connection = DriverManager.getConnection(url, user, pass);
@@ -107,9 +107,16 @@ public class InitDB{
             + "Arbeitszeit_Ende time NOT NULL, "
             + "Pausengesamtzeit_Tag time NOT NULL, "
             + "Ueberstunden_Tag time NOT NULL, "
-            + "Kommentar char(50), "
+            + "Kommentar varchar(510), "
             + "CONSTRAINT PK_Zeitkonto PRIMARY KEY (work_date,MA_ID), "
             + "FOREIGN KEY (MA_ID) REFERENCES Mitarbeiter(MA_ID))";
+    String table2 = "CREATE TABLE IF NOT EXISTS login ("
+            + "MA_ID int NOT NULL, "
+            + "password int NOT NULL, " // Es wird der hashcode vom pw gespeichert
+            + "PRIMARY KEY (MA_ID), "
+            + "FOREIGN KEY (MA_ID) REFERENCES Mitarbeiter(MA_ID))";
+            // Verknüpfung ist notwendig, damit dann nicht für nichtexistente User ein Eintrag
+            // angelegt werden soll und das nicht geht, weil der MA nicht existiert
 
     Statement stmt = null;
     try{
@@ -120,6 +127,7 @@ public class InitDB{
       stmt.addBatch(query2);
       stmt.addBatch(table0);
       stmt.addBatch(table1);
+      stmt.addBatch(table2);
       stmt.executeBatch();
       connection.commit();
       stmt.close();

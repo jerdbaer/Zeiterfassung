@@ -15,9 +15,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import view.Main;
 
-public class SwapStageController{
-	
-	
+public class SwapSceneController{
+
+
 	public void goTo(String filename) {
     	try {
     		var stage = Main.primarystage;
@@ -29,9 +29,21 @@ public class SwapStageController{
 			e.printStackTrace();
 
     	}
-    }	
-	
-    public void showPopup(String filename) {
+    }
+
+	public void goToLogin() {
+    	try {
+    		var stage = Main.primarystage;;
+        	var loginContent = (BorderPane)FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
+        	var login = new Scene(loginContent);
+        	stage.setScene(login);
+    	}catch(IOException e) {
+			e.printStackTrace();
+
+    	}
+    }
+
+	public void showPopup(String filename) {
         try {
 			final Stage dialog = new Stage();
 			dialog.initModality(Modality.APPLICATION_MODAL);
@@ -44,5 +56,6 @@ public class SwapStageController{
 			e.printStackTrace();
 		}
     }
+
 
 }

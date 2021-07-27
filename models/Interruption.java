@@ -2,7 +2,6 @@ package models;
 
 import java.time.LocalTime;
 
-//
 public class Interruption extends Timespann implements IBreak{
 
 	private final long LEGAL_REQUIREMENT_MINUTES = 15;

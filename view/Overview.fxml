@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #0c2454;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OverviewController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #0c2454;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.OverviewController">
    <top>
       <HBox stylesheets="@Style.css" BorderPane.alignment="CENTER">
          <children>
@@ -42,67 +42,71 @@
       <Insets bottom="15.0" left="15.0" right="15.0" top="5.0" />
    </padding>
    <center>
-      <VBox BorderPane.alignment="CENTER">
+      <HBox BorderPane.alignment="CENTER">
          <children>
-            <Label text="Mein Arbeitszeitkonto" textFill="WHITE">
-               <font>
-                  <Font name="System Bold" size="15.0" />
-               </font>
-               <VBox.margin>
-                  <Insets bottom="5.0" />
-               </VBox.margin>
-               <padding>
-                  <Insets left="5.0" />
-               </padding>
-            </Label>
-            <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5;">
-               <center>
-                  <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-                     <children>
-                        <Label text="+ 120 : 00" textFill="#0c2053">
-                           <font>
-                              <Font name="System Bold" size="15.0" />
-                           </font>
-                        </Label>
-                        <Label text="FlexiZeit" textFill="#0c2053" />
-                     </children>
-                  </VBox>
-               </center>
-               <VBox.margin>
-                  <Insets bottom="20.0" left="25.0" />
-               </VBox.margin>
-            </BorderPane>
-            <HBox>
+            <VBox>
                <children>
-                  <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #ffffff;" text="Arbeitszeiten" textFill="#0c2053">
+                  <Label text="Mein Arbeitszeitkonto" textFill="WHITE">
                      <font>
-                        <Font name="System Bold" size="12.0" />
+                        <Font name="System Bold" size="15.0" />
                      </font>
-                     <HBox.margin>
-                        <Insets right="5.0" />
-                     </HBox.margin>
+                     <VBox.margin>
+                        <Insets bottom="5.0" />
+                     </VBox.margin>
                      <padding>
-                        <Insets bottom="1.0" />
+                        <Insets left="5.0" />
                      </padding>
-                  </Button>
-                  <Button disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #ffffff;" text="Abwesenheiten" textFill="#0c2053">
-                     <font>
-                        <Font name="System Bold" size="12.0" />
-                     </font>
-                  </Button>
+                  </Label>
+                  <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5;">
+                     <center>
+                        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+                           <children>
+                              <Label text="+ 120 : 00" textFill="#0c2053">
+                                 <font>
+                                    <Font name="System Bold" size="15.0" />
+                                 </font>
+                              </Label>
+                              <Label text="FlexiZeit" textFill="#0c2053" />
+                           </children>
+                        </VBox>
+                     </center>
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="25.0" />
+                     </VBox.margin>
+                  </BorderPane>
+                  <HBox>
+                     <children>
+                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #ffffff;" text="Arbeitszeiten" textFill="#0c2053">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                           <padding>
+                              <Insets bottom="1.0" />
+                           </padding>
+                        </Button>
+                        <Button disable="true" mnemonicParsing="false" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #ffffff;" text="Abwesenheiten" textFill="#0c2053">
+                           <font>
+                              <Font name="System Bold" size="12.0" />
+                           </font>
+                        </Button>
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
+               <padding>
+                  <Insets right="5.0" top="5.0" />
+               </padding>
+            </VBox>
          </children>
-         <padding>
-            <Insets right="5.0" top="5.0" />
-         </padding>
-      </VBox>
+      </HBox>
    </center>
    <bottom>
       <VBox style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
          <children>
             <HBox>
-               <children>
+               <children>             
                   <Button fx:id="btnThisWeek" mnemonicParsing="false" onAction="#showSampleData" style="-fx-background-color: #ffffff; -fx-border-color: #9dadca;" styleClass="overview" text="Aktuelle Woche" textFill="#0f358e" />
                   <Button fx:id="btnThisMonth" mnemonicParsing="false" onAction="#showSampleData" style="-fx-background-color: #ffffff; -fx-border-color: #9dadca;" styleClass="overview" text="Aktueller Monat" textFill="#0f358e">
                      <HBox.margin>
@@ -116,17 +120,17 @@
                <children>
                   <VBox alignment="TOP_CENTER">
                      <children>
-                        <Label alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="149.0" text="01.07.2021 - 31.07.2021" />
+                        <Label fx:id="txtDate" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="149.0" />
                         <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #dddfe7; -fx-background-radius: 5;">
                            <center>
                               <VBox alignment="CENTER" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Label text="8:51" textFill="#0c2053">
+                                    <Label fx:id="txtWorkTime" text="8:51" textFill="#0c2053">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <Label text="Ø  Arbeitszeit" textFill="#0c2053" />
+                                    <Label text="Ø  Arbeitszeit *" textFill="#0c2053" />
                                  </children>
                               </VBox>
                            </center>
@@ -138,12 +142,12 @@
                            <center>
                               <VBox alignment="CENTER" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Label text="00:30" textFill="#0c2053">
+                                    <Label fx:id="txtBreak" text="00:30" textFill="#0c2053">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
                                     </Label>
-                                    <Label text="Ø Pausenzeit" textFill="#0c2053" />
+                                    <Label text="Ø Pausenzeit *" textFill="#0c2053" />
                                  </children>
                               </VBox>
                            </center>

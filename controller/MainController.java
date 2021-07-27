@@ -8,12 +8,14 @@ import models.Timespann;
 import models.ValidationState;
 import models.Work;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import database.GetOvertime;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -181,6 +183,9 @@ public class MainController {
 	private TextField txtfieldBreakEnd5Minutes;
 
 	@FXML
+	private TextField txtComment;
+
+	@FXML
 	private Button btnBreakHide5;
 
 	@FXML
@@ -285,8 +290,10 @@ public class MainController {
 
 		clear(allTextFields);
 		btnWorkAdd1.setVisible(true);
-		labelErrortxt.setVisible(false);
 		
+		txtComment.setText("");
+		labelErrortxt.setVisible(false);
+
 
 	}
 
@@ -345,7 +352,7 @@ public class MainController {
 
 	@FXML
 	void abort(ActionEvent event) {
-		var swapStageController = new SwapStageController();
+		var swapStageController = new SwapSceneController();
 		swapStageController.showPopup("/view/PopupAbort.fxml");
 	}
 
@@ -361,30 +368,42 @@ public class MainController {
 			var calculationController = new CalculationController(input);
 			var workBegin = calculationController.getWorkBegin();
 			var workEnd = calculationController.getWorkEnd();
-			var timeAtWork = Duration.between(workBegin, workEnd);
+//			var timeAtWork = Duration.between(workBegin, workEnd);
 			var totalWorkingTime = calculationController.calculateTotalWorktime();
-			var timeAtBreak = calculationController.breakUinterruptionDuration();
+			var timeAtBreak = calculationController.calculateBreakAndInterruptionDuration();
 			var legalBreak = calculationController.calculateLegalBreak();
 			var selectedDay = datepicker.getValue();
-			// ------------------------------------------
-			var workEndYesterday = LocalTime.of(16, 30); // need database input
+			// -----------------------------------------
+			var datacontroller = new GetOvertime();
+			var MA_ID = LoginController.MA_Data.getMA_ID();
+			
+			var yesterday = selectedDay.minusDays(1).toString();
+			String workEndYesterday = datacontroller.getWorkEndYesterday(MA_ID, yesterday);
+			LocalTime workEndYesterdayTime =  LocalTime.parse(workEndYesterday);
+			
+			var tomorrow = selectedDay.plusDays(1).toString();
+			String workBeginTomorrow = datacontroller.getWorkBeginTomorrow(MA_ID, tomorrow);
+			LocalTime workBeginTomorrowTime =  LocalTime.parse(workBeginTomorrow);
+			
 			// -------------------------------------------
-			var inputValidationController = new InputValidationController(input, legalBreak, timeAtWork,
-					totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterday);
+			var inputValidationController = new InputValidationController(input, legalBreak, 
+					totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterdayTime, workBeginTomorrowTime);
+			
 			validationResult.addAll(inputValidationController.validation());
 		}
 
-		var swapStageController = new SwapStageController();
+		var swapStageController = new SwapSceneController();
 
 		if (validationResult.stream().allMatch(elm -> elm.equals(ValidationState.VALID))) {
 			computeInput(input);
 			swapStageController.showPopup("/view/PopupValid.fxml");
-		} else if (validationResult.stream().anyMatch(elm -> elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
+		} else if (validationResult.stream().allMatch(elm ->  elm.equals(ValidationState.VALID) 
+				|| elm.equals(ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00)
 				|| elm.equals(ValidationState.VALID_WORKEND_IS_AFTER_19_30))) {
 			var Error = validationResult.stream().filter(elm -> !(elm.equals(ValidationState.VALID))).findFirst().get();
 			labelErrortxt.setVisible(true);
 			labelErrortxt.setText(Error.toString());
-			
+
 			computeInput(input);
 			swapStageController.showPopup("/view/PopupLimits.fxml");
 
@@ -401,7 +420,7 @@ public class MainController {
 	}
 
 	private static CalculationModel calculationModel;
-	
+
 	public static CalculationModel getCalculationModel() {
 		return calculationModel;
 	}
@@ -411,9 +430,12 @@ public class MainController {
 		calculationModel = new CalculationModel();
 		var selectedDay = datepicker.getValue();
 		calculationModel.setSelectedDay(selectedDay);
-		// total working time
+		// totalWorkTime
 		var totalWorkTime = calculationController.calculateTotalWorktime();
 		calculationModel.setTotalWorkTime(totalWorkTime);
+
+		// overtime
+		// needs calculation
 
 		// workbegin
 		var begin = calculationController.getWorkBegin();
@@ -424,8 +446,12 @@ public class MainController {
 		calculationModel.setWorkEnd(end);
 
 		// break&interruptions
-		var breakUinterruptionDuration = calculationController.breakUinterruptionDuration();
+		var breakUinterruptionDuration = calculationController.calculateBreakAndInterruptionDuration();
 		calculationModel.setTotalBreakTime(breakUinterruptionDuration);
+
+		// comment
+		var comment = txtComment.getText();
+		calculationModel.setComment(comment);
 
 	}
 

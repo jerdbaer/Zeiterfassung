@@ -1,5 +1,6 @@
 package controller;
 
+import database.CheckPassword;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -9,6 +10,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
+import models.MA_Data;
 
 public class LoginController {
 
@@ -45,9 +47,20 @@ public class LoginController {
 		}
     }
     
+    public static MA_Data MA_Data;
+    
+    @FXML
+    public void initialize() {
+    	MA_Data = new MA_Data();
+		var limiter = new MainViewInputRestrictionController();
+		limiter.setTextFormatterNumbers(userinput);
+		
+
+	}
     @FXML
     void login(ActionEvent event) {
-    	var swapStageController = new SwapStageController();
+    	
+    	var swapStageController = new SwapSceneController();
     	if(checkLogin())
     		swapStageController.goTo("/view/Menu.fxml");
     	else {
@@ -56,17 +69,17 @@ public class LoginController {
     }
     
     private boolean checkLogin() {
-    	var user = userinput.getText();
-    	int password = passswordinput.getText().hashCode();	
+    	MA_Data.setMA_ID(Integer.parseInt(userinput.getText()));
+    	MA_Data.setPassword(passswordinput.getText());
     	
-    	//-----------------------------
-    	System.out.println(user);
-    	System.out.println(password);
-    	//-----------------------------
-    	 //---------------------
-    	return true;
-    	//----------------------
-    }
+    	var MA_ID = MA_Data.getMA_ID();
+    	var pw = MA_Data.getPassword();
+    	
+    	return CheckPassword.checkPW(MA_ID, pw);
+    	
+    	}
+    
+    
     
     
     

@@ -1,4 +1,4 @@
-package controller;
+package test.calculationInputValidationControllerTest;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
+import controller.InputValidationController;
 import models.Break;
 import models.BreakInterruption;
 import models.Interruption;
@@ -13,86 +14,39 @@ import models.Timespann;
 import models.ValidationState;
 import models.Work;
 
-public class InputValidationController {
-
-	private ArrayList<Timespann> inputList;
-	private Duration legalBreak;
-	private Duration timeAtBreak;
-	private Duration totalWorkingTime;
-	private LocalTime workBegin;
-	private LocalTime workEnd;
-	private LocalTime workEndYesterday;
-	private LocalTime workBeginTomorrow;
-	private LocalDate selectedDay;
-
+public class InputValidationControllerStub extends InputValidationController {
+		
 	private static final Duration MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS = Duration.ofHours(11);
 	private static final Duration MAX_DAILY_WORKING_TIME = Duration.ofHours(10);
 	private static final Duration MAX_WORKING_TIME_WITHOUT_BREAK = Duration.ofHours(6);
 	private static final LocalTime WORKING_LIMIT_BEGIN = LocalTime.of(6, 00);
 	private static final LocalTime WORKING_LIMIT_END = LocalTime.of(19, 30);
 	private static final long DAYS_FOR_REVISION_RELIABILITY = 31;
-
-	public InputValidationController(ArrayList<Timespann> input, Duration legalBreak, 
+	
+	public InputValidationControllerStub(ArrayList<Timespann> input, Duration legalBreak, 
 			Duration totalWorkingTime, Duration timeAtBreak, LocalTime workBegin, LocalTime workEnd,
-			LocalDate selectedDay, LocalTime workEndYesterday, LocalTime workBeginTomorrow) {
-		this.inputList = input;
-		this.legalBreak = legalBreak;
-		this.totalWorkingTime = totalWorkingTime;
-		this.timeAtBreak = timeAtBreak;
-		this.workBegin = workBegin;
-		this.workEnd = workEnd;
-		this.selectedDay = selectedDay;
-		this.workEndYesterday = workEndYesterday;
-		this.workBeginTomorrow = workBeginTomorrow;
+			LocalDate selectedDay, LocalTime workEndYesterday) {
+		super(input, legalBreak, totalWorkingTime, timeAtBreak, workBegin, workEnd, selectedDay, workEndYesterday);
 	}
+	
 
-	public ArrayList<ValidationState> validation() {
-		var validation = new ArrayList<ValidationState>();
-		try {
-			var workBeginToday = LocalDateTime.of(selectedDay, workBegin);
-			var workEndToday = LocalDateTime.of(selectedDay, workEnd);
-			var workEndYesterdayLDT = LocalDateTime.of(selectedDay.minusDays(1), workEndYesterday);
-			var workBeginTomorrowLDT = LocalDateTime.of(selectedDay.plusDays(1), workBeginTomorrow);
-			validation.add(checkDurationBetweenWorkingDays(workEndYesterdayLDT,workBeginTomorrowLDT, workBeginToday, workEndToday));
-		} catch (NullPointerException e) {
-			validation.add(ValidationState.NOT_VALID_NO_DATE_SELECTED);
-		}
-		validation.add(checkInputExists(inputList));
-		validation.add(checkTimeOrderIsChronological(inputList));
-		validation.add(checkBreaksInWorkTime(inputList, workBegin, workEnd));
-		validation.add(checkTotalBreakCompliance(timeAtBreak, legalBreak));
-		validation.add(checkSingleBreakDurationCompliance(inputList, legalBreak));
-		validation.add(checkDatepickerCompliance(selectedDay));
-		validation.add(checkWorkTimeLimits(workBegin, workEnd));
-		validation.add(checkTotalWorkingTimeOverTenHours(totalWorkingTime));
-		
-		//checkWorkingTimeOverSixHoursWithoutBreak only works with valid input
-		var areAllPreviousValidationsValid = validation.stream().allMatch(elm -> elm.equals(ValidationState.VALID));
-		if(areAllPreviousValidationsValid)
-			validation.add(checkWorkingTimeOverSixHoursWithoutBreak(inputList));
-
-		return validation;
-
-	}
-
-	private ValidationState checkDurationBetweenWorkingDays(LocalDateTime workEndYesterday, LocalDateTime workBeginTomorrow,
-			LocalDateTime workBeginToday, LocalDateTime workEndToday) {
+	protected ValidationState checkDurationBetweenWorkingDays(LocalDateTime workEndYesterday,
+			LocalDateTime workBeginToday) {
 		var duration = Duration.between(workEndYesterday, workBeginToday);
-		var otherDuration = Duration.between(workEndToday, workBeginTomorrow);
 
-		return (duration.minus(MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS).isNegative() || otherDuration.minus(MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS).isNegative())
+		return duration.minus(MIN_REQUIRED_DURATION_BETWEEN_WORKING_DAYS).isNegative()
 				? ValidationState.NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR
 				: ValidationState.VALID;
 	}
-
-	private ValidationState checkTotalWorkingTimeOverTenHours(Duration totalWorkingTime) {
+	
+	protected ValidationState checkTotalWorkingTimeOverTenHours(Duration totalWorkingTime) {
 		
 		return (totalWorkingTime.compareTo(MAX_DAILY_WORKING_TIME) > 0)
 				? ValidationState.NOT_VALID_WORKING_TIME_OVER_TEN_HOURS
 				: ValidationState.VALID;
 	}
 
-	private ValidationState checkWorkTimeLimits(LocalTime workBegin, LocalTime workEnd) {
+	protected ValidationState checkWorkTimeLimits(LocalTime workBegin, LocalTime workEnd) {
 		if (workBegin.isBefore(WORKING_LIMIT_BEGIN))
 			return ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00;
 
@@ -102,7 +56,7 @@ public class InputValidationController {
 		return ValidationState.VALID;
 	}
 
-	private ValidationState checkDatepickerCompliance(LocalDate selectedDay) {
+	protected ValidationState checkDatepickerCompliance(LocalDate selectedDay) {
 		try {
 			if (selectedDay.isAfter(LocalDate.now()))
 				return ValidationState.NOT_VALID_SELECTED_DAY_IS_IN_THE_FUTURE;
@@ -115,7 +69,7 @@ public class InputValidationController {
 		return ValidationState.VALID;
 	}
 
-	private ValidationState checkSingleBreakDurationCompliance(ArrayList<Timespann> formattedInput,
+	protected ValidationState checkSingleBreakDurationCompliance(ArrayList<Timespann> formattedInput,
 			Duration legalBreak) {
 		var legalBreakList = new ArrayList<Timespann>();
 		Duration compliantBreakDuration = Duration.ZERO;
@@ -132,7 +86,7 @@ public class InputValidationController {
 				: ValidationState.VALID;
 	}
 
-	private ValidationState checkBreaksInWorkTime(ArrayList<Timespann> formattedInput, LocalTime workBegin,
+	protected ValidationState checkBreaksInWorkTime(ArrayList<Timespann> formattedInput, LocalTime workBegin,
 			LocalTime workEnd) {
 		var breakList = new ArrayList<Break>();
 		formattedInput.stream().filter(elm -> elm instanceof Break).forEach(abreak -> breakList.add((Break)abreak));
@@ -154,7 +108,7 @@ public class InputValidationController {
 		return ValidationState.VALID;
 	}
 
-	private ValidationState checkTimeOrderIsChronological(ArrayList<Timespann> formattedInput) {
+	protected ValidationState checkTimeOrderIsChronological(ArrayList<Timespann> formattedInput) {
 		if (formattedInput.stream().filter(elm -> (elm instanceof Interruption) || (elm instanceof BreakInterruption))
 				.anyMatch(elm -> elm.getDuration().isNegative()))
 			return ValidationState.NOT_VALID_TIME_INPUT_MUST_BE_IN_CHRONICAL_ORDER;
@@ -164,21 +118,23 @@ public class InputValidationController {
 		return ValidationState.VALID;
 	}
 
-	private ValidationState checkInputExists(ArrayList<Timespann> formattedInput) {
+	protected ValidationState checkInputExists(ArrayList<Timespann> formattedInput) {
 		
 		return (formattedInput.stream().noneMatch(elm -> elm instanceof Work))
 				? ValidationState.NOT_VALID_NO_INPUT_FOUND
 				: ValidationState.VALID;
 	}
 
-	private ValidationState checkTotalBreakCompliance(Duration timeAtBreak, Duration legalBreak) {
+	protected ValidationState checkTotalBreakCompliance(Duration timeAtBreak, Duration legalBreak) {
 		
 		return timeAtBreak.minus(legalBreak).isNegative() 
 				? ValidationState.NOT_VALID_TOTAL_BREAK_ERROR
 				: ValidationState.VALID;
 	}
+	
+	
+	protected ValidationState checkWorkingTimeOverSixHoursWithoutBreak(ArrayList<Timespann> formattedInput) {
 
-	private ValidationState checkWorkingTimeOverSixHoursWithoutBreak(ArrayList<Timespann> formattedInput) {
 		var workList = new ArrayList<Work>();
 		formattedInput.stream().filter(elm -> elm instanceof Work).forEach(work -> workList.add((Work) work));
 
@@ -212,5 +168,6 @@ public class InputValidationController {
 
 		return ValidationState.VALID;
 	}
+	
 	
 }

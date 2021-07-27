@@ -1,6 +1,7 @@
 package database;
 
 import java.sql.*;
+import java.util.*;
 
 /**
  * Ein Programm zum Erhalt der Ãœberstunden.
@@ -65,7 +66,7 @@ import java.sql.*;
    private void createConnection(){
      String url = "jdbc:mysql://localhost/zeiterfassung";
      String user = "root";
-     String pass = "";
+     String pass = "1234";
      try{
        System.out.println("Creating DBConnection");
        connection = DriverManager.getConnection(url, user, pass);
@@ -108,8 +109,150 @@ import java.sql.*;
       return resultString;
    }
 
-   public static void main(String[] args){
+   public String getWorkEndYesterday(int MA_ID, String yesterday){
+     String query = "SELECT Arbeitszeit_Ende FROM zeitkonto "
+       + "WHERE work_date = '" + yesterday + "' AND "
+       + "MA_ID = " + MA_ID;
+     Statement stmt = null;
+     String resultString = "00:00:00";
+     try {
+       connection.setAutoCommit(false);
+       stmt = connection.createStatement();
+       ResultSet rs = stmt.executeQuery(query);
+       connection.commit();
+       rs.next();
+       resultString = rs.getString(1);
+       stmt.close();
+     } catch (SQLException e){
+       System.err.println("no WorkEndYesterday");
+     } finally {
+       try{
+         if (stmt != null)
+          stmt.close();
+       } catch (SQLException e) {}
+     }
+     return resultString;
+   }
 
+   public String getWorkBeginTomorrow(int MA_ID, String tomorrow){
+     String query = "SELECT Arbeitszeit_Beginn FROM zeitkonto "
+       + "WHERE work_date = '" + tomorrow + "' AND "
+       + "MA_ID = " + MA_ID;
+     Statement stmt = null;
+     String resultString = "23:59:59";
+     try {
+       connection.setAutoCommit(false);
+       stmt = connection.createStatement();
+       ResultSet rs = stmt.executeQuery(query);
+       connection.commit();
+       rs.next();
+       resultString = rs.getString(1);
+       stmt.close();
+     } catch (SQLException e){
+       System.err.println("no WorkBeginTomorrow");
+     } finally {
+       try{
+         if (stmt != null)
+          stmt.close();
+       } catch (SQLException e) {}
+     }
+     return resultString;
+   }
+
+   /**
+    * Collects Overtime for multiple dates in a time interval.
+    * Data will be displayed in a chart in UI
+    *
+    * @param MA_ID is the ID of the employee whose data needs to be displayed
+    * @param beginDate is the begin of the timespan which includes {@code beginDate}
+    * @param endDate ist the end of the timespan which includes {@code endDate}
+    * @return a HashMap of the data, the keys are the names of the columns in the table
+    */
+
+   public HashMap<String, String> getMultipleDays(int MA_ID, String beginDate, String endDate){
+     String query = "SELECT work_date, Ueberstunden_Tag FROM zeitkonto "
+      + "WHERE MA_ID = " + MA_ID + " AND "
+      + "work_date BETWEEN '" + beginDate + "' AND '" + endDate + "'";
+    Statement stmt = null;
+    HashMap<String, String> result = new HashMap<String, String>();
+    try{
+      connection.setAutoCommit(false);
+      stmt = connection.createStatement();
+      ResultSet rs = stmt.executeQuery(query);
+      connection.commit();
+      while(rs.next()){
+        result.put(rs.getString(1), rs.getString(2));
+      }
+      stmt.close();
+    } catch (SQLException e) {
+      System.err.println("Could not get the necessary data");
+    } finally {
+      try{
+        if (stmt != null)
+          stmt.close();
+      } catch (SQLException e){}
+    }
+    return result;
+   }
+   
+   /**
+    * Searchs the database for the required working time per day for an employee
+    * 
+    * @param MA_ID the ID of the employee in question
+    * @return their required working time per day as hh:mm:ss
+    */
+
+   public String getUsusalWorkingTime(int MA_ID){
+     String query = "SELECT MA_Sollarbeitszeit FROM mitarbeiter "
+       + "WHERE MA_ID = " + MA_ID;
+     Statement stmt = null;
+     String result = "";
+     try{
+       connection.setAutoCommit(false);
+       stmt = connection.createStatement();
+       ResultSet rs = stmt.executeQuery(query);
+       connection.commit();
+       rs.next();
+       result = rs.getString(1);
+       stmt.close();
+     } catch (SQLException e) {
+       System.err.println("Could not get the necessary data");
+     } finally {
+       try{
+         if (stmt != null)
+           stmt.close();
+       } catch (SQLException e){}
+     }
+     return result;
+   }
+   
+   public HashMap<String, Integer> getAverageData(int MA_ID){
+	   String query = "SELECT AVG(TIME_TO_SEC(Pausengesamtzeit_Tag)), "
+			   + "AVG(TIME_TO_SEC(Ueberstunden_Tag)) "
+			   + "FROM zeitkonto WHERE MA_ID = " + MA_ID;
+	   Statement stmt = null;
+	   var result = new HashMap<String, Integer>();
+	   try {
+		   connection.setAutoCommit(false);
+		   stmt = connection.createStatement();
+		   ResultSet rs = stmt.executeQuery(query);
+		   connection.commit();
+		   rs.next();
+		   result.put("Pausengesamtzeit", rs.getInt(1));
+		   result.put("Ueberstunden", rs.getInt(2)); 
+		   stmt.close();
+	   } catch (SQLException e) {
+		   System.err.println("Couldn't reach data");
+	   }
+	   return result;
+   }
+
+   public static void main(String[] args){
+	   var getOT = new GetOvertime();
+	   System.out.println(getOT.getSum(134));
+	   var averageData = getOT.getAverageData(134);
+	   System.out.println("Durchschnittspause: " + averageData.get("Pausengesamtzeit"));
+	   System.out.println("Durchschnittsüberstunden: " + averageData.get("Ueberstunden"));
    }
 
  }

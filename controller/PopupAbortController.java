@@ -11,7 +11,7 @@ public class PopupAbortController {
     void abortToMenu(ActionEvent event) {
     	var popup = ((Button)event.getSource()).getScene().getWindow();
     	popup.hide();
-    	var swapStageController = new SwapStageController();
+    	var swapStageController = new SwapSceneController();
     	swapStageController.goTo("/view/Menu.fxml");
 
     }
