@@ -41,21 +41,7 @@ public class SwapSceneController{
     	}
     }
 
-	/**
-	 * Loads login window
-	 */
-	public void goToLogin() {
-    	try {
-    		var stage = Main.primarystage;;
-        	var loginContent = (BorderPane)FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
-        	var login = new Scene(loginContent);
-        	stage.setScene(login);
-    	}catch(IOException e) {
-			e.printStackTrace();
-
-    	}
-    }
-
+	
 	/**
 	 * Opens popup window of the submitted filename
 	 * @param filename is the name of the fxml file which should be loaded
