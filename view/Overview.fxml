@@ -57,23 +57,63 @@
                         <Insets left="5.0" />
                      </padding>
                   </Label>
-                  <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5;">
-                     <center>
-                        <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-                           <children>
-                              <Label text="+ 120 : 00" textFill="#0c2053">
-                                 <font>
-                                    <Font name="System Bold" size="15.0" />
-                                 </font>
-                              </Label>
-                              <Label text="FlexiZeit" textFill="#0c2053" />
-                           </children>
-                        </VBox>
-                     </center>
+                  <HBox>
                      <VBox.margin>
-                        <Insets bottom="20.0" left="25.0" />
+                        <Insets left="25.0" />
                      </VBox.margin>
-                  </BorderPane>
+                     <children>
+                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #ffffff; -fx-background-radius: 5;">
+                           <center>
+                              <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Label text="+ 120 : 00" textFill="#0c2053">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="FlexiZeit" textFill="#0c2053" />
+                                 </children>
+                              </VBox>
+                           </center>
+                        </BorderPane>
+                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #dddfe7; -fx-background-radius: 5;">
+                           <center>
+                              <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Label fx:id="txtWorkTime" text="8:51" textFill="#0c2053">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Ø  Arbeitszeit *" textFill="#0c2053" />
+                                 </children>
+                              </VBox>
+                           </center>
+                           <HBox.margin>
+                              <Insets left="50.0" right="5.0" />
+                           </HBox.margin>
+                        </BorderPane>
+                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #dddfe7; -fx-background-radius: 5;">
+                           <center>
+                              <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+                                 <children>
+                                    <Label fx:id="txtBreak" text="00:30" textFill="#0c2053">
+                                       <font>
+                                          <Font name="System Bold" size="15.0" />
+                                       </font>
+                                    </Label>
+                                    <Label text="Ø Pausenzeit *" textFill="#0c2053" />
+                                 </children>
+                              </VBox>
+                           </center>
+                        </BorderPane>
+                     </children>
+                  </HBox>
+                  <Label alignment="CENTER" text="* aller Arbeitszeiteinträge" textFill="WHITE">
+                     <VBox.margin>
+                        <Insets bottom="20.0" left="300.0" />
+                     </VBox.margin>
+                  </Label>
                   <HBox>
                      <children>
                         <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="175.0" style="-fx-background-color: #ffffff;" text="Arbeitszeiten" textFill="#0c2053">
@@ -107,13 +147,21 @@
          <children>
             <HBox>
                <children>             
-                  <Button fx:id="btnThisWeek" mnemonicParsing="false" onAction="#showSampleData" style="-fx-background-color: #ffffff; -fx-border-color: #9dadca;" styleClass="overview" text="Aktuelle Woche" textFill="#0f358e" />
-                  <Button fx:id="btnThisMonth" mnemonicParsing="false" onAction="#showSampleData" style="-fx-background-color: #ffffff; -fx-border-color: #9dadca;" styleClass="overview" text="Aktueller Monat" textFill="#0f358e">
+                  <Button fx:id="btnThisWeek" mnemonicParsing="false" onAction="#showRealData" style="-fx-background-color: #ffffff; -fx-border-color: #9dadca;" styleClass="overview" text="Aktuelle Woche" textFill="#0f358e" />
+                  <Button fx:id="btnThisMonth" mnemonicParsing="false" onAction="#showRealData" style="-fx-background-color: #ffffff; -fx-border-color: #9dadca;" styleClass="overview" text="Aktueller Monat" textFill="#0f358e">
                      <HBox.margin>
                         <Insets left="5.0" right="5.0" />
                      </HBox.margin>
                   </Button>
-                  <Button fx:id="btnOtherMonth" mnemonicParsing="false" onAction="#showSampleData" style="-fx-background-color: #ffffff; -fx-border-color: #9dadca;" text="Zufallswerte" textFill="#0f358e" />
+                  <Button fx:id="btnSampleMonth" mnemonicParsing="false" onAction="#showRealData" style="-fx-background-color: #ffffff; -fx-border-color: #9dadca;" text="Zufallswerte" textFill="#0f358e" />
+                  <Button fx:id="btnWorkTime" mnemonicParsing="false" onAction="#switchScene" style="-fx-background-color: #709ce7;" stylesheets="@Style.css" text="Arbeitszeit erfassen" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold" size="12.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="60.0" />
+                     </HBox.margin>
+                  </Button>
                </children>
             </HBox>
             <HBox prefHeight="100.0" prefWidth="200.0">
@@ -121,58 +169,19 @@
                   <VBox alignment="TOP_CENTER">
                      <children>
                         <Label fx:id="txtDate" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0" prefWidth="149.0" />
-                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #dddfe7; -fx-background-radius: 5;">
-                           <center>
-                              <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <Label fx:id="txtWorkTime" text="8:51" textFill="#0c2053">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Ø  Arbeitszeit *" textFill="#0c2053" />
-                                 </children>
-                              </VBox>
-                           </center>
-                           <VBox.margin>
-                              <Insets bottom="5.0" top="5.0" />
-                           </VBox.margin>
-                        </BorderPane>
-                        <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="125.0" style="-fx-background-color: #dddfe7; -fx-background-radius: 5;">
-                           <center>
-                              <VBox alignment="CENTER" BorderPane.alignment="CENTER">
-                                 <children>
-                                    <Label fx:id="txtBreak" text="00:30" textFill="#0c2053">
-                                       <font>
-                                          <Font name="System Bold" size="15.0" />
-                                       </font>
-                                    </Label>
-                                    <Label text="Ø Pausenzeit *" textFill="#0c2053" />
-                                 </children>
-                              </VBox>
-                           </center>
-                        </BorderPane>
-                        <Button fx:id="btnWorkTime" mnemonicParsing="false" onAction="#switchScene" style="-fx-background-color: #709ce7;" stylesheets="@Style.css" text="Arbeitszeit erfassung" textFill="WHITE">
-                           <VBox.margin>
-                              <Insets top="10.0" />
-                           </VBox.margin>
-                           <font>
-                              <Font name="System Bold" size="12.0" />
-                           </font>
-                        </Button>
+                        <BarChart fx:id="chart" alternativeColumnFillVisible="true" animated="false" barGap="2.0" categoryGap="2.0" legendVisible="false" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="500.0" stylesheets="@Style.css">
+                          <xAxis>
+                            <CategoryAxis animated="false" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis autoRanging="false" side="LEFT" tickUnit="2.0" upperBound="10.0" />
+                          </yAxis>
+                        </BarChart>
                      </children>
                      <padding>
                         <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                      </padding>
                   </VBox>
-                  <BarChart fx:id="chart" alternativeRowFillVisible="false" barGap="2.0" categoryGap="2.0" horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" legendVisible="false" stylesheets="@Style.css" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
-                    <xAxis>
-                      <CategoryAxis animated="false" side="BOTTOM" />
-                    </xAxis>
-                    <yAxis>
-                      <NumberAxis autoRanging="false" side="LEFT" tickUnit="2.0" upperBound="10.0" />
-                    </yAxis>
-                  </BarChart>
                </children>
             </HBox>
          </children>

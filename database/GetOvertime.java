@@ -202,7 +202,7 @@ import java.util.*;
     * @return their required working time per day as hh:mm:ss
     */
 
-   public String getUsusalWorkingTime(int MA_ID){
+   public String getPlannedWorkingTime(int MA_ID){
      String query = "SELECT MA_Sollarbeitszeit FROM mitarbeiter "
        + "WHERE MA_ID = " + MA_ID;
      Statement stmt = null;

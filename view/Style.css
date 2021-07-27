@@ -24,5 +24,6 @@ Button:hover{
 }
 
 .chart-bar {
-	-fx-background-color: #f92047;  
+	-fx-background-color: #f92047;
+	-fx-border-color: #0D2253;
 }

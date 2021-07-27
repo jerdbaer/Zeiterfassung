@@ -41,10 +41,10 @@ public class OverviewController {
 	private Button btnThisMonth;
 
 	@FXML
-	private Button btnOtherMonth;
-	
+	private Button btnSampleMonth;
+
 	@FXML
-    private Label txtDate;
+	private Label txtDate;
 
 	@FXML
 	private Label txtWorkTime;
@@ -70,15 +70,13 @@ public class OverviewController {
 		txtBreak.setText(averageBreakTimePrintable);
 
 		var averageOvertimeInSeconds = data.get("Ueberstunden");
-		var usualWorkingTime = dataController.getUsusalWorkingTime(MA_ID);
+		var usualWorkingTime = dataController.getPlannedWorkingTime(MA_ID);
 
 		var averageOvertime = LocalTime.parse(usualWorkingTime);
 
 		averageOvertime = averageOvertime.plusSeconds(averageOvertimeInSeconds);
 		var averageOverTimePrintable = averageOvertime.format(DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT));
 		txtWorkTime.setText(averageOverTimePrintable);
-	
-
 
 	}
 
@@ -102,68 +100,69 @@ public class OverviewController {
 
 	@FXML
 	void showRealData(ActionEvent event) {
-		
+		var buttons = new ArrayList<Button>();
+		buttons.add(btnThisWeek);
+		buttons.add(btnThisMonth);
+		buttons.add(btnSampleMonth);
+		style(buttons, event);
 		chart.getData().clear();
-		
-		var buttonclicked = (Button)event.getSource();
+
+		var buttonclicked = (Button) event.getSource();
 		Series<String, Number> workTime;
-		if(buttonclicked == btnThisMonth) {
+		if (buttonclicked == btnThisMonth) {
 			workTime = thisMonth("month");
-		}else if(buttonclicked == btnThisWeek) {
+		} else if (buttonclicked == btnThisWeek) {
 			workTime = thisMonth("week");
-		}else {
+		} else {
 			workTime = new XYChart.Series<String, Number>();
 			final int MINIMUM = 6;
 			final int MAXIMUM = 10;
-			txtDate.setText("Zufï¿½lliger Monat");
-			
+			txtDate.setText("Zufälliger Monat");
+
 			for (int i = 0; i <= 31; i++) {
 				var randomNum = MINIMUM + (int) (Math.random() * (MAXIMUM - MINIMUM));
-				workTime.getData().add(new XYChart.Data<String, Number>(""+ i, randomNum));
+				workTime.getData().add(new XYChart.Data<String, Number>("" + i, randomNum));
 			}
-			
+
 		}
 
-		
-
 		chart.getData().add(workTime);
-    	
-
 
 	}
 
-  private void style(ArrayList<Button> buttons, ActionEvent buttonclick) {
-    	var clickedButton = (Button)buttonclick.getSource();
-    	var otherButtons = buttons;
-    	var clickedButtonIsInButtons = buttons.stream().anyMatch(button -> button.equals(clickedButton));
-    	otherButtons.remove(clickedButton);
-    	if(clickedButtonIsInButtons) {
-    		clickedButton.setStyle("-fx-background-color: #0f358e; -fx-border-color: #0f358e; -fx-text-fill: #ffffff;");
-    		
-    		for(Button button : otherButtons) {
-    			button.setStyle("-fx-background-color: #ffffff;"
-    					+ "	-fx-border-color:  #9dadca;"
-    					+ "	-fx-text-fill:  #0f358e;");
-    		}
-  
+	private void style(ArrayList<Button> buttons, ActionEvent buttonclick) {
+		var clickedButton = (Button) buttonclick.getSource();
+		var otherButtons = buttons;
+		var clickedButtonIsInButtons = buttons.stream().anyMatch(button -> button.equals(clickedButton));
+		otherButtons.remove(clickedButton);
+		if (clickedButtonIsInButtons) {
+			clickedButton.setStyle("-fx-background-color: #0f358e; -fx-border-color: #0f358e; -fx-text-fill: #ffffff;");
+
+			for (Button button : otherButtons) {
+				button.setStyle("-fx-background-color: #ffffff;" + "	-fx-border-color:  #9dadca;"
+						+ "	-fx-text-fill:  #0f358e;");
+			}
+		}
+	}
+
 	private Series<String, Number> thisMonth(String timespann) {
 		var SOLL_ARBEITSZEIT_IN_STUNDEN = 8;
 		var MA_ID = LoginController.MA_Data.getMA_ID();
 		int today;
-		if(timespann.equals("month")) {
+		if (timespann.equals("month")) {
 			today = LocalDate.now().getDayOfMonth();
-			
-		}else {
+
+		} else {
 			today = LocalDate.now().getDayOfWeek().getValue();
 		}
 		var beginDate = LocalDate.now().minusDays(today - 1);
 		var endDate = LocalDate.now();
-		
+
 		var beginDateLabel = formatDate(beginDate);
 		var endDateLabel = formatDate(endDate);
-		
+
 		txtDate.setText(beginDateLabel + " - " + endDateLabel);
-		
+
 		var overtimeList = fetchData(MA_ID, beginDate.toString(), endDate.toString());
 
 		var workTime = new XYChart.Series<String, Number>();
@@ -194,8 +193,9 @@ public class OverviewController {
 
 		return data;
 	}
-	
+
 	private String formatDate(LocalDate date) {
-		return String.format("%02d.%02d.%4d" , date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+		return String.format("%02d.%02d.%4d", date.getDayOfMonth(), date.getMonthValue(), date.getYear());
 	}
+
 }

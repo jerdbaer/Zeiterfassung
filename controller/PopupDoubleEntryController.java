@@ -1,8 +1,11 @@
 package controller;
 
 import java.sql.BatchUpdateException;
+import java.time.Duration;
+import java.time.LocalTime;
 
 import database.AddWorkingTime;
+import database.GetOvertime;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -95,7 +98,8 @@ public class PopupDoubleEntryController {
 		var beginTime = data.getWorkBegin();
 		var endTime = data.getWorkEnd();
 		var totalBreak = data.getTotalBreakTime();
-		var overtime = "00:00:00";
+		setOvertime();
+		var overtime = data.getOvertime();
 		var comment = data.getComment();
 
 		addWorkTime.modifyWorkingTime(beginTime, endTime, totalBreak, overtime, comment);
@@ -105,5 +109,17 @@ public class PopupDoubleEntryController {
 
 
 	}
+	
+	private void setOvertime() {
+    	var calculations = MainController.getCalculationModel();
+    	var totalWorkingTimeString = calculations.getTotalWorkTime();
+    	var totalWorkingTime = LocalTime.parse(totalWorkingTimeString);
+    	var MA_ID = LoginController.MA_Data.getMA_ID();
+    	var dataController = new GetOvertime();
+    	var plannedWorkingtimeString = dataController.getPlannedWorkingTime(MA_ID);
+    	var plannedWorkingTime = LocalTime.parse(plannedWorkingtimeString);
+    	var overtime = Duration.between(plannedWorkingTime, totalWorkingTime);
+    	calculations.setOvertime(overtime);
+    }
 
 }

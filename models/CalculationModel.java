@@ -12,6 +12,7 @@ public class CalculationModel {
 	private String workEnd;
 	private String totalBreakTime;
 	private String totalWorkTime;
+	private String overtime;
 	private String comment;
 	
 	public String getSelectedDay() {
@@ -58,5 +59,16 @@ public class CalculationModel {
 		this.totalWorkTime =String.format("%02d:%02d:%02d", totalWorkTime.toHoursPart(),
 				totalWorkTime.toMinutesPart(), totalWorkTime.toSecondsPart());
 	}
+
+	public String getOvertime() {
+		return this.overtime;
+	}
+
+	public void setOvertime(Duration overtime) {
+		this.overtime = String.format("%02d:%02d:%02d", overtime.toHoursPart(),
+				overtime.toMinutesPart(), overtime.toSecondsPart());
+		
+	}
+		
 	
 }
