@@ -34,7 +34,7 @@
                         <Insets left="7.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="userinput" onKeyTyped="#animation" promptText="Benutzername" style="-fx-background-color: transparent; -fx-border-color: transparent transparent #ffffff transparent;" styleClass="text-input">
+                  <TextField fx:id="userinput" onKeyTyped="#animation" promptText="Benutzername" styleClass="login">
                      <font>
                         <Font name="SansSerif Regular" size="12.0" />
                      </font>
@@ -44,7 +44,7 @@
                         <Insets left="7.0" />
                      </VBox.margin>
                   </Label>
-                  <PasswordField fx:id="passswordinput" onKeyTyped="#animation" promptText="Password" style="-fx-background-color: transparant; -fx-border-color: transparent transparent #ffffff transparent;" styleClass="text-input">
+                  <PasswordField fx:id="passswordinput" onKeyTyped="#animation" promptText="Password" styleClass="login">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
