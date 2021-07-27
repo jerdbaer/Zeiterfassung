@@ -24,6 +24,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 
+//------------------ needs to be refactored is totally confusing that it is not the main controller right? it is the CreateRecortController -----------
+
+
+/**
+ * Program to create a new database entry/record of working day information 
+ * 
+ * @author Tom Weißflog
+ * @version 1.0
+ */
+
 public class MainController {
 
 	@FXML
@@ -197,6 +207,10 @@ public class MainController {
 	@FXML
 	private Button btnInputValidation;
 
+	/**
+	 * Initializes user input validation while user is typing and displays user
+	 * input at window
+	 */
 	@FXML
 	public void initialize() {
 
@@ -225,7 +239,19 @@ public class MainController {
 		mainViewInputRestrictionController.setTextFormatter(textfieldHour, textfieldMinute);
 
 	}
-
+	
+	/**
+	 * Handles variable user inputs possibilities and hides selected work or 
+	 * break input period line.
+	 * Remark: User can provide 3 work periods and 5 break periods. A new period can be 
+	 * added to the window content if the previous period is fully filled with 
+	 * start and end times. User can delete the last period in the work or break 
+	 * section if needed, but never the first one.
+	 * 
+	 * @param event button click on "+" for showing next period line, button 
+	 * click on "-" for hiding last period line and clear textfield content
+	 * @see showBox()
+	 */
 	@FXML
 	void hideHBox(ActionEvent event) {
 		Button buttonpressed = (Button) event.getSource();
@@ -273,6 +299,11 @@ public class MainController {
 
 	}
 
+	/**
+	 * Resets all reactable input segments to default, except date picker value.
+	 * Date picker will be left at the day selected and can be adjusted by user.
+	 * @param event button click on "Zurücksetzen"
+	 */
 	@FXML
 	void reset(ActionEvent event) {
 		TextField[] allTextFields = { txtfieldWorkStart1Hours, txtfieldWorkStart1Minutes, txtfieldWorkEnd1Hours,
@@ -297,11 +328,27 @@ public class MainController {
 
 	}
 
+	/**
+	 * Clears textfield content
+	 * @param textfields are an array of textfields to get user inputs
+	 */
 	private void clear(TextField[] textfields) {
 		for (TextField textfield : textfields)
 			textfield.clear();
 	}
 
+	/**
+	 * Handles variable user inputs possibilities and shows additional work or 
+	 * break input period line.
+	 * Remark: User can provide 3 work periods and 5 break periods. A new period can be 
+	 * added to the window content if the previous period is fully filled with 
+	 * start and end times. User can delete the last period in the work or break 
+	 * section if needed, but never the first one.
+	 * 
+	 * @param event button click on "+" for showing next period line, button 
+	 * click on "-" for hiding last period line and clear textfield content
+	 * @see showBox()
+	 */
 	@FXML
 	void showHBox(ActionEvent event) {
 
@@ -346,16 +393,32 @@ public class MainController {
 
 	}
 
+	/**
+	 * Validates if any textfield is blank 
+	 * @param textfields
+	 * @return boolean 
+	 */
 	private boolean isBlankTextFields(TextField[] textfields) {
 		return Arrays.stream(textfields).anyMatch(textfield -> textfield.getText().isBlank());
 	}
 
+	/**
+	 * Handles the user's demand to abort creating a new working day record and
+	 * opens the related popup window for user interaction
+	 * @param event button click on "Abbrechen"
+	 */
 	@FXML
 	void abort(ActionEvent event) {
 		var swapStageController = new SwapSceneController();
 		swapStageController.showPopup("/view/PopupAbort.fxml");
 	}
 
+	/**
+	 * Starts input validation based on given legal and company requirements.
+	 * @param event button click on "Eingabe prüfen"
+	 * 
+	 * @see InputValidationController
+	 */
 	@FXML
 	void validateInput(ActionEvent event) {
 
@@ -418,13 +481,24 @@ public class MainController {
 		}
 
 	}
-
+/**
+ * Class CalculationModel for computing working day data based on unser inputs
+ */
 	private static CalculationModel calculationModel;
 
+	/**
+	 * Gets calculation model
+	 * @return calculation model
+	 */
 	public static CalculationModel getCalculationModel() {
 		return calculationModel;
 	}
 
+	/**
+	 * Computes user inputs to working day data 
+	 * @param formattedInput list of working times, break times, work interruptions 
+	 * and break interruptions in Timespann
+	 */
 	private void computeInput(ArrayList<Timespann> formattedInput) {
 		var calculationController = new CalculationController(formattedInput);
 		calculationModel = new CalculationModel();
@@ -455,6 +529,10 @@ public class MainController {
 
 	}
 
+	/**
+	 * Collects all textfield inputs and creates a final list of all works and breaks
+	 * @return list of single work and break periods for further processing
+	 */
 	private ArrayList<Timespann> formatInput() {
 		// all TextFields
 		TextField[] work1 = { txtfieldWorkStart1Hours, txtfieldWorkStart1Minutes, txtfieldWorkEnd1Hours,

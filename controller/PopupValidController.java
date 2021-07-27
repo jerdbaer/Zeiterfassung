@@ -8,6 +8,14 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+/**
+ * Program to open a new popup window for user interaction.
+ * Displays valid working day record information to get user decision how to proceed.
+ * 
+ * @author Tom Weißflog
+ * @version 1.0
+ *
+ */
 public class PopupValidController {
 
     @FXML
@@ -18,6 +26,12 @@ public class PopupValidController {
     
     public static AddWorkingTime addWorkingTime;
     
+    /**
+     * Initializes popup window content and displays working time, total break 
+     * and working day date for user check.
+     * Requires user decision to save record to database or to go back 
+     * to time recording window.
+     */
     @FXML
     public void initialize() {
     	var calculations = MainController.getCalculationModel();
@@ -28,14 +42,22 @@ public class PopupValidController {
     	txtTimes.setText("Arbeitszeit " + workingTime + " mit " + totalBreakTime + " Pausenzeit" );
     	
     }
-
+    
+    /**
+     * Closes popup window and brings user back to time recording window
+     * @param event button click "Abbrechen" 
+     */
     @FXML
     void abortToWorktime(ActionEvent event) {
     	var popup = ((Button)event.getSource()).getScene().getWindow();
-    	popup.hide();
-    	
+    	popup.hide();  	
     }
 
+    /**
+     * Saves the created working day record for declared user ID to database and 
+     * closes popup window afterwards.
+     * @param event button click on "Speichern"
+     */
     @FXML
     void saveToMenu(ActionEvent event) {
     	var calculations = MainController.getCalculationModel();

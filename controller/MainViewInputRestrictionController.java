@@ -6,6 +6,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 
+/*
+ * Program to validate the userer's input while user is typing in working and break times in user interface and displays
+ * all input (key or mouse driven) in the related 
+ * 
+ * @author Tom Weißflog
+ * @version 1.0
+ */
 public class MainViewInputRestrictionController {
 	
 	private TextField[] textfieldHour;
