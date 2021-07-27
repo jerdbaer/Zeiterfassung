@@ -85,7 +85,7 @@ public class PopupDoubleEntryController {
 
 	}
 
-	/**
+    /**
      * Closes popup window and brings user back to time recording window
      * @param event button click "Abbrechen" 
      */
@@ -97,9 +97,9 @@ public class PopupDoubleEntryController {
     	popup.hide();
 	}
 
-	/**
-     * Saves the created working day record for declared user ID to database and 
-     * closes popup window afterwards.
+    /**
+     * Overwrites the existing working day record in data base with the new the created record  
+     * for declared user ID and closes popup window afterwards.
      * @param event button click on "Speichern"
      */
 	@FXML
