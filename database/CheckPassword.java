@@ -128,7 +128,7 @@ public class CheckPassword{
    * Overwrites the stored password for an existing employee's account in case the old password was provided correctly 
    * by the user's input
    *
-   * @param MA_ID employee' account for which the password should be overwritten 
+   * @param MA_ID employee's account for which the password should be overwritten 
    * @param oldPw old password
    * @param newPw new password
    * 
