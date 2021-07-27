@@ -226,20 +226,20 @@ import java.util.*;
      return result;
    }
    
-   public HashMap<String, String> getAverageData(int MA_ID){
-	   String query = "SELECT SEC_TO_TIME(AVG(TIME_TO_SEC(Pausengesamtzeit_Tag))), "
-			   + "SEC_TO_TIME(SUM(TIME_TO_SEC(Ueberstunden_Tag))/COUNT(Ueberstunden_Tag)) "
+   public HashMap<String, Integer> getAverageData(int MA_ID){
+	   String query = "SELECT AVG(TIME_TO_SEC(Pausengesamtzeit_Tag)), "
+			   + "AVG(TIME_TO_SEC(Ueberstunden_Tag)) "
 			   + "FROM zeitkonto WHERE MA_ID = " + MA_ID;
 	   Statement stmt = null;
-	   var result = new HashMap<String, String>();
+	   var result = new HashMap<String, Integer>();
 	   try {
 		   connection.setAutoCommit(false);
 		   stmt = connection.createStatement();
 		   ResultSet rs = stmt.executeQuery(query);
 		   connection.commit();
 		   rs.next();
-		   result.put("Pausengesamtzeit", rs.getString(1));
-		   result.put("Ueberstunden", rs.getString(2)); // BUG: negative Sekunden werden in eine positive Zeit verwandelt
+		   result.put("Pausengesamtzeit", rs.getInt(1));
+		   result.put("Ueberstunden", rs.getInt(2)); 
 		   stmt.close();
 	   } catch (SQLException e) {
 		   System.err.println("Couldn't reach data");
@@ -249,7 +249,7 @@ import java.util.*;
 
    public static void main(String[] args){
 	   var getOT = new GetOvertime();
-	   System.out.println(getOT.getUsusalWorkingTime(134));
+	   System.out.println(getOT.getSum(134));
 	   var averageData = getOT.getAverageData(134);
 	   System.out.println("Durchschnittspause: " + averageData.get("Pausengesamtzeit"));
 	   System.out.println("Durchschnittsüberstunden: " + averageData.get("Ueberstunden"));
