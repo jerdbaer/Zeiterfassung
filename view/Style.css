@@ -7,6 +7,16 @@ Button:hover{
 	
 }
 
+.text-input{
+	-fx-text-fill: #ffffff;
+	-fx-highlight-text-fill: #ffffff;	
+}
+
+.square:hover{
+	-fx-border-width: 3;
+	-fx-border-color: #ffffff;
+}
+
 .header:hover{
 	-fx-underline: true;
 }

@@ -24,27 +24,27 @@
                   <Image url="@AfSLogo.png" />
                </image>
                <HBox.margin>
-                  <Insets right="30.0" />
+                  <Insets right="30.0" top="10.0" />
                </HBox.margin>
             </ImageView>
             <VBox>
                <children>
-                  <Label text="Benutzername" textFill="WHITE">
+                  <Label fx:id="txtUser" text="Benutzername" textFill="WHITE" visible="false">
                      <VBox.margin>
                         <Insets left="7.0" />
                      </VBox.margin>
                   </Label>
-                  <TextField fx:id="userinput" promptText="Benutzername" style="-fx-background-color: transparent; -fx-border-color: transparent transparent #ffffff transparent;">
+                  <TextField fx:id="userinput" onKeyTyped="#animation" promptText="Benutzername" style="-fx-background-color: transparent; -fx-border-color: transparent transparent #ffffff transparent;" styleClass="text-input">
                      <font>
                         <Font name="SansSerif Regular" size="12.0" />
                      </font>
                   </TextField>
-                  <Label text="Password" textFill="WHITE">
+                  <Label fx:id="txtPassword" text="Password" textFill="WHITE" visible="false">
                      <VBox.margin>
                         <Insets left="7.0" />
                      </VBox.margin>
                   </Label>
-                  <PasswordField fx:id="passswordinput" promptText="Password" style="-fx-background-color: transparant; -fx-border-color: transparent transparent #ffffff transparent;">
+                  <PasswordField fx:id="passswordinput" onKeyTyped="#animation" promptText="Password" style="-fx-background-color: transparant; -fx-border-color: transparent transparent #ffffff transparent;" styleClass="text-input">
                      <VBox.margin>
                         <Insets bottom="5.0" />
                      </VBox.margin>
@@ -60,10 +60,13 @@
       </HBox>
    </center>
    <bottom>
-      <Button fx:id="loginbutton" mnemonicParsing="false" onAction="#login" prefWidth="75.0" text="Login" BorderPane.alignment="CENTER">
+      <Button fx:id="loginbutton" mnemonicParsing="false" onAction="#login" prefWidth="100.0" style="-fx-background-color: #f92047;" text="Login" textFill="WHITE" BorderPane.alignment="CENTER">
          <BorderPane.margin>
-            <Insets left="300.0" />
-         </BorderPane.margin></Button>
+            <Insets left="320.0" />
+         </BorderPane.margin>
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font></Button>
    </bottom>
    <padding>
       <Insets bottom="40.0" left="40.0" right="40.0" top="40.0" />
