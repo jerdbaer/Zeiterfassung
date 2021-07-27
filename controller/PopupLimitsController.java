@@ -11,8 +11,8 @@ import javafx.scene.control.TextField;
 
 /**
  * Program to open a new popup window for user interaction.
- * Warns about imminent double entry for working day record which results in an
- * overwrite of existing record. Requires user decision how to proceed.
+ * Requires an explanation (user input) if work begin and/or work end exceed 
+ * organisational working time frame.
  * 
  * @author Tom Weißflog
  * @version 1.0
