@@ -1,7 +1,6 @@
 package controller;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

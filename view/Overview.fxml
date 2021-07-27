@@ -147,7 +147,7 @@
                               </VBox>
                            </center>
                         </BorderPane>
-                        <Button fx:id="btnWorkTime" mnemonicParsing="false" style="-fx-background-color: #709ce7;" stylesheets="@Style.css" text="Arbeitszeit erfassung" textFill="WHITE">
+                        <Button fx:id="btnWorkTime" mnemonicParsing="false" onAction="#switchScene" style="-fx-background-color: #709ce7;" stylesheets="@Style.css" text="Arbeitszeit erfassung" textFill="WHITE">
                            <VBox.margin>
                               <Insets top="10.0" />
                            </VBox.margin>
