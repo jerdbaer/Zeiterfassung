@@ -68,7 +68,7 @@ public class InitDB{
   private void createConnection() {
     String url = "jdbc:mysql://localhost/?rewriteBatchedStatements=true";
     String user = "root";
-    String pass = "1234";
+    String pass = "xxxxxxxx";
     try {
       System.out.println("Creating DBConnection");
       connection = DriverManager.getConnection(url, user, pass);
