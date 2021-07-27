@@ -87,8 +87,8 @@ public class AddWorkingTime {
 	 * Adds new record of working day information to database
 	 * Creates MySQL command and passes it to database, where it will be executed.
 	 *
-	 * @param beginTime  is the begin of working time at a working days in hh:mm:ss
-	 * @param endTime    is the end of working time at a working days in hh:mm:ss
+	 * @param beginTime  is the begin of working time at a working day in hh:mm:ss
+	 * @param endTime    is the end of working time at a working day in hh:mm:ss
 	 * @param totalBreak is the total break duration at a working day in hh:mm:ss
 	 * @param overtime   is the amount of working time which exceeds the individual planned working time of employee 
 	 * 					 in hh:mm:ss
