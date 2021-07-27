@@ -7,9 +7,11 @@ Button:hover{
 	
 }
 
-.text-input{
+.login{
 	-fx-text-fill: #ffffff;
-	-fx-highlight-text-fill: #ffffff;	
+	-fx-highlight-text-fill: #ffffff;
+	-fx-background-color: #0D2253; 
+	-fx-border-color: transparent transparent #ffffff transparent;
 }
 
 .square:hover{
@@ -21,7 +23,6 @@ Button:hover{
 	-fx-underline: true;
 }
 
-
-
-
-
+.chart-bar {
+	-fx-background-color: #f92047;  
+}

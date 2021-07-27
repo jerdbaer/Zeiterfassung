@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
@@ -39,7 +40,7 @@ public class OverviewController {
     private Button btnWorkTime;
     
     @FXML
-    private LineChart<Number, Number> chart;
+    private BarChart<String, Number> chart;
 
     @FXML
     void switchScene(ActionEvent event) {
@@ -72,26 +73,26 @@ public class OverviewController {
 
     	style(buttons, event);
     	chart.getData().clear();
-    	chart.setCreateSymbols(false);
     	
     	final int MINIMUM = 6;
     	final int MAXIMUM = 10;
     	final int SOLL = 8;
-    	var workTime = new XYChart.Series<Number, Number>();
+    	var workTime = new XYChart.Series<String, Number>();
     	workTime.setName("Arbeitszeit");
-    	var sollTime = new XYChart.Series<Number, Number>();
+    	var sollTime = new XYChart.Series<String, Number>();
     	sollTime.setName("Soll Arbeitszeit");
   
 		for (int i=0;i<=31;i++)
 		{
 			var randomNum = MINIMUM + (int)(Math.random() * (MAXIMUM - MINIMUM));
-			sollTime.getData().add(new XYChart.Data<Number, Number>(i,SOLL));
-			workTime.getData().add(new XYChart.Data<Number, Number>(i,randomNum));
+			sollTime.getData().add(new XYChart.Data<String, Number>(""+i,SOLL));
+//			workTime.getData().add(new XYChart.Data<String, Number>(""+i,randomNum));
 		}
-		chart.getData().add(sollTime);					
-		chart.getData().add(workTime);
-		sollTime.nodeProperty().get().setStyle("-fx-stroke: #0f358e;");
-		workTime.nodeProperty().get().setStyle("-fx-stroke: #f92047;");
+		chart.getData().add(sollTime);
+//		chart.getData().get(0).getNode().setStyle("-fx-bar-fill: #0f358e;");
+//		chart.getData().add(workTime);
+//		sollTime.nodeProperty.get().setStyle("-fx-bar-fill: -fx-soll-time;");
+//		workTime.nodeProperty().get().setStyle("-fx-stroke: #f92047;");
 	}
     
     private void style(ArrayList<Button> buttons, ActionEvent buttonclick) {
