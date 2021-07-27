@@ -162,13 +162,13 @@ import java.util.*;
    /**
     * Collects Overtime for multiple dates in a time interval.
     * Data will be displayed in a chart in UI
-    * 
+    *
     * @param MA_ID is the ID of the employee whose data needs to be displayed
     * @param beginDate is the begin of the timespan which includes {@code beginDate}
     * @param endDate ist the end of the timespan which includes {@code endDate}
     * @return a HashMap of the data, the keys are the names of the columns in the table
     */
-   
+
    public HashMap<String, String> getMultipleDays(int MA_ID, String beginDate, String endDate){
      String query = "SELECT work_date, Ueberstunden_Tag FROM zeitkonto "
       + "WHERE MA_ID = " + MA_ID + " AND "
@@ -194,9 +194,65 @@ import java.util.*;
     }
     return result;
    }
+   
+   /**
+    * Searchs the database for the required working time per day for an employee
+    * 
+    * @param MA_ID the ID of the employee in question
+    * @return their required working time per day as hh:mm:ss
+    */
+
+   public String getUsusalWorkingTime(int MA_ID){
+     String query = "SELECT MA_Sollarbeitszeit FROM mitarbeiter "
+       + "WHERE MA_ID = " + MA_ID;
+     Statement stmt = null;
+     String result = "";
+     try{
+       connection.setAutoCommit(false);
+       stmt = connection.createStatement();
+       ResultSet rs = stmt.executeQuery(query);
+       connection.commit();
+       rs.next();
+       result = rs.getString(1);
+       stmt.close();
+     } catch (SQLException e) {
+       System.err.println("Could not get the necessary data");
+     } finally {
+       try{
+         if (stmt != null)
+           stmt.close();
+       } catch (SQLException e){}
+     }
+     return result;
+   }
+   
+   public HashMap<String, String> getAverageData(int MA_ID){
+	   String query = "SELECT SEC_TO_TIME(AVG(TIME_TO_SEC(Pausengesamtzeit_Tag))), "
+			   + "SEC_TO_TIME(SUM(TIME_TO_SEC(Ueberstunden_Tag))/COUNT(Ueberstunden_Tag)) "
+			   + "FROM zeitkonto WHERE MA_ID = " + MA_ID;
+	   Statement stmt = null;
+	   var result = new HashMap<String, String>();
+	   try {
+		   connection.setAutoCommit(false);
+		   stmt = connection.createStatement();
+		   ResultSet rs = stmt.executeQuery(query);
+		   connection.commit();
+		   rs.next();
+		   result.put("Pausengesamtzeit", rs.getString(1));
+		   result.put("Ueberstunden", rs.getString(2)); // BUG: negative Sekunden werden in eine positive Zeit verwandelt
+		   stmt.close();
+	   } catch (SQLException e) {
+		   System.err.println("Couldn't reach data");
+	   }
+	   return result;
+   }
 
    public static void main(String[] args){
-     
+	   var getOT = new GetOvertime();
+	   System.out.println(getOT.getUsusalWorkingTime(134));
+	   var averageData = getOT.getAverageData(134);
+	   System.out.println("Durchschnittspause: " + averageData.get("Pausengesamtzeit"));
+	   System.out.println("Durchschnittsüberstunden: " + averageData.get("Ueberstunden"));
    }
 
  }
