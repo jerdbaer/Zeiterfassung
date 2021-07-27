@@ -79,6 +79,7 @@ public class OverviewController {
 		txtWorkTime.setText(averageOverTimePrintable);
 	
 
+
 	}
 
 	@FXML
@@ -114,7 +115,7 @@ public class OverviewController {
 			workTime = new XYChart.Series<String, Number>();
 			final int MINIMUM = 6;
 			final int MAXIMUM = 10;
-			txtDate.setText("Zufälliger Monat");
+			txtDate.setText("Zufï¿½lliger Monat");
 			
 			for (int i = 0; i <= 31; i++) {
 				var randomNum = MINIMUM + (int) (Math.random() * (MAXIMUM - MINIMUM));
@@ -126,9 +127,25 @@ public class OverviewController {
 		
 
 		chart.getData().add(workTime);
+    	
+
 
 	}
 
+  private void style(ArrayList<Button> buttons, ActionEvent buttonclick) {
+    	var clickedButton = (Button)buttonclick.getSource();
+    	var otherButtons = buttons;
+    	var clickedButtonIsInButtons = buttons.stream().anyMatch(button -> button.equals(clickedButton));
+    	otherButtons.remove(clickedButton);
+    	if(clickedButtonIsInButtons) {
+    		clickedButton.setStyle("-fx-background-color: #0f358e; -fx-border-color: #0f358e; -fx-text-fill: #ffffff;");
+    		
+    		for(Button button : otherButtons) {
+    			button.setStyle("-fx-background-color: #ffffff;"
+    					+ "	-fx-border-color:  #9dadca;"
+    					+ "	-fx-text-fill:  #0f358e;");
+    		}
+  
 	private Series<String, Number> thisMonth(String timespann) {
 		var SOLL_ARBEITSZEIT_IN_STUNDEN = 8;
 		var MA_ID = LoginController.MA_Data.getMA_ID();
