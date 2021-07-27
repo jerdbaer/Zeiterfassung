@@ -113,12 +113,12 @@ import java.sql.*;
    /**
     * Selects the time of working end of the database record on the day before the selected date for the new working 
     * time record for user input validation.
-    * If there is no entry for the previous day, 00:00:00 will be returned to ensure that there will be no error in validation.
     * 
     * @param MA_ID individual employee's id in int
     * @param yesterday date of the day before the selected date for working time record
     * 
-    * @return time of working end of the previous day as String String in hh:mm:ss
+    * @return time of working end of the previous day as String String in hh:mm:ss. If there is no entry for the previous day, 
+    * 00:00:00 will be returned to ensure that there will be no error in validation.
     */
    public String getWorkEndYesterday(int MA_ID, String yesterday){
      String query = "SELECT Arbeitszeit_Ende FROM zeitkonto "
@@ -148,12 +148,12 @@ import java.sql.*;
    /**
     * Selects the time of working begin of the database record on the day after the selected date for the new working 
     * time record for user input validation.
-    * If there is no entry for the following day, 23:59:59 will be returned to ensure that there will be mistake in validation.
     * 
     * @param MA_ID individual employee's id number in int
     * @param tomorrow date of the day after the selected date for working time record
     * 
-    * @return time of working begin of the following day as String String in hh:mm:ss
+    * @return time of working begin of the following day as String String in hh:mm:ss. If there is no entry for the following day, 
+    * 23:59:59 will be returned to ensure that there will be mistake in validation.
     */
    public String getWorkBeginTomorrow(int MA_ID, String tomorrow){
      String query = "SELECT Arbeitszeit_Beginn FROM zeitkonto "
