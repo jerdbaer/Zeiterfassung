@@ -530,7 +530,8 @@ public class MainController {
 	}
 
 	/**
-	 * Collects all textfield inputs and creates a final list of all works and breaks
+	 * Collects all textfield inputs and creates a final list of all works, breaks, interruptions and break interruptions
+	 * sorted chronologigal by type (work1-3, break1-5, interruption1-2, break interruption1-4)
 	 * @return list of single work and break periods for further processing
 	 */
 	private ArrayList<Timespann> formatInput() {
