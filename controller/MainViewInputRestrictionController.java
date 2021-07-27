@@ -6,9 +6,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 
-/*
- * Program to validate the userer's input while user is typing in working and break times in user interface and displays
- * all input (key or mouse driven) in the related 
+/**
+ * This provides rules to restrict the possible key input (includes Strg+V or Mouse copy) in Textfields
+ * Restrictions: only Numbers, only hours (0-23)m only minutes(0-59)
  * 
  * @author Tom Weißflog
  * @version 1.0
