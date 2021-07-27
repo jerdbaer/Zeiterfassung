@@ -1,7 +1,7 @@
 package exceptions;
 
 /**
- * Ein Fehler, der geworfen wird, wenn das Passwort falsch ist
+ * Exception that is is thrown whenever the password input is wrong.
  */
 public class FalsePasswordException extends Exception {
   public FalsePasswordException(){}
