@@ -16,8 +16,8 @@ class DatepickerComplianceTest {
 	private static final LocalDate DATE_31_DAYS_BACK = LocalDate.now().minusDays(31);
 	private static final LocalDate DATE_32_DAYS_BACK = LocalDate.now().minusDays(32);
 
-	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
-			null, null, null, null, null, null, null);
+	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(
+			null, null, null, null, null, null, null, null, null);
 
 	@Test
 	void inputDateIsToday_isCompliant() {

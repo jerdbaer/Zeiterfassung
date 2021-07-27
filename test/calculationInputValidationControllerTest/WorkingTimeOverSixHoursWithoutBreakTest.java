@@ -31,8 +31,8 @@ class WorkingTimeOverSixHoursWithoutBreakTest {
 	private static final Break BREAK_Six_16_30_TO_17_00 = new Break(LocalTime.of(16, 30), LocalTime.of(17, 00));
 
 	
-	InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
-			null, null, null, null, null, null, null);
+	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(
+			null, null, null, null, null, null, null, null, null);
 	
 	private ArrayList<Timespann> addInputToList(ArrayList<Timespann> list, Timespann... timespann) {
 		for (Timespann element : timespann) {

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import controller.CalculationController;
 import models.*;
 
-class BreakAndInterruption {
+class BreakAndInterruptionTest {
 
 	private final Interruption INTERRUPPTION_10_TO_13_Is3 = new Interruption(LocalTime.of(10,0), LocalTime.of(13,0));
 	private final Interruption INTERRUPPTION_12_TO_13_Is1 = new Interruption(LocalTime.of(12,0), LocalTime.of(13,0));

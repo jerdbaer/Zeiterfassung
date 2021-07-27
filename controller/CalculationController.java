@@ -28,7 +28,7 @@ public class CalculationController {
 	 */
 	private ArrayList<Timespann> formattedInput;
 	/**
-	 * duration between begin and end of a working day
+	 * duration between begin and end of a working day in PTnHnMnS (ISO-8601) 
 	 */
 	private Duration timeAtWork;
 	/**
@@ -41,19 +41,21 @@ public class CalculationController {
 	private LocalTime workEnd;
 	
 	/**
-	 * constant for total working duration limit of defined hours for calculating the legal break requirement in hh:mm:ss 
+	 * constant for total working duration limit of defined hours for calculating the legal break requirement in 
+	 * PTnHnMnS (ISO-8601)  
 	 */
 	private static final Duration LEGAL_BREAK_LIMIT_1 = Duration.ofHours(6);
 	/**
-	 * constant for total working duration limit of defined hours for calculating the legal break requirement in hh:mm:ss
+	 * constant for total working duration limit of defined hours for calculating the legal break requirement in 
+	 * PTnHnMnS (ISO-8601) 
 	 */
 	private static final Duration LEGAL_BREAK_LIMIT_2 = Duration.ofHours(9);
 	/**
-	 * legal break requirement of 30 minutes in hh:mm:ss
+	 * legal break requirement of 30 minutes in PTnHnMnS (ISO-8601) 
 	 */
 	private static final Duration LEGAL_BREAK_OVER_SIX_HOURS = Duration.ofMinutes(30);
 	/**
-	 * legal break requirement of 45 minutes in hh:mm:ss
+	 * legal break requirement of 45 minutes in PTnHnMnS (ISO-8601) 
 	 */
 	private static final Duration LEGAL_BREAK_OVER_NINE_HOURS = Duration.ofMinutes(45);
 	
@@ -81,7 +83,7 @@ public class CalculationController {
 	/**
 	 * returns time at work for a working day
 	 * 
-	 * @return time at work in format hh:mm:ss
+	 * @return time at work in PTnHnMnS (ISO-8601) 
 	 */
 	
 	public Duration getTimeAtWork() {
@@ -91,7 +93,7 @@ public class CalculationController {
 	/**
 	 * returns work begin for a working day
 	 * 
-	 * @return work begin in format hh:mm:ss
+	 * @return work begin in hh:mm 
 	 */
 	
 	public LocalTime getWorkBegin() {
@@ -111,7 +113,7 @@ public class CalculationController {
 	/**
 	 * calculates total break duration from all given break times and work interruption times
 	 * 
-	 * @return total break time in hh:mm:ss
+	 * @return total break time in PTnHnMnS (ISO-8601) 
 	 */
 	
 	public Duration calculateBreakAndInterruptionDuration() {
@@ -128,7 +130,7 @@ public class CalculationController {
 	/**
 	 * calculates required legal break based on all work periods and Work Conditions Act
 	 * 
-	 * @return legal break in hh:mm:ss
+	 * @return legal break in PTnHnMnS (ISO-8601) 
 	 */
 	
 	public Duration calculateLegalBreak() {
@@ -146,7 +148,7 @@ public class CalculationController {
 	/**
 	 * calculates total working time based on working times minus break times
 	 * 
-	 * @return total time at work in hh:mm:ss
+	 * @return total time at work in PTnHnMnS (ISO-8601) 
 	 */
 	
 	public Duration calculateTotalWorktime() {

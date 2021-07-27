@@ -11,8 +11,8 @@ import models.ValidationState;
 
 class WorkingTimeOverTenHoursTest {
 
-	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
-			null, null, null, null, null, null, null);
+	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(
+			null, null, null, null, null, null, null, null, null);
 	
 	@Test
 	void workingTimeIs10H_isValid() {
