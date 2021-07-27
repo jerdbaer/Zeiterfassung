@@ -9,7 +9,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 /**
- * Program to handle double entry of working day record conflicts. Requires user decision how to proceed.
+ * Program to handle double entry of working day record conflicts. 
+ * Opens a new popup window for user interaction and warns about imminent double 
+ * entry for working day record which results in an overwrite of existing record. 
+ * Requires user decision how to proceed.
  * 
  * @author Tom Weißflog
  * @version 1.0
