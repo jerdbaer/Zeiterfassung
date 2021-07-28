@@ -62,27 +62,6 @@ public class OverviewController {
 	private Label txtBreak;
 
     @FXML
-    private Button btnWorktimeTop;
-
-    @FXML
-    private Button btnAbsenceTop;
-
-    @FXML
-    private Button btnOverviewTop;
-
-    @FXML
-    private Button btnHelpTop;
-
-    @FXML
-    private Button btnLogout;
-
-    @FXML
-    private Button btnThisWeek;
-
-    @FXML
-    private Button btnThisMonth;
-
-    @FXML
     private Button btnOtherMonth;
 
     @FXML
