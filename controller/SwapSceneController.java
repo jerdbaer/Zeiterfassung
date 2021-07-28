@@ -15,9 +15,19 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import view.Main;
 
+/**
+ * Program to switch between scenes
+ * 
+ * @author Tom Weißflog
+ * @version 1.0
+ *
+ */
 public class SwapSceneController{
 
-
+	/**
+	 * Loads window of the submitted filename 
+	 * @param filename is the name of the fxml file which should be loaded
+	 */
 	public void goTo(String filename) {
     	try {
     		var stage = Main.primarystage;
@@ -31,18 +41,11 @@ public class SwapSceneController{
     	}
     }
 
-	public void goToLogin() {
-    	try {
-    		var stage = Main.primarystage;;
-        	var loginContent = (BorderPane)FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
-        	var login = new Scene(loginContent);
-        	stage.setScene(login);
-    	}catch(IOException e) {
-			e.printStackTrace();
-
-    	}
-    }
-
+	
+	/**
+	 * Opens popup window of the submitted filename
+	 * @param filename is the name of the fxml file which should be loaded
+	 */
 	public void showPopup(String filename) {
         try {
 			final Stage dialog = new Stage();

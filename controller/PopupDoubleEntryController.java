@@ -8,6 +8,16 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
+/**
+ * Program to handle double entry of working day record conflicts. 
+ * Opens a new popup window for user interaction and warns about imminent double 
+ * entry for working day record which results in an overwrite of existing record. 
+ * Requires user decision how to proceed.
+ * 
+ * @author Tom Weißflog
+ * @version 1.0
+ */
+
 public class PopupDoubleEntryController {
 
 	@FXML
@@ -34,6 +44,11 @@ public class PopupDoubleEntryController {
 	@FXML
 	private Label txtBreakTimeNew;
 
+	/**
+	 * Initializes popup window content and displays working time, total break and working day date for both, record in
+	 * data base and newly created record in application for user check.
+     * Requires user decision to save record to database or to go back to time recording window.
+	 */
 	@FXML
 	public void initialize() {
 
@@ -73,6 +88,10 @@ public class PopupDoubleEntryController {
 
 	}
 
+    /**
+     * Closes popup window and brings user back to time recording window
+     * @param event button click "Abbrechen" 
+     */
 	@FXML
 	void abortToWorktime(ActionEvent event) {
 		var addWorkTime = PopupValidController.addWorkingTime;
@@ -81,6 +100,11 @@ public class PopupDoubleEntryController {
     	popup.hide();
 	}
 
+    /**
+     * Overwrites the existing working day record in data base with the new the created record  
+     * for declared user ID and closes popup window afterwards.
+     * @param event button click on "Speichern"
+     */
 	@FXML
 	void saveToMenu(ActionEvent event) {
 		

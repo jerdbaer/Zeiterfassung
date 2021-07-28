@@ -1,7 +1,7 @@
 package exceptions;
 
 /**
- * Ein Fehler, der geworfen wird, wenn altes Passwort und neues Passwort übereinstimmen
+ * Exception that is is thrown whenever the old password equals the new password input.
  */
 public class NoChangeException extends Exception {
   public NoChangeException(){}

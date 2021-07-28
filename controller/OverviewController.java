@@ -6,6 +6,15 @@ import javafx.scene.chart.LineChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 
+/**
+ * Program to provide an overview about personal work related data of the user.
+ * Displays some working time data as overview for current week, current month or earlier month.
+ * 
+ * @author Tom Weißflog
+ * @version 1.0
+ *
+ */
+ 
 public class OverviewController {
 
 
@@ -39,6 +48,11 @@ public class OverviewController {
     @FXML
     private LineChart<Number, Number> chart;
 
+    /**
+     * Handles user choice to switch window and loads the window of the related fxml file.
+     * @param event button click on "Arbeitszeit erfassen", "Abwesenheit verwalten" "Übersicht", "Hilfe" or "Logout" 
+     * at top menu
+     */
     @FXML
     void switchScene(ActionEvent event) {
     	var swapStageController = new SwapSceneController();
@@ -60,7 +74,12 @@ public class OverviewController {
     	}
 
     }
-    
+   
+    /**
+     * Displays random working time data to show the chart function
+     * @param event button click "Zufallsdaten"
+     */
+
     @FXML
     void showSampleData(ActionEvent event) {
     	chart.getData().clear();

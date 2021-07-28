@@ -1,5 +1,11 @@
 package models;
 
+/**
+ * Enumerator to define validation errors.
+ * @author Tom Weißflog
+ * @version 1.0
+ */
+
 public enum ValidationState
 {
 	VALID,

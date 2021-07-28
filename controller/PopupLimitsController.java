@@ -9,7 +9,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
-
+/**
+ * Program to open a new popup window for user interaction.
+ * Requires an explanation (user input) if work begin and/or work end exceed 
+ * organisational working time frame.
+ * 
+ * @author Tom Weißflog
+ * @version 1.0
+ *
+ */
 public class PopupLimitsController {
 	
 	@FXML
@@ -25,13 +33,22 @@ public class PopupLimitsController {
     public void initialize() {
     	var calculations = MainController.getCalculationModel();
     }	
-
+    
+    /**
+     * Closes popup window and brings user back to time recording window
+     * @param event button click "Abbrechen" 
+     */
     @FXML
     void abortToWorktime(ActionEvent event) {
     	var popup = ((Button)event.getSource()).getScene().getWindow();
     	popup.hide();
     }
-
+    
+    /**
+     * Saves the created working day record for declared user ID to database 
+     * and closes popup window afterwards.
+     * @param event button click on ""
+     */
     @FXML
     void saveToMenu(ActionEvent event) {
     	if(txtFieldReason.getText().isBlank()) {
