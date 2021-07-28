@@ -6,12 +6,12 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import models.Break;
-import models.BreakInterruption;
-import models.Interruption;
-import models.Timespann;
 import models.ValidationState;
-import models.Work;
+import models.time.Break;
+import models.time.BreakInterruption;
+import models.time.Interruption;
+import models.time.Timespann;
+import models.time.Work;
 
 /**
  * programm to validate user input in working time management tool

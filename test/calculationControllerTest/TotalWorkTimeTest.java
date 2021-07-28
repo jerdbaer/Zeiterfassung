@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import org.junit.jupiter.api.Test;
 
 import controller.CalculationController;
-import models.Break;
-import models.Timespann;
-import models.Work;
+import models.time.Break;
+import models.time.Timespann;
+import models.time.Work;
 
 class TotalWorkTimeTest {
 
