@@ -4,8 +4,8 @@ import java.sql.*;
 import java.util.HashMap;
 
 /**
- * Ein Programm zum Anlegen und Ändern von Zeitbuchungen.
- *
+ * A program to record new and update existing working time records
+ * 
  * @author Simon Valiente
  * @version 2.0
  */
@@ -17,11 +17,12 @@ public class AddWorkingTime {
 	private int MA_ID;
 
 	/**
-	 * Konstruktor, ruft die Methode zum Aufbau der Verbindung zur DB auf und legt
-	 * bereits fest, was beim Schließen des Programms passiert
+	 * Constructor
+	 * 
+	 * Calls a method to establish a connection to the database and defines its behavior after closing the program. 
 	 *
-	 * @param workDate ist das Datum des Arbeitstages im Format yyyy-mm-dd
-	 * @param MA_ID    ist die Personalnummer des/der Mitarbeiter:in
+	 * @param workDate date of working day in yyyy-mm-dd
+	 * @param MA_ID individual employee's id in int
 	 *
 	 * @see createConnection()
 	 */
@@ -49,8 +50,8 @@ public class AddWorkingTime {
 	}
 
 	/**
-	 * Stellt Verbindung zum MySQL-Treiber her. Misslingt die Verbindung, ist
-	 * womöglich der CLASSPATH falsch gesetzt
+	 * Establish connection to MySQL driver
+	 * Remark: if connection fails, check if CLASSPATH variable is set correctly.
 	 */
 
 	static {
@@ -66,7 +67,7 @@ public class AddWorkingTime {
 	}
 
 	/**
-	 * Stellt die Verbindung zur Datenbank her
+	 * Establish connection to the database
 	 */
 
 	private void createConnection() {
@@ -83,18 +84,18 @@ public class AddWorkingTime {
 	}
 
 	/**
-	 * Legt in der Datenbank einen Eintrag für die Arbeitszeit an Ein SQL-Befehl
-	 * wird erstellt und an die Datenbank übergeben, wo dieser ausgeführt wird.
+	 * Adds new record of working day information to database
+	 * Creates MySQL command and passes it to database, where it will be executed.
 	 *
-	 * @param beginTime  ist der Beginn der Arbeitszeit im Format hh:mm:ss
-	 * @param endTime    ist das Ende der Arbeitszeit im Format hh:mm:ss
-	 * @param totalBreak ist die Gesamtzeit der Pausen an dem Tag im Format hh:mm:ss
-	 * @param overtime   ist die Anzahl der Überstunden, die an dem Tag geleistet
-	 *                   wurden im Format hh:mm:ss
-	 * @param comment    ist der Kommentar zum Arbeitszeiteintrag
-	 * @throws BatchUpdateException wenn bereits ein Eintrag für den MA und das
-	 *                              Datum existiert (wird extern abgefangen)
-	 * @return Rückmeldung, ob der Eintrag erfolgreich angelegt wurde
+	 * @param beginTime  is the begin of working time at a working day in hh:mm:ss
+	 * @param endTime    is the end of working time at a working day in hh:mm:ss
+	 * @param totalBreak is the total break duration at a working day in hh:mm:ss
+	 * @param overtime   is the amount of working time which exceeds the individual planned working time of employee 
+	 * 					 in hh:mm:ss
+	 * @param comment    is an additional information / comment for the working time record
+	 * @throws BatchUpdateException when record for selected employee and date already exists (remark: is handled external)
+	 * 
+	 * @return feedback, if record was successfully created
 	 */
 
 	public boolean addWorkingTime(String beginTime, String endTime, String totalBreak, String overtime, String comment)
@@ -131,18 +132,18 @@ public class AddWorkingTime {
 	}
 
 	/**
-	 * Ändert an einem Tag für den/die angegebe:n Mitarbeiter:in die Zeiten
-	 * Achtung: Wenn der Eintrag nicht existiert, passiert nichts, nicht mal ein
-	 * Fehler! Ein SQL-Befehl wird erstellt und an die Datenbank übergeben, wo
-	 * dieser ausgeführt wird.
+	 * Updates (overwrites) an existing working time record for a selected employee
+	 * Warning: If record does not exist, there won't be any action, error messages nor exceptions. The MySQL command
+	 * will be created and passed to the database where it will be executed. 
 	 *
-	 * @param beginTime  ist der Beginn der Arbeitszeit im Format hh:mm:ss
-	 * @param endTime    ist das Ende der Arbeitszeit im Format hh:mm:ss
-	 * @param totalBreak ist die Gesamtzeit der Pausen an dem Tag im Format hh:mm:ss
-	 * @param overtime   ist die Anzahl der Überstunden, die an dem Tag geleistet
-	 *                   wurden im Format hh:mm:ss
-	 * @param comment    ist der Kommentar zum Arbeitszeiteintrag
-	 * @return Rückmeldung, ob der Eintrag erfolgreich geändert wurde
+	 * @param beginTime  is the begin of working time at a working days in hh:mm:ss
+	 * @param endTime    is the end of working time at a working days in hh:mm:ss
+	 * @param totalBreak is the total break duration at a working day in hh:mm:ss
+	 * @param overtime   is the amount of working time which exceeds the individual planned working time of employee 
+	 * 					 in hh:mm:ss
+	 * @param comment    is an additional information / comment for the working time record
+	 * 
+	 * @return feedback, if record was successfully updated
 	 */
 
 	public boolean modifyWorkingTime(String beginTime, String endTime, String totalBreak, String overtime,
@@ -179,6 +180,14 @@ public class AddWorkingTime {
 		return false;
 	}
 
+	/**
+	 * Selects work time data from database when a possible double entry of the same working day occurs to warn the user
+	 * about an possible overwrite if his/her data. 
+	 * Selected data will be displayed at user interface and the user is asked to compare the entry data (new and 
+	 * existing) and decide how to proceed.
+	 * 
+	 * @return collection of working time data
+	 */
 	public HashMap<String, String> getWorkingTime() {
 		String query = "SELECT Arbeitszeit_Beginn, Arbeitszeit_Ende, Pausengesamtzeit_Tag, Ueberstunden_Tag, Kommentar "
 				+ "FROM zeitkonto WHERE " + "work_date  = '" + workDate + "' AND " + "MA_ID = " + MA_ID;
@@ -212,6 +221,12 @@ public class AddWorkingTime {
 		return result;
 	}
 
+	/**
+	 * Closes database connection
+	 * 
+	 * @return feedback, if closure succeded
+	 */
+	
 	public boolean close() {
 		try {
 			if (connection != null && !connection.isClosed()) {
@@ -226,22 +241,4 @@ public class AddWorkingTime {
 		return true;
 	}
 
-	/**
-	 * Hauptprogramm. Tut nichts
-	 *
-	 * @param args Kommandozeilenparameter
-	 */
-
-	public static void main(String[] args) {
-		AddWorkingTime addAz = new AddWorkingTime("2021-02-04", 134);
-		try {
-			addAz.addWorkingTime("08:00:00", "16:30:00", "00:30:00", "00:00:00", "");
-			System.out.println("Eintrag 1 erfolgreich");
-			addAz.addWorkingTime("08:00:00", "17:30:00", "00:30:00", "01:00:00", "");
-			System.out.println("Something went wrong...");
-		} catch (BatchUpdateException e) {
-			System.out.println("Einmal ist gut, zweimal ist schlecht");
-		}
-
-	}
 }

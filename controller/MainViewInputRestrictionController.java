@@ -6,6 +6,13 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextFormatter.Change;
 
+/**
+ * This provides rules to restrict the possible key input (includes Strg+V or Mouse copy) in Textfields
+ * Restrictions: only Numbers, only hours (0-23), only minutes (0-59).
+ * 
+ * @author Tom Weißflog
+ * @version 1.0
+ */
 public class MainViewInputRestrictionController {
 	
 	private TextField[] textfieldHour;

@@ -5,8 +5,7 @@ import exceptions.FalsePasswordException;
 import exceptions.NoChangeException;
 
 /**
- * Ein Programm zum überprüfen des Passworts
- * Die Klasse ist möglicherweise nur ein Zwischenspeicher
+ * Program to validate password input
  *
  * @author Simon Valiente
  * @version 1.0
@@ -29,8 +28,9 @@ public class CheckPassword{
   }
 
   /**
-   * Stellt die Verbindung zur Datenbank her
-   */
+    * Establish connection to MySQL driver
+	* Remark: if connection fails, check if CLASSPATH variable is set correctly.
+	*/
 
   private static void createConnection(){
     String url = "jdbc:mysql://localhost/zeiterfassung";
@@ -46,12 +46,12 @@ public class CheckPassword{
   }
 
   /**
-   * Überprüft das Passwort zu einer bestimmten MA_ID
+   * Validates, if the input password matches the stored password in the database for specific employee's account
    *
-   * @param MA_ID ist die ID des Mitarbeiters, dessen Passwort überprüft werden soll
-   * @param pw ist das Passwort, das überprüft werden soll
+   * @param MA_ID individual employee's id in int, for which password should be validated 
+   * @param pw password input which needs validation
    *
-   * @return boolean, ob das angegebene Passwort mit dem gespeicherten Passwort übereinstimmt
+   * @return boolean, if input password matches the stored password value 
    */
 
   public static boolean checkPW(int MA_ID, String pw){
@@ -85,12 +85,12 @@ public class CheckPassword{
   }
 
   /**
-   * Fügt einen neuen Account mit MA_ID und Passwort hinzu
-   * Das Passwort wird hierbei nicht direkt, sondern als Hashcode gespeichert.
+   * Adds a new login account for a specific employee including employee's id and password
+   * Password is not stored directly, but as hashcode.
    *
-   * @param MA_ID die ID des Mitarbeiters, dessen Konto angelegt werden soll
-   * @param pw das Passwort für den Account
-   * @return Angabe, ob der Eintrag erfolgreich angelegt wurde
+   * @param MA_ID individual employee's id for which the new login account should be created 
+   * @param pw password for new employee's account
+   * @return feedback, if account was created successfully 
    */
 
   public static boolean addAccount(int MA_ID, String pw){
@@ -125,14 +125,17 @@ public class CheckPassword{
   }
 
   /**
-   * Ändert das Passwort für den Account MA_ID, wenn das alte Passwort korrekt ist
+   * Overwrites the stored password for an existing employee's account in case the old password was provided correctly 
+   * by the user's input
    *
-   * @param MA_ID ist der Account, für den das Passwort geändert werden soll
-   * @param oldPw ist das alte Passwort
-   * @param newPw ist das neue Passwort
-   * @return Angabe, ob das Passwort erfoglreich geändert wurde
-   * @throws FalsePasswordException wenn {@code oldPw} falsch ist
-   * @throws NoChangeException wenn {@code oldPw == newPw}
+   * @param MA_ID employee's account for which the password should be overwritten 
+   * @param oldPw old password
+   * @param newPw new password
+   * 
+   * @return feedback, if the password was updated (overwritten) successfully
+   * 
+   * @throws FalsePasswordException when {@code oldPw} is false 
+   * @throws NoChangeException when {@code oldPw == newPw}
    */
 
   public static boolean changePW(int MA_ID, String oldPw, String newPw) throws FalsePasswordException, NoChangeException {

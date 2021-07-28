@@ -6,14 +6,45 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+/**
+ * Class to define CalculationModel objects.
+ * 
+ * @author Tom Weißflog
+ * @version 1.0
+ *
+ */
+
 public class CalculationModel {
+	
+	/**
+	 * date of considered working day for which the working day information should be calculated and recorded in String
+	 */	
 	private String selectedDay;
+	/**
+	 * begin of working time at working day in String
+	 */
 	private String workBegin;
+	/**
+	 * end of working time at working day in String
+	 */
 	private String workEnd;
+	/**
+	 * total break duration in String
+	 */
 	private String totalBreakTime;
+	/**
+	 * total working duration at a working day in String
+	 */
 	private String totalWorkTime;
+
 	private String overtime;
+
+	/*
+	 * comment by the user which can oder must be filled during working time recording steps in String
+	 */
+
 	private String comment;
+	
 	
 	public String getSelectedDay() {
 		return selectedDay;

@@ -27,6 +27,7 @@ class ValidationIntegrationTest {
 		}
 		return list;
 	}
+	
 //-------- allInputIsValid Pass
 	@Test
 	void allInputsValid_Pass() {
@@ -34,31 +35,33 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, work);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ofMinutes(0), 	//legalBreak
-				Duration.ofHours(5), 	//totalWorkingTime
-				Duration.ZERO, 			//timeAtBreak
-				LocalTime.of(8,0), 		//workBegin
-				LocalTime.of(13,0), 	//workEnd
+				list, 					// list
+				Duration.ofMinutes(0), 	// legalBreak
+				Duration.ofHours(5), 	// totalWorkingTime
+				Duration.ZERO, 			// timeAtBreak
+				LocalTime.of(8,0), 		// workBegin
+				LocalTime.of(13,0), 	// workEnd
 				LocalDate.now(), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
-				ValidationState.VALID, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
-				ValidationState.VALID, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
-				ValidationState.VALID, // checkTotalWorkingTimeOverTenHours
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
+				ValidationState.VALID, 	// checkTotalWorkingTimeOverTenHours
 				ValidationState.VALID); // checkWorkingTimeOverSixHoursWithoutBreak););
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
 		
 		assertEquals(expecteValidations,validationAll);
 	}
+	
 //--------	noDateSelected
 	@Test
 	void noDateSelected_Fail() {
@@ -66,14 +69,15 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, work);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ofMinutes(0), 	//legalBreak
-				Duration.ofHours(5), 	//totalWorkingTime
-				Duration.ZERO, 			//timeAtBreak
-				LocalTime.of(8,0), 		//workBegin
-				LocalTime.of(13,0), 	//workEnd
+				list, 					// list
+				Duration.ofMinutes(0), 	// legalBreak
+				Duration.ofHours(5), 	// totalWorkingTime
+				Duration.ZERO, 			// timeAtBreak
+				LocalTime.of(8,0), 		// workBegin
+				LocalTime.of(13,0), 	// workEnd
 				null, 					// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
 				ValidationState.NOT_VALID_NO_DATE_SELECTED, // checkDurationBetweenWorkingDays
@@ -90,22 +94,24 @@ class ValidationIntegrationTest {
 		
 		assertEquals(expecteValidations,validationAll);
 	}
+	
 //-------- no Input in WorkTime
 	@Test
 	void noInputList_Fail() {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ofMinutes(0), 	//legalBreak
-				Duration.ofHours(0), 	//totalWorkingTime
-				Duration.ZERO, 			//timeAtBreak
-				LocalTime.of(6,0), 		//workBegin
-				LocalTime.of(10,0), 	//workEnd
+				list, 					// list
+				Duration.ofMinutes(0), 	// legalBreak
+				Duration.ofHours(0), 	// totalWorkingTime
+				Duration.ZERO, 			// timeAtBreak
+				LocalTime.of(6,0), 		// workBegin
+				LocalTime.of(10,0), 	// workEnd
 				LocalDate.now(), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations,
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
 				ValidationState.NOT_VALID_NO_INPUT_FOUND, // checkInputExists
 				ValidationState.VALID, 	// checkTimeOrderIsChronological
 				ValidationState.VALID, 	// checkBreaksInWorkTime
@@ -115,11 +121,11 @@ class ValidationIntegrationTest {
 				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 				
-		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
 		
 		assertEquals(expecteValidations,validationAll);
 	}
+	
 //-------- ChronologicalTimeOrder
 	@Test
 	void workTimeOrderNotChronological_Fail() {
@@ -129,24 +135,25 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, work2, work1, interruption);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ofMinutes(0), 	//legalBreak
-				Duration.ofHours(5), 	//totalWorkingTime
-				Duration.ZERO, 			//timeAtBreak
-				LocalTime.of(8,0), 		//workBegin
-				LocalTime.of(13,0), 	//workEnd
+				list, 					// list
+				Duration.ofMinutes(0), 	// legalBreak
+				Duration.ofHours(5), 	// totalWorkingTime
+				Duration.ZERO, 			// timeAtBreak
+				LocalTime.of(8,0), 		// workBegin
+				LocalTime.of(13,0), 	// workEnd
 				LocalDate.now(), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations,
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
 				ValidationState.NOT_VALID_TIME_INPUT_MUST_BE_IN_CHRONICAL_ORDER, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
-				ValidationState.VALID, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
@@ -163,24 +170,25 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, break1, work1, break2, breakInterruption);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ofMinutes(45), //legalBreak
-				Duration.ofHours(9), 	//totalWorkingTime
-				Duration.ofHours(2), 	//timeAtBreak
-				LocalTime.of(7,0), 		//workBegin
-				LocalTime.of(18,0), 	//workEnd
+				list, 					// list
+				Duration.ofMinutes(45), // legalBreak
+				Duration.ofHours(9), 	// totalWorkingTime
+				Duration.ofHours(2), 	// timeAtBreak
+				LocalTime.of(7,0), 		// workBegin
+				LocalTime.of(18,0), 	// workEnd
 				LocalDate.now(), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
 				ValidationState.NOT_VALID_TIME_INPUT_MUST_BE_IN_CHRONICAL_ORDER, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
-				ValidationState.VALID, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
@@ -196,24 +204,25 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, work1, work2, interruption);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ZERO, 			//legalBreak
-				Duration.ofHours(4), 	//totalWorkingTime
-				Duration.ofHours(1), 	//timeAtBreak
-				LocalTime.of(10,0), 	//workBegin
-				LocalTime.of(14,0), 	//workEnd
-				LocalDate.now(), 		//selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday
+				list, 					// list
+				Duration.ZERO, 			// legalBreak
+				Duration.ofHours(4), 	// totalWorkingTime
+				Duration.ofHours(1), 	// timeAtBreak
+				LocalTime.of(10,0), 	// workBegin
+				LocalTime.of(14,0), 	// workEnd
+				LocalDate.now(), 		// selectedDay
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations,
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
+				ValidationState.VALID,  // checkDurationBetweenWorkingDays
+				ValidationState.VALID,  // checkInputExists
 				ValidationState.NOT_VALID_START_IS_AFTER_END, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
-				ValidationState.VALID, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID,  // checkBreaksInWorkTime
+				ValidationState.VALID,  // checkTotalBreakCompliance
+				ValidationState.VALID,  // checkSingleBreakDurationCompliance
+				ValidationState.VALID,  // checkDatepickerCompliance
+				ValidationState.VALID,  // checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();	
@@ -230,24 +239,25 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, break1, break2, work1, breakInterruption);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ZERO, 			//legalBreak
-				Duration.ofHours(5), 	//totalWorkingTime
-				Duration.ZERO, 	//timeAtBreak
-				LocalTime.of(10,0), 	//workBegin
-				LocalTime.of(15,0), 	//workEnd
-				LocalDate.now(), 		//selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday
+				list, 					// list
+				Duration.ZERO, 			// legalBreak
+				Duration.ofHours(5), 	// totalWorkingTime
+				Duration.ZERO, 			// timeAtBreak
+				LocalTime.of(10,0), 	// workBegin
+				LocalTime.of(15,0), 	// workEnd
+				LocalDate.now(), 		// selectedDay
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		addExpectations(expecteValidations,
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
 				ValidationState.NOT_VALID_START_IS_AFTER_END, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
-				ValidationState.VALID, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();	
@@ -263,24 +273,25 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, break1, work1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ZERO, //legalBreak
-				Duration.ofHours(5), 	//totalWorkingTime
-				Duration.ofHours(1), 	//timeAtBreak
-				LocalTime.of(10,0), 	//workBegin
-				LocalTime.of(15,0), 	//workEnd
+				list, 					// list
+				Duration.ZERO, 			// legalBreak
+				Duration.ofHours(5), 	// totalWorkingTime
+				Duration.ofHours(1), 	// timeAtBreak
+				LocalTime.of(10,0), 	// workBegin
+				LocalTime.of(15,0), 	// workEnd
 				LocalDate.now(), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday	
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow	
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
-				ValidationState.VALID, // checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
 				ValidationState.NOT_VALID_BREAK_IS_NOT_IN_WORKTIME, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
-				ValidationState.VALID, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
@@ -295,24 +306,25 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, break1, work1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ZERO, 			//legalBreak
-				Duration.ofHours(5), 	//totalWorkingTime
-				Duration.ofHours(1), 	//timeAtBreak
-				LocalTime.of(10,0), 	//workBegin
-				LocalTime.of(15,0), 	//workEnd
+				list, 					// list
+				Duration.ZERO, 			// legalBreak
+				Duration.ofHours(5), 	// totalWorkingTime
+				Duration.ofHours(1), 	// timeAtBreak
+				LocalTime.of(10,0), 	// workBegin
+				LocalTime.of(15,0), 	// workEnd
 				LocalDate.now(), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday		
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow	
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
-				ValidationState.VALID, // checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
 				ValidationState.NOT_VALID_BREAK_CANNOT_BE_AT_WORKING_BEGIN_OR_END, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
-				ValidationState.VALID, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
@@ -327,32 +339,31 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, break1, work1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ZERO, 			//legalBreak
-				Duration.ofHours(4), 	//totalWorkingTime
-				Duration.ofHours(1), 	//timeAtBreak
-				LocalTime.of(10,0), 	//workBegin
-				LocalTime.of(15,0), 	//workEnd
+				list, 					// list
+				Duration.ZERO, 			// legalBreak
+				Duration.ofHours(4), 	// totalWorkingTime
+				Duration.ofHours(1), 	// timeAtBreak
+				LocalTime.of(10,0), 	// workBegin
+				LocalTime.of(15,0), 	// workEnd
 				LocalDate.now(), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday		
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow	
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
-				ValidationState.VALID, // checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
 				ValidationState.NOT_VALID_BREAK_CANNOT_BE_AT_WORKING_BEGIN_OR_END, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
-				ValidationState.VALID, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
 		
 		assertEquals(expecteValidations,validationAll);
-		
 	}
-
 	
 //-------- TotalBreak
 	@Test
@@ -362,24 +373,25 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, break1, work1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ofMinutes(30), //legalBreak
-				Duration.ofHours(5), 	//totalWorkingTime
-				Duration.ofMinutes(29), //timeAtBreak
-				LocalTime.of(10,0), 	//workBegin
-				LocalTime.of(17,0), 	//workEnd
+				list, 					// list
+				Duration.ofMinutes(30), // legalBreak
+				Duration.ofHours(5), 	// totalWorkingTime
+				Duration.ofMinutes(29), // timeAtBreak
+				LocalTime.of(10,0), 	// workBegin
+				LocalTime.of(17,0), 	// workEnd
 				LocalDate.now(), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday		
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow		
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
-				ValidationState.VALID, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkBreaksInWorkTime
 				ValidationState.NOT_VALID_TOTAL_BREAK_ERROR, // checkTotalBreakCompliance
 				ValidationState.NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
@@ -394,30 +406,32 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, break1, work1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ofMinutes(45), //legalBreak
-				Duration.ofHours(5), 	//totalWorkingTime
-				Duration.ofMinutes(44), //timeAtBreak
-				LocalTime.of(10,0), 	//workBegin
-				LocalTime.of(17,0), 	//workEnd
-				LocalDate.now(), 		//selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday		
+				list, 					// list
+				Duration.ofMinutes(45), // legalBreak
+				Duration.ofHours(5), 	// totalWorkingTime
+				Duration.ofMinutes(44), // timeAtBreak
+				LocalTime.of(10,0), 	// workBegin
+				LocalTime.of(17,0), 	// workEnd
+				LocalDate.now(), 		// selectedDay
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow		
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
-				ValidationState.VALID, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkBreaksInWorkTime
 				ValidationState.NOT_VALID_TOTAL_BREAK_ERROR, // checkTotalBreakCompliance
 				ValidationState.NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
 		
 		assertEquals(expecteValidations,validationAll);
 	}
+
 //-------- SingleBreak	
 	@Test
 	void SingleBreakErrorForLegalBreak45Minutes_TotalBreakOverLegalBreakButAtLeastOneSingleBreakUnder15MinutesToReachLegalBreakRequirement_Fail(){
@@ -428,24 +442,25 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, break1, break2, break3, work1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 						//list
-				Duration.ofMinutes(45), 	//legalBreak
-				Duration.parse("PT6H15M"), 	//totalWorkingTime
-				Duration.ofMinutes(45),		//timeAtBreak
-				LocalTime.of(10,0), 		//workBegin
-				LocalTime.of(17,0), 		//workEnd
+				list, 						// list
+				Duration.ofMinutes(45), 	// legalBreak
+				Duration.parse("PT6H15M"), 	// totalWorkingTime
+				Duration.ofMinutes(45),		// timeAtBreak
+				LocalTime.of(10,0), 		// workBegin
+				LocalTime.of(17,0), 		// workEnd
 				LocalDate.now(), 			// selectedDay
-				LocalTime.of(13,0));  		//workEndYesterday			
+				LocalTime.of(0,0),			// workEndYesterday
+				LocalTime.of(23,49));  		// workBeginTomorrow			
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
-				ValidationState.VALID, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
 				ValidationState.NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
@@ -462,24 +477,25 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, break1, break2, break3, work1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 						//list
-				Duration.ofMinutes(30), 	//legalBreak
-				Duration.parse("PT6H30M"), 	//totalWorkingTime
-				Duration.ofMinutes(30),		//timeAtBreak
-				LocalTime.of(10,0), 		//workBegin
-				LocalTime.of(17,0), 		//workEnd
+				list, 						// list
+				Duration.ofMinutes(30), 	// legalBreak
+				Duration.parse("PT6H30M"), 	// totalWorkingTime
+				Duration.ofMinutes(30),		// timeAtBreak
+				LocalTime.of(10,0), 		// workBegin
+				LocalTime.of(17,0), 		// workEnd
 				LocalDate.now(), 			// selectedDay
-				LocalTime.of(13,0));  		//workEndYesterday		
+				LocalTime.of(0,0),			// workEndYesterday
+				LocalTime.of(23,49));  		// workBeginTomorrow		
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
-				ValidationState.VALID, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
 				ValidationState.NOT_VALID_SINGLE_BREAK_DURATIONS_ERROR, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
@@ -488,7 +504,6 @@ class ValidationIntegrationTest {
 	}
 	
 //-------- Datepicker
-	
 	@Test
 	void selectedDateIs1DayInTheFuture_Fail(){
 		Work work1 = new Work(LocalTime.of(10,0),LocalTime.of(17,0));
@@ -496,24 +511,25 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, break1, work1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ofMinutes(30), //legalBreak
-				Duration.parse("PT6H30M"), 	//totalWorkingTime
-				Duration.ofMinutes(30),//timeAtBreak
-				LocalTime.of(10,0), 	//workBegin
-				LocalTime.of(17,0), 	//workEnd
-				LocalDate.now().plusDays(1), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday		
+				list, 							// list
+				Duration.ofMinutes(30), 		// legalBreak
+				Duration.parse("PT6H30M"), 		// totalWorkingTime
+				Duration.ofMinutes(30),			// timeAtBreak
+				LocalTime.of(10,0), 			// workBegin
+				LocalTime.of(17,0), 			// workEnd
+				LocalDate.now().plusDays(1), 	// selectedDay
+				LocalTime.of(0,0),				// workEndYesterday
+				LocalTime.of(23,49));  			// workBeginTomorrow		
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
-				ValidationState.VALID, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
-				ValidationState.VALID, // checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
 				ValidationState.NOT_VALID_SELECTED_DAY_IS_IN_THE_FUTURE, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
+				ValidationState.VALID, 	// checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
@@ -528,25 +544,26 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, break1, work1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ofMinutes(30), //legalBreak
-				Duration.parse("PT6H30M"), 	//totalWorkingTime
-				Duration.ofMinutes(30),//timeAtBreak
-				LocalTime.of(10,0), 	//workBegin
-				LocalTime.of(17,0), 	//workEnd
-				LocalDate.now().minusDays(32), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday		
+				list, 							// list
+				Duration.ofMinutes(30), 		// legalBreak
+				Duration.parse("PT6H30M"), 		// totalWorkingTime
+				Duration.ofMinutes(30),			// timeAtBreak
+				LocalTime.of(10,0), 			// workBegin
+				LocalTime.of(17,0), 			// workEnd
+				LocalDate.now().minusDays(32), 	// selectedDay
+				LocalTime.of(0,0),				// workEndYesterday
+				LocalTime.of(23,49));  			// workBeginTomorrow		
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
-				ValidationState.VALID, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
-				ValidationState.VALID, // checkSingleBreakDurationCompliance
+				ValidationState.VALID, 			// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 			// checkInputExists
+				ValidationState.VALID, 			// checkTimeOrderIsChronological
+				ValidationState.VALID, 			// checkBreaksInWorkTime
+				ValidationState.VALID, 			// checkTotalBreakCompliance
+				ValidationState.VALID, 			// checkSingleBreakDurationCompliance
 				ValidationState.NOT_VALID_SELECTED_DAY_IS_TO_FAR_IN_THE_PAST, // checkDatepickerCompliance
-				ValidationState.VALID, // checkWorkTimeLimits
-				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
+				ValidationState.VALID, 			// checkWorkTimeLimits
+				ValidationState.VALID); 		// checkTotalWorkingTimeOverTenHours
 		
 		ArrayList<ValidationState> validationAll = inputValidationController.validation();
 		
@@ -560,23 +577,24 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, work1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 					//list
-				Duration.ZERO, 			//legalBreak
-				Duration.ofHours(5), 	//totalWorkingTime
-				Duration.ZERO, 			//timeAtBreak
-				LocalTime.of(5,0), 		//workBegin
-				LocalTime.of(10,0), 	//workEnd
+				list, 					// list
+				Duration.ZERO, 			// legalBreak
+				Duration.ofHours(5), 	// totalWorkingTime
+				Duration.ZERO, 			// timeAtBreak
+				LocalTime.of(5,0), 		// workBegin
+				LocalTime.of(10,0), 	// workEnd
 				LocalDate.now(), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday		
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow		
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
-				ValidationState.VALID, // checkDurationBetweenWorkingDays
-				ValidationState.VALID, // checkInputExists
-				ValidationState.VALID, // checkTimeOrderIsChronological
-				ValidationState.VALID, // checkBreaksInWorkTime
-				ValidationState.VALID, // checkTotalBreakCompliance
-				ValidationState.VALID, // checkSingleBreakDurationCompliance
-				ValidationState.VALID, // checkDatepickerCompliance
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
 				ValidationState.VALID_WORKBEGIN_IS_BEFORE_6_00, // checkWorkTimeLimits
 				ValidationState.VALID); // checkTotalWorkingTimeOverTenHours
 		
@@ -598,7 +616,8 @@ class ValidationIntegrationTest {
 				LocalTime.of(15,0), 	//workBegin
 				LocalTime.of(20,0), 	//workEnd
 				LocalDate.now(), 		// selectedDay
-				LocalTime.of(13,0));  	//workEndYesterday
+				LocalTime.of(0,0),		// workEndYesterday
+				LocalTime.of(23,49));  	// workBeginTomorrow
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
 				ValidationState.VALID, // checkDurationBetweenWorkingDays
@@ -624,14 +643,15 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, work1, break1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 						//list
-				Duration.ofMinutes(30), 	//legalBreak
-				Duration.parse("PT10H15M"), //totalWorkingTime
-				Duration.ofMinutes(30), 	//timeAtBreak
-				LocalTime.of(8,0), 			//workBegin
-				LocalTime.of(18,45), 		//workEnd
+				list, 						// list
+				Duration.ofMinutes(30), 	// legalBreak
+				Duration.parse("PT10H15M"), // totalWorkingTime
+				Duration.ofMinutes(30), 	// timeAtBreak
+				LocalTime.of(8,0), 			// workBegin
+				LocalTime.of(18,45), 		// workEnd
 				LocalDate.now(), 			// selectedDay
-				LocalTime.of(13,0));  		//workEndYesterday
+				LocalTime.of(0,0),			// workEndYesterday
+				LocalTime.of(23,49));  		// workBeginTomorrow
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
 				ValidationState.VALID, // checkDurationBetweenWorkingDays
@@ -657,14 +677,15 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, work1, break1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 						//list
-				Duration.ofMinutes(45), 	//legalBreak
-				Duration.ofHours(9), 	//totalWorkingTime
-				Duration.ofHours(1), 	//timeAtBreak
-				LocalTime.of(8,0), 			//workBegin
-				LocalTime.of(18,0), 		//workEnd
+				list, 						// list
+				Duration.ofMinutes(45), 	// legalBreak
+				Duration.ofHours(9), 		// totalWorkingTime
+				Duration.ofHours(1), 		// timeAtBreak
+				LocalTime.of(8,0), 			// workBegin
+				LocalTime.of(18,0), 		// workEnd
 				LocalDate.now(), 			// selectedDay
-				LocalTime.of(13,0));  		//workEndYesterday
+				LocalTime.of(0,0),			// workEndYesterday
+				LocalTime.of(23,49));  		// workBeginTomorrow
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
 				ValidationState.VALID, // checkDurationBetweenWorkingDays
@@ -690,14 +711,15 @@ class ValidationIntegrationTest {
 		ArrayList<Timespann> list = new ArrayList<Timespann>();
 		list = addInputToList(list, work1, break1);
 		InputValidationController inputValidationController = new InputValidationController(
-				list, 						//list
-				Duration.ofMinutes(45), 	//legalBreak
-				Duration.ofHours(9), 		//totalWorkingTime
-				Duration.ofHours(1), 		//timeAtBreak
-				LocalTime.of(8,0), 			//workBegin
-				LocalTime.of(18,0), 		//workEnd
+				list, 						// list
+				Duration.ofMinutes(45), 	// legalBreak
+				Duration.ofHours(9), 		// totalWorkingTime
+				Duration.ofHours(1), 		// timeAtBreak
+				LocalTime.of(8,0), 			// workBegin
+				LocalTime.of(18,0), 		// workEnd
 				LocalDate.now(), 			// selectedDay
-				LocalTime.of(13,0));  		//workEndYesterday
+				LocalTime.of(0,0),			// workEndYesterday
+				LocalTime.of(23,49));  		// workBeginTomorrow
 		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
 		expecteValidations = addExpectations(expecteValidations, 
 				ValidationState.VALID, // checkDurationBetweenWorkingDays
@@ -715,5 +737,135 @@ class ValidationIntegrationTest {
 		
 		assertEquals(expecteValidations,validationAll);
 	}
+
+//-------- Duration between working days
+	@Test
+	void workBeginToday8AndWorkEndYesterday23_durationBetweenWorkingDaysIs9HoursAndLessThanRequired_Fail() {
+		Work work = new Work(LocalTime.of(8, 0), LocalTime.of(13, 0));
+		ArrayList<Timespann> list = new ArrayList<Timespann>();
+		list = addInputToList(list, work);
+		InputValidationController inputValidationController = new InputValidationController(list, // list
+				Duration.ofMinutes(0), 	// legalBreak
+				Duration.ofHours(5), 	// totalWorkingTime
+				Duration.ZERO, 			// timeAtBreak
+				LocalTime.of(8, 0), 	// workBegin
+				LocalTime.of(13, 0), 	// workEnd
+				LocalDate.now(), 		// selectedDay
+				LocalTime.of(23, 0), 	// workEndYesterday
+				LocalTime.of(23, 49)); 	// workBeginTomorrow
+		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
+		expecteValidations = addExpectations(expecteValidations, 
+				ValidationState.NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
+				ValidationState.VALID, 	// checkTotalWorkingTimeOverTenHours
+				ValidationState.VALID); // checkWorkingTimeOverSixHoursWithoutBreak););
+
+		ArrayList<ValidationState> validationAll = inputValidationController.validation();
+
+		assertEquals(expecteValidations, validationAll);
+	}
 	
+	@Test
+	void workBeginToday8AndWorkEndYesterday23_durationBetweenWorkingDaysIs11HoursAndEqualsRequired_Pass() {
+		Work work = new Work(LocalTime.of(8, 0), LocalTime.of(13, 0));
+		ArrayList<Timespann> list = new ArrayList<Timespann>();
+		list = addInputToList(list, work);
+		InputValidationController inputValidationController = new InputValidationController(list, // list
+				Duration.ofMinutes(0), 	// legalBreak
+				Duration.ofHours(5), 	// totalWorkingTime
+				Duration.ZERO, 			// timeAtBreak
+				LocalTime.of(8, 0), 	// workBegin
+				LocalTime.of(13, 0), 	// workEnd
+				LocalDate.now(), 		// selectedDay
+				LocalTime.of(21, 0), 	// workEndYesterday
+				LocalTime.of(23, 49)); 	// workBeginTomorrow
+		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
+		expecteValidations = addExpectations(expecteValidations, 
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
+				ValidationState.VALID, 	// checkTotalWorkingTimeOverTenHours
+				ValidationState.VALID); // checkWorkingTimeOverSixHoursWithoutBreak););
+
+		ArrayList<ValidationState> validationAll = inputValidationController.validation();
+
+		assertEquals(expecteValidations, validationAll);
+	}
+	
+	@Test
+	void workEndToday19_30_AndWorkEndTomorrow6_durationBetweenWorkingDaysIs10H30MAndIsLessThanRequired_Fail() {
+		Work work = new Work(LocalTime.of(16, 30), LocalTime.of(19, 30));
+		ArrayList<Timespann> list = new ArrayList<Timespann>();
+		list = addInputToList(list, work);
+		InputValidationController inputValidationController = new InputValidationController(
+				list, 					// list
+				Duration.ZERO, 			// legalBreak
+				Duration.ofHours(3), 	// totalWorkingTime
+				Duration.ZERO, 			// timeAtBreak
+				LocalTime.of(16, 30), 	// workBegin
+				LocalTime.of(19, 30), 	// workEnd
+				LocalDate.now(), 		// selectedDay
+				LocalTime.of(0, 0), 	// workEndYesterday
+				LocalTime.of(19, 30)); 	// workBeginTomorrow
+		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
+		expecteValidations = addExpectations(expecteValidations, 
+				ValidationState.NOT_VALID_DURATION_BETWEEN_WORKING_DAYS_ERROR, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
+				ValidationState.VALID, 	// checkTotalWorkingTimeOverTenHours
+				ValidationState.VALID); // checkWorkingTimeOverSixHoursWithoutBreak););
+
+		ArrayList<ValidationState> validationAll = inputValidationController.validation();
+
+		assertEquals(expecteValidations, validationAll);
+	}
+	
+	@Test
+	void workEndToday19_00_AndWorkEndTomorrow6_durationBetweenWorkingDaysIs11HoursAndEqualsRequired_Fail() {
+		Work work = new Work(LocalTime.of(16, 00), LocalTime.of(19, 00));
+		ArrayList<Timespann> list = new ArrayList<Timespann>();
+		list = addInputToList(list, work);
+		InputValidationController inputValidationController = new InputValidationController(
+				list, 					// list
+				Duration.ZERO, 			// legalBreak
+				Duration.ofHours(3), 	// totalWorkingTime
+				Duration.ZERO, 			// timeAtBreak
+				LocalTime.of(16, 00), 	// workBegin
+				LocalTime.of(19, 00), 	// workEnd
+				LocalDate.now(), 		// selectedDay
+				LocalTime.of(0, 0), 	// workEndYesterday
+				LocalTime.of(19, 00)); 	// workBeginTomorrow
+		ArrayList<ValidationState> expecteValidations = new ArrayList<ValidationState>();
+		expecteValidations = addExpectations(expecteValidations, 
+				ValidationState.VALID, 	// checkDurationBetweenWorkingDays
+				ValidationState.VALID, 	// checkInputExists
+				ValidationState.VALID, 	// checkTimeOrderIsChronological
+				ValidationState.VALID, 	// checkBreaksInWorkTime
+				ValidationState.VALID, 	// checkTotalBreakCompliance
+				ValidationState.VALID, 	// checkSingleBreakDurationCompliance
+				ValidationState.VALID, 	// checkDatepickerCompliance
+				ValidationState.VALID, 	// checkWorkTimeLimits
+				ValidationState.VALID, 	// checkTotalWorkingTimeOverTenHours
+				ValidationState.VALID); // checkWorkingTimeOverSixHoursWithoutBreak););
+
+		ArrayList<ValidationState> validationAll = inputValidationController.validation();
+
+		assertEquals(expecteValidations, validationAll);
+	}
 }

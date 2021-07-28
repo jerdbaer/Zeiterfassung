@@ -28,8 +28,8 @@ class SingleBreakComplianceTest {
 	private static final Interruption INTERRUPTION_45 = new Interruption(LocalTime.of(8, 0), LocalTime.of(8, 45));
 	private static final Interruption INTERRUPTION_46 = new Interruption(LocalTime.of(10, 0), LocalTime.of(10, 46));
 
-	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
-			null, null, null, null, null, null, null);
+	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(
+			null, null, null, null, null, null, null, null, null);
 
 	private ArrayList<Timespann> addInputToList(ArrayList<Timespann> list, Timespann... timespann) {
 		for (Timespann element : timespann) {

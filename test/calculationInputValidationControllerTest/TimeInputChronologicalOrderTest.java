@@ -38,8 +38,8 @@ class TimeInputChronologicalOrderTest {
 	private static final Work WORK_VALID = new Work(LocalTime.of(13, 30), LocalTime.of(15, 30));
 	private static final Work Work_INVALID = new Work(LocalTime.of(15, 30), LocalTime.of(13, 30));
 	
-	InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
-			null, null, null, null, null, null, null);
+	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(
+			null, null, null, null, null, null, null, null, null);
 	
 	private ArrayList<Timespann> addInputToList(ArrayList<Timespann> list, Timespann... timespann) {
 		for (Timespann element : timespann) {

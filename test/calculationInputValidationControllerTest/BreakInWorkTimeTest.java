@@ -24,8 +24,8 @@ class BreakInWorkTimeTest {
 	private static Break BREAK_AT_WORKBEGIN = new Break(LocalTime.of(8,0), LocalTime.of(10,0));
 	private static Break BREAK_AT_WORKEND = new Break(LocalTime.of(15,0), LocalTime.of(18,0));
 	
-	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(null,
-			null, null, null, null, null, null, null);
+	private InputValidationControllerStub dummyInputValidationControllerStub = new InputValidationControllerStub(
+			null, null, null, null, null, null, null, null, null);
 	
 	private ArrayList<Timespann> addInputToList(ArrayList<Timespann> list, Timespann... timespann) {
 		for (Timespann element : timespann) {

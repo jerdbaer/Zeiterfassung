@@ -17,6 +17,15 @@ import javafx.scene.control.Label;
 import models.ComparatorOvertime;
 import models.Overtime;
 
+/**
+ * Program to provide an overview about personal work related data of the user.
+ * Displays some working time data as overview for current week, current month or earlier month.
+ * 
+ * @author Tom Weißflog
+ * @version 1.0
+ *
+ */
+ 
 public class OverviewController {
 
 	@FXML
@@ -52,13 +61,37 @@ public class OverviewController {
 	@FXML
 	private Label txtBreak;
 
-	@FXML
-	private Button btnWorkTime;
+    @FXML
+    private Button btnWorktimeTop;
 
+    @FXML
+    private Button btnAbsenceTop;
+
+    @FXML
+    private Button btnOverviewTop;
+
+    @FXML
+    private Button btnHelpTop;
+
+    @FXML
+    private Button btnLogout;
+
+    @FXML
+    private Button btnThisWeek;
+
+    @FXML
+    private Button btnThisMonth;
+
+    @FXML
+    private Button btnOtherMonth;
+
+    @FXML
+    private Button btnWorkTime;
+    
 	@FXML
 	private BarChart<String, Number> chart;
 
-	@FXML
+      	@FXML
 	public void initialize() {
 		var MA_ID = LoginController.MA_Data.getMA_ID();
 		var dataController = new GetOvertime();
@@ -79,7 +112,11 @@ public class OverviewController {
 		txtWorkTime.setText(averageOverTimePrintable);
 
 	}
-
+    /**
+     * Handles user choice to switch window and loads the window of the related fxml file.
+     * @param event button click on "Arbeitszeit erfassen", "Abwesenheit verwalten" "Übersicht", "Hilfe" or "Logout" 
+     * at top menu
+     */
 	@FXML
 	void switchScene(ActionEvent event) {
 		var swapStageController = new SwapSceneController();
@@ -94,6 +131,32 @@ public class OverviewController {
 			swapStageController.goTo("/view/Help.fxml");
 		} else if (pressedBtn == btnLogout) {
 			swapStageController.goTo("/view/Login.fxml");
+    }
+  }
+    /**
+     * Displays random working time data to show the chart function
+     * @param event button click "Zufallsdaten"
+     */
+
+    @FXML
+    void showSampleData(ActionEvent event) {
+    	chart.getData().clear();
+    	chart.setCreateSymbols(false);
+    	
+    	final int MINIMUM = 6;
+    	final int MAXIMUM = 10;
+    	final int SOLL = 8;
+    	var workTime = new XYChart.Series<Number, Number>();
+    	workTime.setName("Arbeitszeit");
+    	var sollTime = new XYChart.Series<Number, Number>();
+    	sollTime.setName("Soll Arbeitszeit");
+  
+		for (int i=0;i<=31;i++)
+		{
+			var randomNum = MINIMUM + (int)(Math.random() * (MAXIMUM - MINIMUM));
+			sollTime.getData().add(new XYChart.Data<Number, Number>(i,SOLL));
+			workTime.getData().add(new XYChart.Data<Number, Number>(i,randomNum));
+
 		}
 
 	}
@@ -117,7 +180,7 @@ public class OverviewController {
 			workTime = new XYChart.Series<String, Number>();
 			final int MINIMUM = 6;
 			final int MAXIMUM = 10;
-			txtDate.setText("Zuf�lliger Monat");
+			txtDate.setText("Zuf�lliger Monat");
 
 			for (int i = 0; i <= 31; i++) {
 				var randomNum = MINIMUM + (int) (Math.random() * (MAXIMUM - MINIMUM));
