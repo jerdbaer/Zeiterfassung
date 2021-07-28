@@ -99,7 +99,7 @@ public class PopupDoubleEntryController {
 	void abortToWorktime(ActionEvent event) {
 		var addWorkTime = PopupValidController.addWorkingTime;
 		var popup = ((Button)event.getSource()).getScene().getWindow();
-    	addWorkTime.close();
+//    	addWorkTime.close();
     	popup.hide();
 	}
 

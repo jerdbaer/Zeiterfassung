@@ -249,6 +249,16 @@ import java.util.*;
      return result;
    }
    
+   /**
+    * Searches the average break time and overtime for an employee.
+    * The time will be returned in seconds, as this method (but only this method)
+    * cannot deal with {@code TIME_TO_SEC} of negative values
+    * 
+    * @param MA_ID the id of the employee whose average values need to be displayed
+    * @return a HashMap with the type of value (break or overtime) as key and 
+    * the average time in seconds as values
+    */
+   
    public HashMap<String, Integer> getAverageData(int MA_ID){
 	   String query = "SELECT AVG(TIME_TO_SEC(Pausengesamtzeit_Tag)), "
 			   + "AVG(TIME_TO_SEC(Ueberstunden_Tag)) "

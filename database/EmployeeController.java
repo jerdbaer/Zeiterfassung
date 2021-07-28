@@ -1,14 +1,15 @@
-/**
- * 
- */
 package database;
 
 import java.sql.*;
 import java.util.HashMap;
 
 /**
- * @author 
- *
+ * Program to add, modify, view and delete employees in database.
+ * 
+ * @author Josephine Luksch
+ * @author Simon Valiente
+ * @author Julian Erxleben
+ * @version 1.0
  */
 public class EmployeeController {
 	
@@ -39,6 +40,13 @@ public class EmployeeController {
 		}
 	}
 	
+	/**
+	 * Empty constructor
+	 * Calls a method to establish a connection to the database and defines its behavior after closing the program.
+	 * 
+	 * @see createConnection()
+	 */
+	
 	public EmployeeController() {
 		createConnection();
 		Thread shutDownHook = new Thread() {
@@ -59,6 +67,24 @@ public class EmployeeController {
 		};
 		Runtime.getRuntime().addShutdownHook(shutDownHook);
 	}
+	
+	/**
+	 * Creates an employee based on the given data.
+	 * 
+	 * @param MA_ID individual employee's id in int
+	 * @param firstName employee's first name
+	 * @param lastName employee's last name
+	 * @param address employee's address
+	 * @param postcode employee's postcode as String
+	 * @param city the city the employee is living in
+	 * @param team the team in which the employee is working
+	 * @param mail employee's e-mail address
+	 * @param vacationDays number ov employee's vacation days per year as int
+	 * @param plannedWorkingTime planned working time as String "hh:mm:ss"
+	 * @param active notion if the employee is active, must be either "ja" or "nein"
+	 * 
+	 * @return feedback, if record was successfully created
+	 */
 	
 	public boolean createEmployee(int MA_ID, String firstName, String lastName,
 			String address, String postcode, String city, String team, 
@@ -91,6 +117,15 @@ public class EmployeeController {
 		return false;
 	}
 	
+	/**
+	 * Changes the employee's data
+	 * 
+	 * @param MA_ID the ID of the employee whose data needs to be changed
+	 * @param changeData a HashMap with the new data. Not every database column
+	 * needs to be part of {@code changeData}, but every key has to match one of
+	 * the column's names
+	 * @return feedback, if record was successfully modified
+	 */
 	
 	public boolean modifyEmployee(int MA_ID, HashMap<String, String> changeData) {
 		String query = "UPDATE mitarbeiter SET ";
@@ -126,6 +161,14 @@ public class EmployeeController {
 		return false;
 	}
 	
+	/**
+	 * Deletes an employee's data. This includes their basic information, but also
+	 * their login and working time data
+	 * 
+	 * @param MA_ID the id of the employee whose data needs to be deleted
+	 * @return feedback, if record was successfully deleted
+	 */
+	
 	public boolean deleteEmployee(int MA_ID) {
 		String query0 = "DELETE FROM login WHERE MA_ID = " + MA_ID;
 		String query1 = "DELETE FROM zeitkonto WHERE MA_ID = " + MA_ID;
@@ -157,6 +200,14 @@ public class EmployeeController {
 		}		
 		return false;
 	}
+	
+	/**
+	 * Collects an employee's data and stores it in a HashMap
+	 * 
+	 * @param MA_ID the id of the employee whose data needs to be read
+	 * @return a HashMap with the column names as its keys and the according
+	 * values from the database as values
+	 */
 	
 	public HashMap<String, String> getEmployeeData(int MA_ID){
 		String query = "SELECT * FROM mitarbeiter WHERE MA_ID = " + MA_ID;
