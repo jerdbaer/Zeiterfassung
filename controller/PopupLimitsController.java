@@ -1,8 +1,11 @@
 package controller;
 
 import java.sql.BatchUpdateException;
+import java.time.Duration;
+import java.time.LocalTime;
 
 import database.AddWorkingTime;
+import database.GetOvertime;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -38,6 +41,7 @@ public class PopupLimitsController {
      * Closes popup window and brings user back to time recording window
      * @param event button click "Abbrechen" 
      */
+
     @FXML
     void abortToWorktime(ActionEvent event) {
     	var popup = ((Button)event.getSource()).getScene().getWindow();
@@ -65,7 +69,8 @@ public class PopupLimitsController {
         	var beginTime = data.getWorkBegin();
         	var endTime = data.getWorkEnd();
         	var totalBreak = data.getTotalBreakTime();
-        	var overtime = "00:00:00";
+        	setOvertime();
+        	var overtime = calculations.getOvertime();
         	var comment = data.getComment();
         	try {
         		
@@ -83,6 +88,18 @@ public class PopupLimitsController {
         	}
     	}
 
+    }
+    
+    private void setOvertime() {
+    	var calculations = MainController.getCalculationModel();
+    	var totalWorkingTimeString = calculations.getTotalWorkTime();
+    	var totalWorkingTime = LocalTime.parse(totalWorkingTimeString);
+    	var MA_ID = LoginController.MA_Data.getMA_ID();
+    	var dataController = new GetOvertime();
+    	var plannedWorkingtimeString = dataController.getPlannedWorkingTime(MA_ID);
+    	var plannedWorkingTime = LocalTime.parse(plannedWorkingtimeString);
+    	var overtime = Duration.between(plannedWorkingTime, totalWorkingTime);
+    	calculations.setOvertime(overtime);
     }
 
 }

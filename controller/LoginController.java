@@ -8,28 +8,44 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import models.MA_Data;
 
 public class LoginController {
 
     @FXML
-    private AnchorPane loginscene;
+    private Label txtUser;
 
     @FXML
     private TextField userinput;
 
     @FXML
+    private Label txtPassword;
+
+    @FXML
     private PasswordField passswordinput;
+
+    @FXML
+    private Label txtError;
 
     @FXML
     private Button loginbutton;
 
     @FXML
-    private MenuItem gottoHelpCenter1;
-    
-    @FXML
-    private Label txtError;
+    void animation(KeyEvent event) {
+    	if(userinput.getText().isBlank())
+    		txtUser.setVisible(false);
+    	else {
+			txtUser.setVisible(true);
+		}
+    	
+    	if(passswordinput.getText().isBlank())
+    		txtPassword.setVisible(false);
+    	else {
+			txtPassword.setVisible(true);
+		}
+    }
     
     public static MA_Data MA_Data;
     
@@ -62,6 +78,8 @@ public class LoginController {
     	return CheckPassword.checkPW(MA_ID, pw);
     	
     	}
+    
+    
     
     
     

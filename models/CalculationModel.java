@@ -36,9 +36,13 @@ public class CalculationModel {
 	 * total working duration at a working day in String
 	 */
 	private String totalWorkTime;
+
+	private String overtime;
+
 	/*
 	 * comment by the user which can oder must be filled during working time recording steps in String
 	 */
+
 	private String comment;
 	
 	
@@ -86,5 +90,16 @@ public class CalculationModel {
 		this.totalWorkTime =String.format("%02d:%02d:%02d", totalWorkTime.toHoursPart(),
 				totalWorkTime.toMinutesPart(), totalWorkTime.toSecondsPart());
 	}
+
+	public String getOvertime() {
+		return this.overtime;
+	}
+
+	public void setOvertime(Duration overtime) {
+		this.overtime = String.format("%02d:%02d:%02d", overtime.toHoursPart(),
+				overtime.toMinutesPart(), overtime.toSecondsPart());
+		
+	}
+		
 	
 }

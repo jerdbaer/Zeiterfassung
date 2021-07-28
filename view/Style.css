@@ -1,0 +1,29 @@
+Button:pressed {
+	-fx-border-radius: 7;
+	-fx-background-radius: 7;
+}
+
+Button:hover{
+	
+}
+
+.login{
+	-fx-text-fill: #ffffff;
+	-fx-highlight-text-fill: #ffffff;
+	-fx-background-color: #0D2253; 
+	-fx-border-color: transparent transparent #ffffff transparent;
+}
+
+.square:hover{
+	-fx-border-width: 3;
+	-fx-border-color: #ffffff;
+}
+
+.header:hover{
+	-fx-underline: true;
+}
+
+.chart-bar {
+	-fx-background-color: #f92047;
+	-fx-border-color: #0D2253;
+}

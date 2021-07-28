@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #dddfe7; -fx-border-color: #94a6c6; -fx-border-width: 3;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PopupLimitsController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: #dddfe7; -fx-border-color: #94a6c6; -fx-border-width: 3;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.PopupLimitsController">
    <top>
       <Label text="Arbeit außerhalb der Rahmenarbeitszeit" textFill="#0f358e" BorderPane.alignment="CENTER_LEFT">
          <font>
