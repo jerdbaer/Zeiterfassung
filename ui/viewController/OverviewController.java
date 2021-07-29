@@ -25,8 +25,8 @@ import ui.interfaces.ISwapSceneController;
  * Program to provide an overview about personal work related data of the user.
  * Displays some working time data as overview for current week, current month
  * or earlier month.
- * 
- * @author Tom Weißflog
+ *
+ * @author Tom WeiÃŸflog
  * @version 1.0
  *
  */
@@ -96,7 +96,7 @@ public class OverviewController {
 	/**
 	 * fetches average overtime and planned working time from database as hh:mm:ss
 	 * calculates average working time and converts to hh:mm for display
-	 * 
+	 *
 	 * @see GetOvertime().getPlannedWorkingTime(String MA_ID);
 	 * @see GetOvertime().getAverageData(MA_ID).get("Ueberstunden")
 	 * @param MA_ID
@@ -116,7 +116,7 @@ public class OverviewController {
 	/**
 	 * fetches average break time from database as hh:mm:ss converts to hh:mm for
 	 * display
-	 * 
+	 *
 	 * @see GetOvertime().getAverageData(MA_ID).get("Pausengesamtzeit")
 	 * @param data
 	 */
@@ -130,7 +130,7 @@ public class OverviewController {
 
 	/**
 	 * fetches flexitime from database as hh:mm:ss converts to hh:mm for display
-	 * 
+	 *
 	 * @see GetOvertime().getSum(String MA_ID)
 	 * @param MA_ID
 	 * @param dataController
@@ -146,9 +146,9 @@ public class OverviewController {
 	/**
 	 * Handles user choice to switch window and loads the window of the related fxml
 	 * file.
-	 * 
+	 *
 	 * @param event button click on "Arbeitszeit erfassen", "Abwesenheit verwalten"
-	 *              "Übersicht", "Hilfe" or "Logout" at top menu
+	 *              "Ãœbersicht", "Hilfe" or "Logout" at top menu
 	 */
 	@FXML
 	void switchScene(ActionEvent event) {
@@ -170,7 +170,7 @@ public class OverviewController {
 	/**
 	 * Displays this week, month or random working time data to show the chart
 	 * function
-	 * 
+	 *
 	 * @param event button click "Zufallswerte"
 	 * @param event button cick "Aktuelle Woche"
 	 * @param event button click "Aktueller Monat"
@@ -194,7 +194,7 @@ public class OverviewController {
 			workTime = new XYChart.Series<String, Number>();
 			final int MINIMUM = 6;
 			final int MAXIMUM = 10;
-			txtDate.setText("Zuf�lliger Monat");
+			txtDate.setText("Zufälliger Monat");
 
 			for (int i = 0; i <= 31; i++) {
 				var randomNum = MINIMUM + (int) (Math.random() * (MAXIMUM - MINIMUM));
@@ -209,7 +209,7 @@ public class OverviewController {
 
 	/**
 	 * applies button effect to buttons
-	 * 
+	 *
 	 * @param buttons "Aktuelle Woche", "Aktueller Monat", "Zufallswerte"
 	 * @param event   buttonclick
 	 */
@@ -231,13 +231,13 @@ public class OverviewController {
 
 	/**
 	 * creates series from database and displays the timespann of the series
-	 * 
+	 *
 	 * @param timespann month or not (week)
 	 * @return Series to display in bar-chart
 	 */
 	private Series<String, Number> produceSeries(String timespann) {
-		var SOLL_ARBEITSZEIT_IN_STUNDEN = 8;
 		var MA_ID = Main.dataEntryModel.getMA_ID();
+		var plannedWorkingTime = fetchPlannedWorkingTime(MA_ID);
 		int today;
 		if (timespann.equals("month")) {
 			today = LocalDate.now().getDayOfMonth();
@@ -263,14 +263,14 @@ public class OverviewController {
 			var label = day + "." + month;
 
 			workTime.getData()
-					.add(new XYChart.Data<String, Number>(label, SOLL_ARBEITSZEIT_IN_STUNDEN + ot.getOvertime()));
+					.add(new XYChart.Data<String, Number>(label, plannedWorkingTime + ot.getOvertime()));
 		}
 		return workTime;
 	}
 
 	/**
 	 * fetches overtime (date and value) from database
-	 * 
+	 *
 	 * @param MA_ID
 	 * @param beginDate
 	 * @param endDate
@@ -294,12 +294,21 @@ public class OverviewController {
 
 	/**
 	 * format LocalDate value
-	 * 
+	 *
 	 * @param date yyyy-mm-dd
 	 * @return dd.mm.yyyy
 	 */
 	private String formatDate(LocalDate date) {
 		return String.format("%02d.%02d.%4d", date.getDayOfMonth(), date.getMonthValue(), date.getYear());
+	}
+
+	private float fetchPlannedWorkingTime(int MA_ID) {
+		var dataController = new GetOvertime();
+    	var plannedWorkingtimeString = dataController.getPlannedWorkingTime(MA_ID);
+    	var plannedWorkingTime = LocalTime.parse(plannedWorkingtimeString);
+    	var plannedWorkingTimeFloat = plannedWorkingTime.getHour() +
+    			((float)plannedWorkingTime.getMinute()/60);
+    	return plannedWorkingTimeFloat;
 	}
 
 }
