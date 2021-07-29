@@ -4,16 +4,18 @@ import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
 
-import models.Break;
-import models.Interruption;
-import models.Timespann;
-import models.Work;
+import database.GetOvertime;
+import main.Main;
+import models.time.Break;
+import models.time.Interruption;
+import models.time.Timespann;
+import models.time.Work;
 
 /**
  * Program to get information about a working day from a list of working times, break times, 
  * break interruptions and working time interruptions which are given by an ui-interface.
  * 
- * Calculated values are time at work, total work time, work begin, work end, (required) legal break time, 
+ * Calculated values are time at work, total work time, overtime, work begin, work end, (required) legal break time, 
  * and total break time.
  * 
  * @author Tom Weißflog
@@ -161,6 +163,28 @@ public class CalculationController {
 		}
 		return totalWorkTime;
 	}
+	
+	/**
+	 * calculates overtime based on planned work time and total work time
+	 * 
+	 * @return overtime in PTnHnMnS (ISO-8601) 
+	 */
+	
+	public Duration calculateOvertime() {
+		// calculate total work time as Duration and converts to LocalTime
+    	var totalWorkingTimeDuration = calculateTotalWorktime();
+    	var totalWorkingTime = LocalTime.MIN.plus(totalWorkingTimeDuration); 
+    	
+    	// fetch planned work time from database via primary key MA_ID;
+    	var MA_ID = Main.dataEntryModel.getMA_ID();
+    	var dataController = new GetOvertime();
+    	var plannedWorkingtimeString = dataController.getPlannedWorkingTime(MA_ID);
+    	var plannedWorkingTime = LocalTime.parse(plannedWorkingtimeString);
+    	
+    	
+    	return Duration.between(plannedWorkingTime, totalWorkingTime);
+    	
+	}	
 	
 	/**
 	 * selects first work begin of all working times

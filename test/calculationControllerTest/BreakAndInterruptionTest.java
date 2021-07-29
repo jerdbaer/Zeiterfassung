@@ -10,6 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import controller.CalculationController;
 import models.*;
+import models.time.Break;
+import models.time.Interruption;
+import models.time.Timespann;
+import models.time.Work;
 
 class BreakAndInterruptionTest {
 
