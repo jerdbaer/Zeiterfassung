@@ -86,10 +86,14 @@ public class OverviewController {
 		var MA_ID = Main.dataEntryModel.getMA_ID();
 		var dataController = new GetOvertime();
 		var data = dataController.getAverageData(MA_ID);
-
-		displayFlexiTime(MA_ID, dataController);
-		displayAverageBreakTime(data);
-		displayAverageWorkingTime(MA_ID, dataController, data);
+		try {
+			displayFlexiTime(MA_ID, dataController);
+			displayAverageBreakTime(data);
+			displayAverageWorkingTime(MA_ID, dataController, data);
+		}catch (NullPointerException noAverageDataFound) {
+			
+		}
+		
 
 	}
 
@@ -236,8 +240,9 @@ public class OverviewController {
 	 * @return Series to display in bar-chart
 	 */
 	private Series<String, Number> produceSeries(String timespann) {
-		var SOLL_ARBEITSZEIT_IN_STUNDEN = 8;
 		var MA_ID = Main.dataEntryModel.getMA_ID();
+		float usualWorkingTime = fetchPlannedWorkingTime(MA_ID);
+
 		int today;
 		if (timespann.equals("month")) {
 			today = LocalDate.now().getDayOfMonth();
@@ -263,14 +268,14 @@ public class OverviewController {
 			var label = day + "." + month;
 
 			workTime.getData()
-					.add(new XYChart.Data<String, Number>(label, SOLL_ARBEITSZEIT_IN_STUNDEN + ot.getOvertime()));
+					.add(new XYChart.Data<String, Number>(label, usualWorkingTime + ot.getOvertime()));
 		}
 		return workTime;
 	}
 
 	/**
 	 * fetches overtime (date and value) from database
-	 * 
+	 * converts HashMap(date,overtime) to sorted ArrayList<Overtime>
 	 * @param MA_ID
 	 * @param beginDate
 	 * @param endDate
@@ -290,6 +295,20 @@ public class OverviewController {
 		data.sort(new ComparatorOvertime());
 
 		return data;
+	}
+	/**
+	 * fetches planned working time from database
+	 * 
+	 * @param MA_ID
+	 * @return planned working time as float
+	 */
+	private float fetchPlannedWorkingTime(int MA_ID) {
+		var dataController = new GetOvertime();
+    	var plannedWorkingtimeString = dataController.getPlannedWorkingTime(MA_ID);
+    	var plannedWorkingTime = LocalTime.parse(plannedWorkingtimeString);
+    	var plannedWorkingTimeFloat = plannedWorkingTime.getHour() +
+    			((float)plannedWorkingTime.getMinute()/60);
+    	return plannedWorkingTimeFloat;
 	}
 
 	/**

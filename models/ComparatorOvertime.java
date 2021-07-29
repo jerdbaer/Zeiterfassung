@@ -2,6 +2,13 @@ package models;
 
 import java.util.Comparator;
 
+/**
+ * comparator for overtime to sort them by date 
+ * past to future 
+ * 
+ * @author Tom_W
+ *
+ */
 public class ComparatorOvertime implements Comparator<Overtime> {
 
 	@Override

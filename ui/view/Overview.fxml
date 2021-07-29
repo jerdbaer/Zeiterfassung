@@ -66,7 +66,7 @@
                            <center>
                               <VBox alignment="CENTER" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Label fx:id="txtFlexiTime" text="+ 120 : 00" textFill="#0c2053">
+                                    <Label fx:id="txtFlexiTime" text="n/a" textFill="#0c2053">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
@@ -80,7 +80,7 @@
                            <center>
                               <VBox alignment="CENTER" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Label fx:id="txtWorkTime" text="8:51" textFill="#0c2053">
+                                    <Label fx:id="txtWorkTime" text="n/a" textFill="#0c2053">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
@@ -97,7 +97,7 @@
                            <center>
                               <VBox alignment="CENTER" BorderPane.alignment="CENTER">
                                  <children>
-                                    <Label fx:id="txtBreak" text="00:30" textFill="#0c2053">
+                                    <Label fx:id="txtBreak" text="n/a" textFill="#0c2053">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>

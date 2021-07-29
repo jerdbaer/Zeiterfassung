@@ -265,6 +265,7 @@ public class WorkTimeController {
 			clear(work2);
 		} else if (buttonpressed == btnWorkHide3) {
 			hBoxWork3.setVisible(false);
+			btnWorkHide2.setVisible(true);
 			btnWorkAdd2.setVisible(true);
 			TextField[] work3 = { txtfieldWorkStart3Hours, txtfieldWorkStart3Minutes, txtfieldWorkEnd3Hours,
 					txtfieldWorkEnd3Minutes };
@@ -278,6 +279,7 @@ public class WorkTimeController {
 
 		} else if (buttonpressed == btnBreakHide3) {
 			hBoxBreak3.setVisible(false);
+			btnBreakHide2.setVisible(true);
 			btnBreakAdd2.setVisible(true);
 			TextField[] break3 = { txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours,
 					txtfieldBreakEnd3Minutes };
@@ -285,6 +287,7 @@ public class WorkTimeController {
 
 		} else if (buttonpressed == btnBreakHide4) {
 			hBoxBreak4.setVisible(false);
+			btnBreakHide3.setVisible(true);
 			btnBreakAdd3.setVisible(true);
 			TextField[] break4 = { txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours,
 					txtfieldBreakEnd4Minutes };
@@ -292,6 +295,7 @@ public class WorkTimeController {
 
 		} else if (buttonpressed == btnBreakHide5) {
 			hBoxBreak5.setVisible(false);
+			btnBreakHide4.setVisible(true);
 			btnBreakAdd4.setVisible(true);
 			TextField[] break5 = { txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours,
 					txtfieldBreakEnd5Minutes };
@@ -308,13 +312,14 @@ public class WorkTimeController {
 	 */
 	@FXML
 	void reset(ActionEvent event) {
-		TextField[] allTextFields = { txtfieldWorkStart1Hours, txtfieldWorkStart1Minutes, txtfieldWorkEnd1Hours,
-				txtfieldWorkEnd1Minutes, txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes, txtfieldWorkEnd2Hours,
-				txtfieldWorkEnd2Minutes, txtfieldBreakStart1Hours, txtfieldBreakStart1Minutes, txtfieldBreakEnd1Hours,
-				txtfieldBreakEnd1Minutes, txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes, txtfieldBreakEnd2Hours,
-				txtfieldBreakEnd2Minutes, txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours,
-				txtfieldBreakEnd3Minutes, txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours,
-				txtfieldBreakEnd4Minutes };
+		TextField[] allTextFields = { txtfieldWorkStart1Hours, txtfieldWorkStart1Minutes, txtfieldWorkEnd1Hours, txtfieldWorkEnd1Minutes,
+				txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes, txtfieldWorkEnd2Hours,	txtfieldWorkEnd2Minutes,
+				txtfieldWorkStart3Hours, txtfieldWorkStart3Minutes, txtfieldWorkEnd3Hours,	txtfieldWorkEnd3Minutes, 
+				txtfieldBreakStart1Hours, txtfieldBreakStart1Minutes, txtfieldBreakEnd1Hours, txtfieldBreakEnd1Minutes, 
+				txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes, txtfieldBreakEnd2Hours, txtfieldBreakEnd2Minutes, 
+				txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours, txtfieldBreakEnd3Minutes, 
+				txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours, txtfieldBreakEnd4Minutes,
+				txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours, txtfieldBreakEnd5Minutes};
 
 		HBox[] allRetractableInputSegments = { hBoxWork2, hBoxWork3, hBoxBreak2, hBoxBreak3, hBoxBreak4, hBoxBreak5 };
 
@@ -323,6 +328,7 @@ public class WorkTimeController {
 
 		clear(allTextFields);
 		btnWorkAdd1.setVisible(true);
+		btnBreakAdd1.setVisible(true);
 		
 		txtComment.setText("");
 		labelErrortxt.setVisible(false);
@@ -378,18 +384,22 @@ public class WorkTimeController {
 			btnWorkAdd1.setVisible(false);
 		} else if (buttonpressed == btnWorkAdd2 && !isBlankTextFields(work2)) {
 			hBoxWork3.setVisible(true);
+			btnWorkHide2.setVisible(false);
 			btnWorkAdd2.setVisible(false);
 		} else if (buttonpressed == btnBreakAdd1 && !isBlankTextFields(break1)) {
 			hBoxBreak2.setVisible(true);
 			btnBreakAdd1.setVisible(false);
 		} else if (buttonpressed == btnBreakAdd2 && !isBlankTextFields(break2)) {
 			hBoxBreak3.setVisible(true);
+			btnBreakHide2.setVisible(false);
 			btnBreakAdd2.setVisible(false);
 		} else if (buttonpressed == btnBreakAdd3 && !isBlankTextFields(break3)) {
 			hBoxBreak4.setVisible(true);
+			btnBreakHide3.setVisible(false);
 			btnBreakAdd3.setVisible(false);
 		} else if (buttonpressed == btnBreakAdd4 && !isBlankTextFields(break4)) {
 			hBoxBreak5.setVisible(true);
+			btnBreakHide4.setVisible(false);
 			btnBreakAdd4.setVisible(false);
 		}
 
