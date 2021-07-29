@@ -57,7 +57,6 @@ public class PopupDoubleEntryController {
 		}else{
 			addWorkTime = PopupLimitsController.addWorkingTime;
 		}
-		var MA_ID = Main.dataEntryModel.getMA_ID();
 
 		// new		
 		var selectedDay = Main.dataEntryModel.getSelectedDay();

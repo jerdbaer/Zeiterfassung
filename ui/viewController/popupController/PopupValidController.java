@@ -1,11 +1,8 @@
 package ui.viewController.popupController;
 
 import java.sql.BatchUpdateException;
-import java.time.Duration;
-import java.time.LocalTime;
 
 import database.AddWorkingTime;
-import database.GetOvertime;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,8 +10,6 @@ import javafx.scene.control.Label;
 import main.Main;
 import ui.controller.SwapSceneController;
 import ui.interfaces.ISwapSceneController;
-import ui.viewController.LoginController;
-import ui.viewController.WorkTimeController;
 
 /**
  * Program to open a new popup window for user interaction.
