@@ -380,29 +380,46 @@ public class WorkTimeController {
 
 		Button buttonpressed = (Button) event.getSource();
 		if (buttonpressed == btnWorkAdd1 && !isBlankTextFields(work1)) {
-			hBoxWork2.setVisible(true);
-			btnWorkAdd1.setVisible(false);
+			show(hBoxWork2,btnWorkAdd2,btnWorkHide2);
+			hide(btnWorkAdd1);
 		} else if (buttonpressed == btnWorkAdd2 && !isBlankTextFields(work2)) {
-			hBoxWork3.setVisible(true);
-			btnWorkHide2.setVisible(false);
-			btnWorkAdd2.setVisible(false);
+			show(hBoxWork3,btnWorkHide3);
+			hide(btnWorkAdd2,btnWorkHide2);
 		} else if (buttonpressed == btnBreakAdd1 && !isBlankTextFields(break1)) {
-			hBoxBreak2.setVisible(true);
-			btnBreakAdd1.setVisible(false);
+			show(hBoxBreak2,btnBreakAdd2,btnBreakHide2);
+			hide(btnBreakAdd1);
 		} else if (buttonpressed == btnBreakAdd2 && !isBlankTextFields(break2)) {
-			hBoxBreak3.setVisible(true);
-			btnBreakHide2.setVisible(false);
-			btnBreakAdd2.setVisible(false);
+			show(hBoxBreak3,btnBreakAdd3,btnBreakHide3);
+			hide(btnBreakAdd2,btnBreakHide2);
 		} else if (buttonpressed == btnBreakAdd3 && !isBlankTextFields(break3)) {
-			hBoxBreak4.setVisible(true);
-			btnBreakHide3.setVisible(false);
-			btnBreakAdd3.setVisible(false);
+			show(hBoxBreak4,btnBreakAdd4,btnBreakHide4);
+			hide(btnBreakAdd3,btnBreakHide3);
 		} else if (buttonpressed == btnBreakAdd4 && !isBlankTextFields(break4)) {
-			hBoxBreak5.setVisible(true);
-			btnBreakHide4.setVisible(false);
-			btnBreakAdd4.setVisible(false);
+			show(hBoxBreak5,btnBreakHide5);
+			hide(btnBreakAdd4,btnBreakHide4);
 		}
 
+	}
+		
+	private void hide(Button btn) {
+		btn.setVisible(false);
+	}
+	
+	private void hide(Button btnAdd,Button tbnRemove) {
+		btnAdd.setVisible(false);
+		tbnRemove.setVisible(false);
+
+	}
+	
+	private void show(HBox hBox, Button btnAdd, Button btnRemove) {
+		btnAdd.setVisible(true);
+		btnRemove.setVisible(true);
+		hBox.setVisible(true);
+	}
+	
+	private void show(HBox hBox, Button btnRemove) {
+		btnRemove.setVisible(true);
+		hBox.setVisible(true);
 	}
 
 	/**
@@ -649,10 +666,123 @@ public class WorkTimeController {
 					timespann = new Break(start, end);
 				formattedInput.add(timespann);
 			} catch (NumberFormatException e) {
+				if(value.equals(work1)) {
+					TextField[] allTextFields = { txtfieldWorkStart1Hours, txtfieldWorkStart1Minutes, txtfieldWorkEnd1Hours, txtfieldWorkEnd1Minutes,
+							txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes, txtfieldWorkEnd2Hours,	txtfieldWorkEnd2Minutes,
+							txtfieldWorkStart3Hours, txtfieldWorkStart3Minutes, txtfieldWorkEnd3Hours,	txtfieldWorkEnd3Minutes, 
+							txtfieldBreakStart1Hours, txtfieldBreakStart1Minutes, txtfieldBreakEnd1Hours, txtfieldBreakEnd1Minutes, 
+							txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes, txtfieldBreakEnd2Hours, txtfieldBreakEnd2Minutes, 
+							txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours, txtfieldBreakEnd3Minutes, 
+							txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours, txtfieldBreakEnd4Minutes,
+							txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours, txtfieldBreakEnd5Minutes};
 
+					HBox[] allRetractableInputSegments = { hBoxWork2, hBoxWork3, hBoxBreak2, hBoxBreak3, hBoxBreak4, hBoxBreak5 };
+
+					for (HBox InputSegment : allRetractableInputSegments)
+						InputSegment.setVisible(false);
+
+					clear(allTextFields);
+					btnWorkAdd1.setVisible(true);
+					btnBreakAdd1.setVisible(true);
+				}
+				else if(value.equals(work2)) {
+					TextField[] allTextFields = { 
+							txtfieldWorkStart2Hours, txtfieldWorkStart2Minutes, txtfieldWorkEnd2Hours,	txtfieldWorkEnd2Minutes,
+							txtfieldWorkStart3Hours, txtfieldWorkStart3Minutes, txtfieldWorkEnd3Hours,	txtfieldWorkEnd3Minutes};
+
+					HBox[] retractableInputSegments = { hBoxWork2, hBoxWork3};
+
+					for (HBox InputSegment : retractableInputSegments)
+						InputSegment.setVisible(false);
+
+					clear(allTextFields);
+					btnWorkAdd1.setVisible(true);
+				}
+				else if(value.equals(work3)) {
+					TextField[] work3TextFields = { 
+							txtfieldWorkStart3Hours, txtfieldWorkStart3Minutes, txtfieldWorkEnd3Hours,	txtfieldWorkEnd3Minutes};
+
+					hBoxWork3.setVisible(false);
+					clear(work3TextFields);
+					btnWorkAdd2.setVisible(true);
+					
+				}
+				else if(value.equals(break1)) {
+					TextField[] allTextFields = { 
+							txtfieldBreakStart1Hours, txtfieldBreakStart1Minutes, txtfieldBreakEnd1Hours, txtfieldBreakEnd1Minutes, 
+							txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes, txtfieldBreakEnd2Hours, txtfieldBreakEnd2Minutes, 
+							txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours, txtfieldBreakEnd3Minutes, 
+							txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours, txtfieldBreakEnd4Minutes,
+							txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours, txtfieldBreakEnd5Minutes};
+
+
+					HBox[] retractableInputSegments = {hBoxBreak2, hBoxBreak3, hBoxBreak4, hBoxBreak5 };
+
+					for (HBox InputSegment : retractableInputSegments)
+						InputSegment.setVisible(false);
+
+					clear(allTextFields);
+					btnBreakAdd1.setVisible(true);
+					
+				}else if(value.equals(break2)) {
+					TextField[] allTextFields = { 
+							txtfieldBreakStart2Hours, txtfieldBreakStart2Minutes, txtfieldBreakEnd2Hours, txtfieldBreakEnd2Minutes, 
+							txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours, txtfieldBreakEnd3Minutes, 
+							txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours, txtfieldBreakEnd4Minutes,
+							txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours, txtfieldBreakEnd5Minutes};
+
+					HBox[] retractableInputSegments = {hBoxBreak2, hBoxBreak3, hBoxBreak4, hBoxBreak5 };
+
+					for (HBox InputSegment : retractableInputSegments)
+						InputSegment.setVisible(false);
+
+					clear(allTextFields);
+					btnBreakAdd1.setVisible(true);
+					
+				}else if(value.equals(break3)) {
+					TextField[] allTextFields = { 
+							txtfieldBreakStart3Hours, txtfieldBreakStart3Minutes, txtfieldBreakEnd3Hours, txtfieldBreakEnd3Minutes, 
+							txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours, txtfieldBreakEnd4Minutes,
+							txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours, txtfieldBreakEnd5Minutes};
+
+					HBox[] retractableInputSegments = {hBoxBreak3, hBoxBreak4, hBoxBreak5 };
+
+					for (HBox InputSegment : retractableInputSegments)
+						InputSegment.setVisible(false);
+
+					clear(allTextFields);
+					btnBreakAdd2.setVisible(true);
+					
+				}
+				
+				else if(value.equals(break4)) {
+					TextField[] allTextFields = { 
+							txtfieldBreakStart4Hours, txtfieldBreakStart4Minutes, txtfieldBreakEnd4Hours, txtfieldBreakEnd4Minutes,
+							txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours, txtfieldBreakEnd5Minutes};
+
+					HBox[] retractableInputSegments = { hBoxBreak4, hBoxBreak5};
+
+					for (HBox InputSegment : retractableInputSegments)
+						InputSegment.setVisible(false);
+
+					clear(allTextFields);
+					btnBreakAdd3.setVisible(true);
+					
+				}
+				else if(value.equals(break5)) {
+					TextField[] break5TextFields = { 
+							txtfieldBreakStart5Hours, txtfieldBreakStart5Minutes, txtfieldBreakEnd5Hours, txtfieldBreakEnd5Minutes};
+
+
+					hBoxBreak5.setVisible(false);
+					clear(break5TextFields);
+					btnBreakAdd4.setVisible(true);
+				}
 			}
 		} // -> produced list with work(s) and break(s)
 		return formattedInput;
 	}
+
+	
 
 }
